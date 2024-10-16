@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:46 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/10/12 15:28:20 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/10/14 17:26:57 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,14 @@ char	*spacing(char *line)
 {
 	int		i;
 	int		j;
-	char	buffer[BUFFER_SIZE];
+	char	*buffer;
 	char	*str;
 
 	i = 0;
 	j = 0;
+	buffer = malloc(ft_strlen(line) * 3 + 1);
+	if (!buffer)
+		return (NULL);
 	while (line[i])
 	{
 		if (check_token(line[i]) && !quotes_open(line, i))
@@ -42,5 +45,6 @@ char	*spacing(char *line)
 	buffer[j] = '\0';
 	str = ft_strdup(buffer);
 	free(line);
+	free(buffer);
 	return (str);
 }

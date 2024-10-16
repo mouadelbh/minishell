@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/09/21 14:09:16 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/10/14 17:40:17 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 # define GREEN	"\x1b[32m"
 # define YELLOW	"\x1b[93m"
 # define CYAN	"\x1b[36m"
+
+extern int exit_status;
 
 typedef struct s_token t_line;
 

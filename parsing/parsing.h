@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/10/11 15:56:42 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/10/14 17:50:47 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <signal.h>
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -35,7 +36,8 @@ typedef enum
 	CMD			// 8
 }	t_token;
 
-#define BUFFER_SIZE	2097152
+#define BUFFER_SIZE	4098
+extern char	*string;
 
 typedef struct	s_cmd
 {

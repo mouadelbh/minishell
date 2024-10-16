@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:16 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/10/11 15:56:16 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/10/14 17:40:26 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ char	*expand_exit(char *str, int i, int exit)
 	int		j;
 	char	*new;
 
-	size = alloc_exit(str, exit);
+	size = alloc_exit(str, exit_status);
 	new = malloc(size + 1);
 	if (!new)
 		return (NULL);
@@ -148,7 +148,7 @@ char	*expand_exit(char *str, int i, int exit)
 		new[j] = str[j];
 		j++;
 	}
-	fill_exit(new, j++, exit);
+	fill_exit(new, j++, exit_status);
 	i += 2;
 	while (str[i])
 		new[j++] = str[i++];

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/10 02:43:07 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/10 02:48:13 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,47 +189,6 @@ char	*get_full_cmd(char *av, char **env)
 	return (NULL);
 }
 
-char	*array_to_string(t_line *temp)
-{
-	size_t total_length = 0;
-	char *cmd;
-	size_t cmd_size;
-	t_line *current = temp;
-
-	// Calculate the total length needed
-	while (current && current->str[0][0] != '|' && current->str[0][0] != '>' && current->str[0][0] != '<')
-	{
-		for (size_t i = 0; current->str[i]; i++)
-			total_length += strlen(current->str[i]) + 1;
-		current = current->next;
-	}
-
-	// Allocate memory for the result string
-	cmd_size = total_length + 1; // +1 for the null terminator
-	cmd = (char *)malloc(cmd_size);
-	if (!cmd)
-	{
-		perror("malloc");
-		return NULL;
-	}
-	cmd[0] = '\0'; // Initialize the result string
-
-	// Concatenate each element with a space
-	current = temp;
-	while (current && current->str[0][0] != '|' && current->str[0][0] != '>' && current->str[0][0] != '<')
-	{
-		for (size_t i = 0; current->str[i]; i++)
-		{
-			ft_strlcat(cmd, current->str[i], cmd_size);
-			if (current->str[i + 1] || (current->next &&
-				(current->next->type == 7 || current->next->type == 8)))
-				ft_strlcat(cmd, " ", cmd_size);
-		}
-		current = current->next;
-	}
-	return cmd;
-}
-
 int	count_symbols(t_data *data)
 {
 	int		i;
@@ -251,20 +210,20 @@ char *ft_strcat(char *s1, char *s2)
 	size_t	len2;
 
 	if (!s1 && !s2)
-		return (NULL); // Both are NULL
+		return (NULL);
 	if (!s1)
-		return (strdup(s2)); // s1 is NULL, return a copy of s2
+		return (strdup(s2));
 	if (!s2)
-		return (strdup(s1)); // s2 is NULL, return a copy of s1
+		return (strdup(s1));
 	len1 = strlen(s1);
 	len2 = strlen(s2);
 	char *dest = malloc(len1 + len2 + 1);
 	if (!dest)
-		return (NULL); // Check for allocation failure
+		return (NULL);
 	memcpy(dest, s1, len1);
 	memcpy(dest + len1, s2, len2);
 	dest[len1 + len2] = '\0';
-	return (dest); // Return the pointer to the new string
+	return (dest);
 }
 
 char	*to_str(char **arr)
@@ -344,31 +303,30 @@ void set_cmd_strings(t_cmd *cmd)
 
 char	**set_list_arra(t_list *env)
 {
-    char	**result;
-    t_list	*temp = env;
-    int		i;
+	char	**result;
+	t_list	*temp = env;
+	int		i;
 
-    i = ft_lstsize(env);
-    result = malloc(sizeof(char *) * (i + 1));
-    if (!result)
-        return NULL;
-    result[i] = NULL;
-    i = 0;
-    while (temp)
-    {
-        result[i] = ft_strdup(temp->content); // Make a copy of the string
-        if (!result[i])
-        {
-            // Free previously allocated memory in case of failure
-            while (i > 0)
-            {
-                free(result[--i]);
-            }
-            free(result);
-            return NULL;
-        }
-        temp = temp->next;
-        i++;
-    }
-    return (result);
+	i = ft_lstsize(env);
+	result = malloc(sizeof(char *) * (i + 1));
+	if (!result)
+		return NULL;
+	result[i] = NULL;
+	i = 0;
+	while (temp)
+	{
+		result[i] = ft_strdup(temp->content);
+		if (!result[i])
+		{
+			while (i > 0)
+			{
+				free(result[--i]);
+			}
+			free(result);
+			return NULL;
+		}
+		temp = temp->next;
+		i++;
+	}
+	return (result);
 }

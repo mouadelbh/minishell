@@ -3,17 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   files.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/10/31 18:39:46 by prizmo           ###   ########.fr       */
+/*   Updated: 2024/11/10 14:56:48 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	create_files(t_cmd *cmd, t_data *data)
+int	create_files(t_cmd *cmd, t_data *data)
 {
+	int	i;
+
+	i = 1;
 	while (cmd)
 	{
 		if (cmd->type == CMD)
@@ -21,13 +24,16 @@ void	create_files(t_cmd *cmd, t_data *data)
 		else if (cmd->type == REDIR_OUT)
 			init_write_to(cmd, data);
 		else if (cmd->type == REDIR_IN)
-			init_read_from(cmd, data);
+			i = init_read_from(cmd, data);
 		else if (cmd->type == APPEND)
 			init_append(cmd, data);
 		else if (cmd->type == HEREDOC)
 			init_heredoc(cmd, data);
+		if (i == 0)
+			break ;
 		cmd = cmd->next;
 	}
+	return (i);
 }
 
 bool	check_infile_outfile(t_io_fds *io)

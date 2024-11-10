@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/10 02:41:22 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/10 20:48:14 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,24 @@ void	init_command(t_cmd *cmd, t_data *data)
 		cmd->pipe_output = true;
 }
 
+static int	valid_command(t_cmd *cmd, t_data *data)
+{
+	char	*full_command;
+	
+	full_command = get_full_cmd(cmd->argv[0], data->envp_arr);
+	if (access(full_command, F_OK | X_OK) == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->cmd, 2);
+		ft_putstr_fd(": command not found\n", 2);
+		g_exit_status = COMMAND_NOT_FOUND;
+		free(full_command);
+		return (0);
+	}
+	free(full_command);
+	return (1);
+}
+
 int	handle_execute(t_data *data)
 {
 	t_cmd	*cmd;
@@ -43,7 +61,7 @@ int	handle_execute(t_data *data)
 	cmd = data->cmd;
 	while (data->pid != 0 && cmd)
 	{
-		if (cmd->type == CMD)
+		if (cmd->type == CMD && valid_command(cmd, data))
 		{
 			data->pid = fork();
 			if (data->pid == -1)
@@ -74,6 +92,7 @@ int	exec_cmd(char *av, char **env, t_data *data)
 	{
 		perror("execve");
 		g_exit_status = GENERAL_ERROR;
+		free(path);
 		return (1);
 	}
 	return (0);
@@ -103,6 +122,7 @@ int	single_command(t_data *data, char *cmd)
 		}
 		temp = temp->next;
 	}
+	free(cmd);
 	return (data->status);
 }
 
@@ -124,6 +144,25 @@ t_cmd	*init_new_cmd(t_cmd *src)
 	return (new);
 }
 
+static void	free_cmd_node(t_cmd *cmd)
+{
+	if (cmd->argv)
+		free_arr(cmd->argv);
+	if (cmd->cmd)
+		free(cmd->cmd);
+	if (cmd->io_fds)
+	{
+		if (cmd->io_fds->infile)
+			free(cmd->io_fds->infile);
+		if (cmd->io_fds->outfile)
+			free(cmd->io_fds->outfile);
+		if (cmd->io_fds->heredoc_name)
+			free(cmd->io_fds->heredoc_name);
+		free(cmd->io_fds);
+	}
+	free(cmd);
+}
+
 t_cmd	*set_command_list(t_cmd *cmd)
 {
 	t_cmd	*new_list;
@@ -133,7 +172,10 @@ t_cmd	*set_command_list(t_cmd *cmd)
 	if (!cmd)
 		return (NULL);
 	while (cmd && cmd->type != CMD)
+	{
+		free_cmd_node(cmd);
 		cmd = cmd->next;
+	}
 	if (!cmd)
 		return (NULL);
 	new_list = init_new_cmd(cmd);
@@ -165,6 +207,80 @@ t_cmd	*set_command_list(t_cmd *cmd)
 	return (new_list);
 }
 
+/* t_cmd *set_command_list(t_cmd *cmd)
+{
+	t_cmd *new_list;
+	t_cmd *current;
+	t_cmd *temp;
+	t_cmd *orig_cmd = cmd;
+
+	if (!cmd)
+		return (NULL);
+
+	while (cmd && cmd->type != CMD)
+	{
+		free_cmd_node(cmd);
+		cmd = cmd->next;
+	}
+	if (!cmd)
+	{
+		while (orig_cmd)
+		{
+			temp = orig_cmd->next;
+			free_cmd_node(orig_cmd);
+			orig_cmd = temp;
+		}
+		return (NULL);
+	}
+	new_list = init_new_cmd(cmd);
+	if (!new_list)
+	{
+		while (orig_cmd)
+		{
+			temp = orig_cmd->next;
+			free_cmd_node(orig_cmd);
+			orig_cmd = temp;
+		}
+		return (NULL);
+	}
+	current = new_list;
+	cmd = cmd->next;
+	while (cmd)
+	{
+		if (cmd->type == CMD)
+		{
+			temp = init_new_cmd(cmd);
+			if (!temp)
+			{
+				while (new_list)
+				{
+					temp = new_list->next;
+					free(new_list);
+					new_list = temp;
+				}
+				while (orig_cmd)
+				{
+					temp = orig_cmd->next;
+					free_cmd_node(orig_cmd);
+					orig_cmd = temp;
+				}
+				return (NULL);
+			}
+			current->next = temp;
+			temp->prev = current;
+			current = temp;
+		}
+		cmd = cmd->next;
+	}
+	while (orig_cmd)
+	{
+		temp = orig_cmd->next;
+		free_cmd_node(orig_cmd);
+		orig_cmd = temp;
+	}
+	return (new_list);
+}
+ */
 int	complex_command(t_data *data)
 {
 	t_line	*temp = data->head;
@@ -172,7 +288,8 @@ int	complex_command(t_data *data)
 
 	if (data->cmd)
 	{
-		create_files(data->cmd, data);
+		if (!create_files(data->cmd, data))
+			return (1);
 		data->cmd = set_command_list(data->cmd);
 		ret = set_values(data);
 		return (handle_execute(data));

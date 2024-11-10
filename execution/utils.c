@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/10 02:48:13 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/10 20:52:03 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,8 +165,8 @@ int	count_pipes(t_data *data)
 char	*get_full_cmd(char *av, char **env)
 {
 	int		i;
-	// char	*result;
 	char	*full_cmd;
+	char	*temp;
 	char	**path;
 
 	i = 0;
@@ -176,16 +176,19 @@ char	*get_full_cmd(char *av, char **env)
 		perror("Path error");
 	while (path[i])
 	{
-		full_cmd = ft_strjoin(ft_strjoin(path[i], "/"), av);
-		// free(result);
+		temp = ft_strjoin(path[i], "/");
+		full_cmd = ft_strjoin(temp, av);
+		free(temp);
 		if (access(full_cmd, X_OK | F_OK) == 0)
 		{
+			free_arr(path);
 			return (full_cmd);
 		}
-		// free(full_cmd);
+		free(full_cmd);
+		full_cmd = NULL;
 		i++;
 	}
-	// free_arr(path);
+	free_arr(path);
 	return (NULL);
 }
 
@@ -208,20 +211,21 @@ char *ft_strcat(char *s1, char *s2)
 {
 	size_t	len1;
 	size_t	len2;
+	char	*dest;
 
 	if (!s1 && !s2)
 		return (NULL);
 	if (!s1)
-		return (strdup(s2));
+		return (ft_strdup(s2));
 	if (!s2)
-		return (strdup(s1));
-	len1 = strlen(s1);
-	len2 = strlen(s2);
-	char *dest = malloc(len1 + len2 + 1);
+		return (ft_strdup(s1));
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	dest = malloc(len1 + len2 + 1);
 	if (!dest)
 		return (NULL);
-	memcpy(dest, s1, len1);
-	memcpy(dest + len1, s2, len2);
+	ft_memcpy(dest, s1, len1);
+	ft_memcpy(dest + len1, s2, len2);
 	dest[len1 + len2] = '\0';
 	return (dest);
 }
@@ -229,15 +233,23 @@ char *ft_strcat(char *s1, char *s2)
 char	*to_str(char **arr)
 {
 	char	*result;
+	char	*temp;
 	int		i;
 
 	i = 0;
 	result = NULL;
 	while (arr[i])
 	{
-		result = ft_strcat(result, arr[i]);
+		temp = ft_strcat(result, arr[i]);
+		if (result)
+			free(result);
+		result = temp;
 		if (arr[i + 1])
-			result = ft_strcat(result, " ");
+		{
+			temp = ft_strcat(result, " ");
+			free(result);
+			result = temp;
+		}
 		i++;
 	}
 	return (result);
@@ -270,6 +282,7 @@ char	*new_strjoin(char *s1, char *s2)
 void set_cmd_strings(t_cmd *cmd)
 {
 	t_cmd	*current = cmd;
+	char	*temp;
 	int		i;
 	size_t	total_length;
 
@@ -282,19 +295,16 @@ void set_cmd_strings(t_cmd *cmd)
 			total_length += ft_strlen(current->argv[i]) + 1;
 			i++;
 		}
-		current->cmd = malloc(total_length * sizeof(char));
-		if (current->cmd == NULL)
-		{
-			perror("Failed to allocate memory");
-			exit(EXIT_FAILURE);
-		}
-		current->cmd[0] = '\0';
+		current->cmd = NULL;
 		i = 0;
 		while (current->argv[i] != NULL)
 		{
-			strcat(current->cmd, current->argv[i]);
+			temp = ft_strjoin(current->cmd, current->argv[i]);
 			if (current->argv[i + 1] != NULL)
-				strcat(current->cmd, " ");
+				current->cmd = ft_strjoin(temp, " ");
+			else
+				current->cmd = ft_strjoin(temp, "\0");
+			free(temp);
 			i++;
 		}
 		current = current->next;

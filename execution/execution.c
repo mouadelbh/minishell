@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/11 10:52:08 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/11 12:06:46 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,19 @@ int	minishell(t_data *data)
 		err = parse(data->arg, &data->head, &p_data, data);
 		if (err == -1)
 			continue;
+		head = data->head;
+		while (head)
+		{
+			printf("this is a node\n");
+			printf("----------------\n");
+			for (int i = 0;head->str[i];i++)
+				printf("%s\n", head->str[i]);
+			printf("%d\n", head->type);
+			head = head->next;
+		}
 		get_final_list(&data->head, &data->cmd);
 		data->envp_arr = set_list_arra(data->envp);
 		data->status = handle_input(data);
-		global.g_exit_status = data->status;
 		free_line(&data->head);
 		free_cmd_list(&data->cmd);
 	}

@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/11 10:50:29 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/11 11:44:50 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,24 @@ int	parse_error(t_line *head)
 void	expanding(t_line **head, t_list *env)
 {
 	t_line	*new;
+	int		flag;
 	int		i;
 
 	new = *head;
+	flag = 0;
 	while (new)
 	{
 		i = 0;
-		while (new->str[i])
+		if (check_token(new->str[0][0]) == 2)
 		{
-			new->str[i] = find_and_replace(new->str[i], env);
+			new = new->next;
+			flag = 1;
+		}
+		while (new && new->str[i])
+		{
+			new->str[i] = find_and_replace(new->str[i], env, flag);
 			i++;
+			flag = 0;
 		}
 		new = new->next;
 	}

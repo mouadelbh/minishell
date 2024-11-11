@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/11 10:38:04 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/11 11:59:20 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ static int	size_to_alloc(t_line *node)
         i = 0;
         while (node->str[i])
         {
+            if (is_empty(node->str[i]))
+                size--;
             i++;
             size++;
         }
@@ -64,7 +66,7 @@ t_cmd	*get_current(t_line **node)
         return (NULL);
     tmp->argv = malloc(sizeof(char *) * (size_to_alloc((*node)) + 1));
     i = 0;
-    if ((*node)->type != PIPE)
+    if ((*node)->type != PIPE && !is_empty((*node)->str[0]))
     {
         tmp->argv[i++] = ft_strdup((*node)->str[0]);
         tmp->type = (*node)->type;
@@ -74,7 +76,10 @@ t_cmd	*get_current(t_line **node)
     {
         j = 0;
         while ((*node)->str[j])
+        {
+            while (is_empty((*node)->str[j]))
             tmp->argv[i++] = ft_strdup((*node)->str[j++]);
+        }
         (*node) = (*node)->next;
     }
 	tmp->pipe_output = 0;
@@ -86,7 +91,7 @@ t_cmd	*get_current(t_line **node)
 
 void	get_final_list(t_line **head, t_cmd **cmd)
 {
-    t_cmd	*new;
+    t_cmd   *new;
     t_line	*tmp;
     int     i;
 

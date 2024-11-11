@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/11 10:51:40 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/11 11:53:50 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,18 @@ void	handlesig(int sig)
 		ft_putstr_fd("\n", 1);
 		global.g_exit_status = CTRL_C;
 	}
+}
+
+int is_empty(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] && is_space(str[i]))
+		i++;
+	if (!str[i])
+		return (1);
+	return (0);
 }
 
 void	free_env(t_list *env)

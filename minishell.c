@@ -6,13 +6,13 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:18:31 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/11 08:33:40 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:53:28 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
-int	g_exit_status;
+t_global	global;
 
 void	free_arr(char **arr)
 {
@@ -44,5 +44,5 @@ int	main(int ac, char **av, char **env)
 	program.status = 0;
 	minishell(&program);
 	free_all(&program);
-	return (g_exit_status);
+	return (global.g_exit_status);
 }

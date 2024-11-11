@@ -6,13 +6,11 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/11 08:51:13 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:52:08 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	pid;
 
 void	free_cmd_list(t_cmd **head)
 {
@@ -93,7 +91,7 @@ int	minishell(t_data *data)
 		get_final_list(&data->head, &data->cmd);
 		data->envp_arr = set_list_arra(data->envp);
 		data->status = handle_input(data);
-		g_exit_status = data->status;
+		global.g_exit_status = data->status;
 		free_line(&data->head);
 		free_cmd_list(&data->cmd);
 	}

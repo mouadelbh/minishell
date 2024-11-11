@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/11 08:23:51 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:50:29 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	print_error(char *str)
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("'", 2);
 	ft_putstr_fd("\n", 2);
-	g_exit_status = 2;
+	global.g_exit_status = 2;
 	return (-1);
 }
 
@@ -62,31 +62,51 @@ int	parse_error(t_line *head)
 	return (0);
 }
 
+void	expanding(t_line **head, t_list *env)
+{
+	t_line	*new;
+	int		i;
+
+	new = *head;
+	while (new)
+	{
+		i = 0;
+		while (new->str[i])
+		{
+			new->str[i] = find_and_replace(new->str[i], env);
+			i++;
+		}
+		new = new->next;
+	}
+}
+
 int	parse(char *str, t_line **head, t_parse *data, t_data* ex_data)
 {
 	char	**arg;
 	char	*line;
+	t_line	*new;
+	int		i;
 
 	if (ex_data->arg == NULL)
 		reset_shell(ex_data);
 	if (!checkspaces(str))
 		return (-1);
+	add_history(ex_data->arg);
 	if (!checkquotes(str))
 	{
-		g_exit_status = 2;
+		global.g_exit_status = 2;
 		return (-1);
 	}
-	add_history(ex_data->arg);
 	line = spacing(str);
-	line = find_and_replace(line, data->env);
 	arg = ft_split(line, ' ');
 	free(line);
 	if (!arg)
 	{
-		g_exit_status = 139;
+		global.g_exit_status = 139;
 		return (-1);
 	}
 	lexer(arg, head, data);
+	expanding(head, data->env);
 	triming_quotes(*head);
 	return (parse_error(*head));
 }

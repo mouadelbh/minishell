@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/10 02:41:22 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:50:29 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	init_command(t_cmd *cmd, t_data *data)
 int	handle_execute(t_data *data)
 {
 	t_cmd	*cmd;
-	int		pid;
 
 	cmd = data->cmd;
 	while (data->pid != 0 && cmd)
@@ -73,7 +72,7 @@ int	exec_cmd(char *av, char **env, t_data *data)
 	if (execve(path, cmd, env) == -1)
 	{
 		perror("execve");
-		g_exit_status = GENERAL_ERROR;
+		global.g_exit_status = GENERAL_ERROR;
 		return (1);
 	}
 	return (0);
@@ -82,7 +81,6 @@ int	exec_cmd(char *av, char **env, t_data *data)
 int	single_command(t_data *data, char *cmd)
 {
 	t_line	*temp = data->head;
-	int pid;
 
 	while (temp)
 	{

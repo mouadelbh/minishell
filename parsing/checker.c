@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:00 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/11 08:20:04 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:50:29 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	checkspaces(char *line)
 		i++;
 	if (!line[i])
 	{
-		g_exit_status = 0;
+		global.g_exit_status = 0;
 		return (free(line), 0);
 	}
 	return (1);

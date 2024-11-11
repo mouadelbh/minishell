@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/10 02:43:38 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:50:52 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,13 @@
 # define MAX_PATH 4096
 #endif
 
-extern int	g_exit_status;
-extern int	pid;
+typedef struct	s_global
+{
+	int	g_exit_status;
+	int	pid;
+}	t_global;
+
+extern t_global	global;
 
 typedef struct s_token t_line;
 

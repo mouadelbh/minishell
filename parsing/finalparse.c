@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/08 02:50:45 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:38:04 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void	get_final_list(t_line **head, t_cmd **cmd)
 {
     t_cmd	*new;
     t_line	*tmp;
+    int     i;
 
     tmp = *head;
     new = NULL;

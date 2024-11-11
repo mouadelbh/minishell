@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/09 23:51:40 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/10 14:24:01 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	handlesig(int sig)
 {
-	if (pid == 0)
+	if (pid == -1)
 	{
 		ft_putstr_fd("\n", 1);
 		rl_on_new_line();

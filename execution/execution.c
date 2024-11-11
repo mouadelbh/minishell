@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/10 02:42:35 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/11 08:51:13 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,9 @@ int	minishell(t_data *data)
 	t_line	*head;
 	t_parse	p_data;
 	int		new_fd;
+	int		err;
 
+	err = 1;
 	while (!data->status)
 	{
 		data->head = NULL;
@@ -85,7 +87,9 @@ int	minishell(t_data *data)
 		data->arg = readline(READLINE_MSG);
 		p_data.env = data->envp;
 		data->pid = -1;
-		g_exit_status = parse(data->arg, &data->head, &p_data, data);
+		err = parse(data->arg, &data->head, &p_data, data);
+		if (err == -1)
+			continue;
 		get_final_list(&data->head, &data->cmd);
 		data->envp_arr = set_list_arra(data->envp);
 		data->status = handle_input(data);

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/10 20:48:14 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/11 09:03:26 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,10 @@ int	handle_execute(t_data *data)
 		{
 			data->pid = fork();
 			if (data->pid == -1)
+			{
 				ft_putstr_fd("fork error\n", 2);
+				return (1);
+			}
 		}
 		if (data->pid == 0)
 			execute_command(data, cmd);
@@ -80,6 +83,7 @@ int	exec_cmd(char *av, char **env, t_data *data)
 	char	*path;
 
 	cmd = ft_split(av, ' ');
+	free(av);
 	if (cmd[0][0] == '/')
 		path = ft_strdup(cmd[0]);
 	else if (cmd[0][0] != '\0')

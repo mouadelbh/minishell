@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/10 20:52:03 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:42:48 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,6 +300,8 @@ void set_cmd_strings(t_cmd *cmd)
 		while (current->argv[i] != NULL)
 		{
 			temp = ft_strjoin(current->cmd, current->argv[i]);
+			if (current->cmd)
+				free(current->cmd);
 			if (current->argv[i + 1] != NULL)
 				current->cmd = ft_strjoin(temp, " ");
 			else

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:18:31 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/10 19:00:31 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:43:05 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	main(int ac, char **av, char **env)
 	program.status = 0;
 	program.exit = 0;
 	minishell(&program);
-	// free_all(&program);
+	free_all(&program);
+	free_line(program.head);
 	return (g_exit_status);
 }

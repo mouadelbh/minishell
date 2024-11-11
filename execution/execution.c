@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/10 20:42:34 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:43:29 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int	minishell(t_data *data)
 		data->envp_arr = set_list_arra(data->envp);
 		data->status = handle_input(data);
 		g_exit_status = data->status;
+		free_line(&data->head);
 		free_all(data);
 	}
 	return (data->status);

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/11 10:43:29 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:44:30 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	handle_input(t_data *data)
 	char	*cmd;
 
 	data->cmd_count = count_symbols(data);
-	if (data->cmd_count == 0)
+	if (data->cmd_count == 0 && data->head->type == CMD)
 	{
 		if (data->cmd)
 			cmd = to_str(data->cmd->argv);

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/11 10:57:24 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:47:58 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ void init_write_to(t_cmd *cmd, t_data *data)
 	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
 	{
-		perror("file");
+		// perror("file");
+		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
 		return;
 	}
 	t_cmd *current = cmd->prev;

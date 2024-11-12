@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/11 09:03:26 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:46:31 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ t_cmd	*set_command_list(t_cmd *cmd)
 
 	if (!cmd)
 		return (NULL);
-	while (cmd && cmd->type != CMD)
+	while (cmd && cmd->type != CMD && cmd->next)
 	{
 		free_cmd_node(cmd);
 		cmd = cmd->next;

@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/09 23:51:40 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/11 11:53:50 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,31 @@
 
 void	handlesig(int sig)
 {
-	if (pid == 0)
+	if (global.pid == 0)
 	{
 		ft_putstr_fd("\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		g_exit_status = CTRL_C;
+		global.g_exit_status = CTRL_C;
 	}
 	else
 	{
 		ft_putstr_fd("\n", 1);
-		g_exit_status = CTRL_C;
+		global.g_exit_status = CTRL_C;
 	}
+}
+
+int is_empty(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] && is_space(str[i]))
+		i++;
+	if (!str[i])
+		return (1);
+	return (0);
 }
 
 void	free_env(t_list *env)
@@ -49,7 +61,7 @@ void	reset_shell(t_data *data)
 	ft_putstr_fd("exit\n", 1);
 	free_env(data->envp);
 	data->status = 1;
-	exit(g_exit_status);
+	exit(global.g_exit_status);
 }
 
 int	is_space(char c)

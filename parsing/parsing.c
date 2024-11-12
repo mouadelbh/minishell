@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/09 23:51:34 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/11 11:44:50 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,18 @@ int	print_error(char *str)
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("'", 2);
 	ft_putstr_fd("\n", 2);
-	g_exit_status = 2;
-	return (2);
+	global.g_exit_status = 2;
+	return (-1);
 }
 
 int	redir_error(t_line *head)
 {
 	while (head)
 	{
-		if (check_token(head->str[0][0]) == 2 && \
-		(!head->next || head->next->type == PIPE))
+		if (check_token(head->str[0][0]) == 2 && !head->next)
 			return (print_error("newline"));
+		if (check_token(head->str[0][0]) == 2 && head->next->type == PIPE)
+			return (print_error("|"));
 		if (check_token(head->str[0][0]) == 2 && check_token(head->next->str[0][0]) == 2)
 			return (print_error(head->next->str[0]));
 		head = head->next;
@@ -57,29 +58,63 @@ int	parse_error(t_line *head)
 	if (pipe_error(head))
 		return (print_error("|"));
 	if (redir_error(head))
-		return (2);
+		return (-1);
 	return (0);
+}
+
+void	expanding(t_line **head, t_list *env)
+{
+	t_line	*new;
+	int		flag;
+	int		i;
+
+	new = *head;
+	flag = 0;
+	while (new)
+	{
+		i = 0;
+		if (check_token(new->str[0][0]) == 2)
+		{
+			new = new->next;
+			flag = 1;
+		}
+		while (new && new->str[i])
+		{
+			new->str[i] = find_and_replace(new->str[i], env, flag);
+			i++;
+			flag = 0;
+		}
+		new = new->next;
+	}
 }
 
 int	parse(char *str, t_line **head, t_parse *data, t_data* ex_data)
 {
 	char	**arg;
 	char	*line;
+	t_line	*new;
+	int		i;
 
 	if (ex_data->arg == NULL)
 		reset_shell(ex_data);
 	if (!checkspaces(str))
-		return (SUCCESS);
-	if (!checkquotes(str))
-		return (PARSE_ERROR);
+		return (-1);
 	add_history(ex_data->arg);
+	if (!checkquotes(str))
+	{
+		global.g_exit_status = 2;
+		return (-1);
+	}
 	line = spacing(str);
-	line = find_and_replace(line, data->env);
 	arg = ft_split(line, ' ');
 	free(line);
 	if (!arg)
-		return (139);
+	{
+		global.g_exit_status = 139;
+		return (-1);
+	}
 	lexer(arg, head, data);
+	expanding(head, data->env);
 	triming_quotes(*head);
 	return (parse_error(*head));
 }

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/10 20:37:06 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:53:15 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,13 @@
 # define MAX_PATH 4096
 #endif
 
-extern int	g_exit_status;
-extern int	pid;
+typedef struct	s_global
+{
+	int	g_exit_status;
+	int	pid;
+}	t_global;
+
+extern t_global	global;
 
 typedef struct s_token t_line;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expanding.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:16 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/10 02:43:55 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/11 11:48:20 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ char	*expand_exit(char *str, int i, int exit)
 	int		j;
 	char	*new;
 
-	size = alloc_exit(str, g_exit_status);
+	size = alloc_exit(str, global.g_exit_status);
 	new = malloc(size + 1);
 	if (!new)
 		return (NULL);
@@ -148,7 +148,7 @@ char	*expand_exit(char *str, int i, int exit)
 		new[j] = str[j];
 		j++;
 	}
-	fill_exit(new, j++, g_exit_status);
+	fill_exit(new, j++, global.g_exit_status);
 	i += 2;
 	while (str[i])
 		new[j++] = str[i++];
@@ -157,7 +157,20 @@ char	*expand_exit(char *str, int i, int exit)
 	return (new);
 }
 
-char	*find_and_replace(char *str, t_list *env)
+void	reset_expand(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == -1)
+			str[i] = '$';
+		i++;
+	}
+}
+
+char	*find_and_replace(char *str, t_list *env, int flag)
 {
 	int		i;
 	int		size;
@@ -171,14 +184,16 @@ char	*find_and_replace(char *str, t_list *env)
 	while (str[i])
 	{
 		if (str[i] == -1 && str[i + 1] == '?')
-			tmp = expand_exit(tmp, i, g_exit_status);
+			tmp = expand_exit(tmp, i, global.g_exit_status);
 		else if (str[i] == -1)
 		{
 			ca = find(str, i, env, &size);
 			if (ca >= 0)
 				tmp = replace(tmp, ca, env, size);
-			else
+			else if (ca < 0 && flag == 0)
 				tmp = delete(tmp, size);
+			else
+				reset_expand(tmp);
 		}
 		if (tmp == NULL)
 			return (free(str), NULL);

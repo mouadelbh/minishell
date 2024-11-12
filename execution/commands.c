@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/12 13:46:31 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:51:38 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ static int	valid_command(t_cmd *cmd, t_data *data)
 int	handle_execute(t_data *data)
 {
 	t_cmd	*cmd;
-	int		pid;
 
 	cmd = data->cmd;
 	while (data->pid != 0 && cmd)
@@ -105,7 +104,6 @@ int	exec_cmd(char *av, char **env, t_data *data)
 int	single_command(t_data *data, char *cmd)
 {
 	t_line	*temp = data->head;
-	int pid;
 
 	while (temp)
 	{

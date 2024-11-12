@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 16:43:22 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/10/31 22:29:57 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/12 18:28:11 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int is_valid_path(char *path)
 
 	if (stat(path, &buf) == -1)
 		return (-1);
-	if (!S_ISDIR(buf.st_mode))
+	if (!S_ISDIR(buf.st_mode));
 		return (-2);
 	if (access(path, X_OK) == -1)
 		return (-3);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:47:56 by prizmo            #+#    #+#             */
-/*   Updated: 2024/10/04 13:16:15 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/12 20:49:07 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,18 @@ void create_env_value(t_data *data, char *key)
 		temp->next = new_node;
 	}
 }
+
+// void	list_env(t_data *data, char **cmd)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (data->envp_arr[i])
+// 	{
+// 		printf("declare -x %s\n", data->envp_arr[i]);
+// 		i++;
+// 	}
+// }
 
 int ft_export(t_data *data, char **cmd)
 {

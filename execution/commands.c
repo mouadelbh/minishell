@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/12 13:51:38 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/12 16:57:02 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	valid_command(t_cmd *cmd, t_data *data)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd->cmd, 2);
 		ft_putstr_fd(": command not found\n", 2);
-		g_exit_status = COMMAND_NOT_FOUND;
+		global.g_exit_status = COMMAND_NOT_FOUND;
 		free(full_command);
 		return (0);
 	}
@@ -94,8 +94,9 @@ int	exec_cmd(char *av, char **env, t_data *data)
 	if (execve(path, cmd, env) == -1)
 	{
 		perror("execve");
-		g_exit_status = GENERAL_ERROR;
+		global.g_exit_status = GENERAL_ERROR;
 		free(path);
+		free_arr(cmd);
 		return (1);
 	}
 	return (0);
@@ -110,7 +111,10 @@ int	single_command(t_data *data, char *cmd)
 		if (temp->next && temp->next->type == 7)
 			temp = temp->next;
 		if (builtin(data->cmd->argv[0]))
+		{
 			exec_builtin(data, data->cmd->argv);
+			free(cmd);		
+		}
 		else
 		{
 			data->pid = fork();
@@ -124,7 +128,6 @@ int	single_command(t_data *data, char *cmd)
 		}
 		temp = temp->next;
 	}
-	free(cmd);
 	return (data->status);
 }
 

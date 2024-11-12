@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/11 11:59:20 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/12 09:04:43 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,9 @@ t_cmd	*get_current(t_line **node)
         while ((*node)->str[j])
         {
             while (is_empty((*node)->str[j]))
+                j++;
+            if (!(*node)->str[j])
+                break ;
             tmp->argv[i++] = ft_strdup((*node)->str[j++]);
         }
         (*node) = (*node)->next;

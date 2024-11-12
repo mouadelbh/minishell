@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/11 12:06:46 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/12 09:07:30 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	free_cmd(t_cmd **head)
 int	minishell(t_data *data)
 {
 	t_line	*head;
+	t_cmd	*cmd;
 	t_parse	p_data;
 	int		new_fd;
 	int		err;
@@ -87,18 +88,31 @@ int	minishell(t_data *data)
 		data->pid = -1;
 		err = parse(data->arg, &data->head, &p_data, data);
 		if (err == -1)
-			continue;
-		head = data->head;
-		while (head)
 		{
-			printf("this is a node\n");
-			printf("----------------\n");
-			for (int i = 0;head->str[i];i++)
-				printf("%s\n", head->str[i]);
-			printf("%d\n", head->type);
-			head = head->next;
+			free_line(&data->head);
+			continue;
 		}
+		// head = data->head;
+		// while (head)
+		// {
+		// 	printf("this is a node\n");
+		// 	printf("----------------\n");
+		// 	for (int i = 0;head->str[i];i++)
+		// 		printf("%s\n", head->str[i]);
+		// 	printf("%d\n", head->type);
+		// 	head = head->next;
+		// }
 		get_final_list(&data->head, &data->cmd);
+		// cmd = data->cmd;
+		// while (cmd)
+		// {
+		// 	printf("this is a node\n");
+		// 	printf("----------------\n");
+		// 	for (int i = 0;cmd->argv[i];i++)
+		// 		printf("%s\n", cmd->argv[i]);
+		// 	printf("%d\n", cmd->type);
+		// 	cmd = cmd->next;
+		// }
 		data->envp_arr = set_list_arra(data->envp);
 		data->status = handle_input(data);
 		free_line(&data->head);

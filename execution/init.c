@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/12 13:47:58 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/14 11:57:11 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,23 +72,30 @@ void init_append(t_cmd *cmd, t_data *data)
 	}
 }
 
-void init_write_to(t_cmd *cmd, t_data *data)
+int init_write_to(t_cmd *cmd, t_data *data)
 {
 	init_io(&cmd->io_fds);
 	if (!remove_old_file_ref(cmd->io_fds, false))
-		return;
+		return (0);
 	cmd->io_fds->outfile = ft_strdup(cmd->argv[1]);
 	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
 	{
-		ft_error(3, data);
-		return;
+		// ft_error(3, data);
+		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
+		return (0);
+	}
+	if (cmd->io_fds->outfile[0] == '\0' || (cmd->io_fds->outfile[0] == 36 && cmd->io_fds->outfile[1] != '\0'))
+	{
+		// ft_error(3, data);
+		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
+		return (0);
 	}
 	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
 	{
 		// perror("file");
 		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
-		return;
+		return (0);
 	}
 	t_cmd *current = cmd->prev;
 	while (current && current->type != CMD)
@@ -102,6 +109,7 @@ void init_write_to(t_cmd *cmd, t_data *data)
 		current->io_fds->outfile = cmd->io_fds->outfile;
 		current->io_fds->out_fd = cmd->io_fds->out_fd;
 	}
+	return (1);
 }
 
 int	init_read_from(t_cmd *cmd, t_data *data)

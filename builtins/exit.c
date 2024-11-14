@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:48:20 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/12 20:53:00 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/14 11:21:27 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,12 @@ int ft_exit(t_data *data, char **cmd)
 	{
 		if (!is_num(cmd[1]))
 			printf("exit\nminishell: exit: %s: numeric argument required\n", cmd[1]);
-		exit_code = get_code(cmd[1], &error);
 	}
+	if (is_num(cmd[1]))
+		exit_code = get_code(cmd[1], &error);
+	else
+		exit_code = 1;
 	free_data(data, exit_code);
-	data->exit = 1;
+	data->exit = exit_code;
 	return (0);
 }

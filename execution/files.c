@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/10 14:56:48 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/14 11:55:53 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	create_files(t_cmd *cmd, t_data *data)
 		if (cmd->type == CMD)
 			init_command(cmd, data);
 		else if (cmd->type == REDIR_OUT)
-			init_write_to(cmd, data);
+			i = init_write_to(cmd, data);
 		else if (cmd->type == REDIR_IN)
 			i = init_read_from(cmd, data);
 		else if (cmd->type == APPEND)

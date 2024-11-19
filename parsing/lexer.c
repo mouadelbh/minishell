@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:49 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/06 20:29:14 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/19 09:29:23 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static void	lstadd_back(t_line **head, t_line *new)
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new;
+	new->prev = tmp;
 }
 
 t_token	get_token(char *str)
@@ -45,10 +46,15 @@ t_token	get_token(char *str)
 		return (NONE);
 }
 
-int	is_command(char **arg, int i)
+int	is_command(char **arg, int i, int *flag)
 {
 	if (i == 0)
 		return (1);
+	else if (*flag)
+	{
+		*flag = 0;
+		return (1);
+	}
 	else if (get_token(arg[i - 1]) == PIPE)
 		return (1);
 	else
@@ -59,14 +65,20 @@ void	lexer(char **arg, t_line **head, t_parse *data)
 {
 	t_line	*tmp;
 	int		i;
+	int		flag;
 
 	i = 0;
+	flag = 0;
 	while (arg[i])
 	{
 		tmp = malloc(sizeof(t_line));
+		tmp->next = NULL;
+		tmp->prev = NULL;
+		tmp->data = data;
+		lstadd_back(head, tmp);
 		if (!tmp)
 			return ;
-		if (is_command(arg, i) && !check_token(arg[i][0]))
+		if (is_command(arg, i, &flag) && !check_token(arg[i][0]))
 			tokenize_cmd(arg[i++], tmp);
 		else if (ft_strchr(arg[i], '\"'))
 			tokenize_quotarg(arg, &i, tmp, '\"');
@@ -75,9 +87,7 @@ void	lexer(char **arg, t_line **head, t_parse *data)
 		else if (get_token(arg[i]) != NONE)
 			tokenize(arg[i++], tmp);
 		else
-			tokenize_arg(arg, &i, tmp);
-		tmp->data = data;
-		lstadd_back(head, tmp);
+			tokenize_arg(arg, &i, tmp, &flag);
 	}
 	ft_free(arg);
 }

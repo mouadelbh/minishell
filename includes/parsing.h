@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/11 11:54:03 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/19 09:28:18 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct	s_token
 	char 			**str;
 	t_token			type;
 	t_parse			*data;
+	struct s_token	*prev;
 	struct s_token	*next;
 }	t_line;
 
@@ -67,7 +68,7 @@ void	ft_free(char **arg);
 void	lexer(char **arg, t_line **head, t_parse *data);
 void	tokenize_cmd(char *str, t_line *tmp);
 void	tokenize(char *arg, t_line *tmp);
-void	tokenize_arg(char **arg, int *i, t_line *tmp);
+void	tokenize_arg(char **arg, int *i, t_line *tmp, int *flag);
 void	tokenize_quotarg(char **arg, int *i, t_line *tmp, char c);
 void	init(t_list **data, char **env);
 void	triming_quotes(t_line *head);
@@ -81,10 +82,12 @@ int		checkquotes(char *line);
 int		checkspaces(char *line);
 int		quotes_open(char *s, int i);
 int		is_space(char c);
+int		isredir(int i);
 int		checkspaces(char *line);
 int		checkquotes(char *line);
 int		check_case_1(char c);
 int 	is_empty(char *str);
+int		count_words(const char *s, char c);
 char	*find_and_replace(char *line, t_list *data, int flag);
 char	*spacing(char *line);
 t_token	get_token(char *str);

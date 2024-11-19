@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/12 13:52:49 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/19 23:06:38 by prizmo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ int	minishell(t_data *data)
 		// 	printf("this is a node\n");
 		// 	printf("----------------\n");
 		// 	for (int i = 0;head->str[i];i++)
-		// 		printf("%s\n", head->str[i]);
-		// 	printf("%d\n", head->type);
+		// 		printf("str[%i]:%s\n", i,head->str[i]);
+		// 	printf("type = %d\n", head->type);
 		// 	head = head->next;
 		// }
 		get_final_list(&data->head, &data->cmd);

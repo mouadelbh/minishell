@@ -6,11 +6,41 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/11 11:53:50 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/19 02:43:07 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
+
+int	count_words(const char *s, char c)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (*(s + i))
+	{
+		while (*(s + i) == c && *(s + i))
+			i++;
+		if (*(s + i) != '\0')
+		{
+			count++;
+			while (*(s + i) != c && *(s + i))
+				i++;
+		}
+	}
+	return (count);
+}
+
+int	isredir(int i)
+{
+	if (i == REDIR_IN || i == REDIR_OUT || i == APPEND)
+		return (1);
+	if (i == HEREDOC)
+		return (2);
+	return (0);
+}
 
 void	handlesig(int sig)
 {

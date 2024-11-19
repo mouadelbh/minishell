@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/11 11:44:50 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/19 09:27:06 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ int	redir_error(t_line *head)
 {
 	while (head)
 	{
-		if (check_token(head->str[0][0]) == 2 && !head->next)
+		if (isredir(head->type) && !head->next)
 			return (print_error("newline"));
-		if (check_token(head->str[0][0]) == 2 && head->next->type == PIPE)
+		if (isredir(head->type) && head->next->type == PIPE)
 			return (print_error("|"));
-		if (check_token(head->str[0][0]) == 2 && check_token(head->next->str[0][0]) == 2)
+		if (isredir(head->type) && isredir(head->next->type))
 			return (print_error(head->next->str[0]));
 		head = head->next;
 	}
@@ -73,11 +73,13 @@ void	expanding(t_line **head, t_list *env)
 	while (new)
 	{
 		i = 0;
-		if (check_token(new->str[0][0]) == 2)
+		if (isredir((*head)->type))
 		{
 			new = new->next;
 			flag = 1;
 		}
+		if (!new)
+			break ;
 		while (new && new->str[i])
 		{
 			new->str[i] = find_and_replace(new->str[i], env, flag);
@@ -91,6 +93,7 @@ void	expanding(t_line **head, t_list *env)
 int	parse(char *str, t_line **head, t_parse *data, t_data* ex_data)
 {
 	char	**arg;
+	t_line *tmp;
 	char	*line;
 	t_line	*new;
 	int		i;

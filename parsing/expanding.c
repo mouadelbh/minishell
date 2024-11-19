@@ -6,11 +6,28 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:16 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/11 11:48:20 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/19 09:22:38 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../includes/parsing.h"
+
+void	reset_expand(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == -1)
+		{
+			str[i] = '$';
+			break ;
+		}
+		i++;
+	}
+}
 
 static int	check_case(char *str, int i)
 {
@@ -42,7 +59,7 @@ int	find(char *tmp, int i, t_list *env, int *size)
 	return (-1);
 }
 
-char	*replace(char *tmp, int k, t_list *env, int size)
+char	*replace(char *tmp, int k, t_list *env, int size, int flag)
 {
 	char	*new;
 	int		i;
@@ -56,6 +73,11 @@ char	*replace(char *tmp, int k, t_list *env, int size)
 	while (env->content[env_len] && env->content[env_len] != '=')
 		env_len++;
 	env_len++;
+	if (flag == 1 && count_words(env->content + env_len, ' ') > 1)
+	{
+		reset_expand(tmp);
+		return (tmp);
+	}
 	new = malloc(ft_strlen(tmp) + ft_strlen(env->content + env_len) - size + 1);
 	if (!new)
 		return (NULL);
@@ -157,19 +179,6 @@ char	*expand_exit(char *str, int i, int exit)
 	return (new);
 }
 
-void	reset_expand(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == -1)
-			str[i] = '$';
-		i++;
-	}
-}
-
 char	*find_and_replace(char *str, t_list *env, int flag)
 {
 	int		i;
@@ -188,8 +197,8 @@ char	*find_and_replace(char *str, t_list *env, int flag)
 		else if (str[i] == -1)
 		{
 			ca = find(str, i, env, &size);
-			if (ca >= 0)
-				tmp = replace(tmp, ca, env, size);
+			if (ca >= 0 && flag == 0)
+				tmp = replace(tmp, ca, env, size, flag);
 			else if (ca < 0 && flag == 0)
 				tmp = delete(tmp, size);
 			else

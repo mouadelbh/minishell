@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/19 02:40:51 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/19 09:27:06 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ void	expanding(t_line **head, t_list *env)
 			new = new->next;
 			flag = 1;
 		}
+		if (!new)
+			break ;
 		while (new && new->str[i])
 		{
 			new->str[i] = find_and_replace(new->str[i], env, flag);

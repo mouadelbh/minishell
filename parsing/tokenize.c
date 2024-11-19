@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:58 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/06 20:29:22 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/19 08:02:24 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,9 @@ void	tokenize_quotarg(char **arg, int *i, t_line *tmp, char c)
 	tmp->str[0] = argument;
 	tmp->str[1] = NULL;
 	tmp->type = ARG;
-	tmp->next = NULL;
 }
 
-void	tokenize_arg(char **arg, int *i, t_line *tmp)
+void	tokenize_arg(char **arg, int *i, t_line *tmp, int *flag)
 {
 	int	count;
 	int	j;
@@ -89,6 +88,8 @@ void	tokenize_arg(char **arg, int *i, t_line *tmp)
 	{
 		count++;
 		j += 1;
+		if (isredir(tmp->prev->type))
+			break ;
 	}
 	j = 0;
 	tmp->str = malloc(sizeof(char *) * (count + 1));
@@ -100,10 +101,15 @@ void	tokenize_arg(char **arg, int *i, t_line *tmp)
 		tmp->str[j] = ft_strdup(arg[*i]);
 		j++;
 		*i += 1;
+		if (isredir(tmp->prev->type))
+		{
+			*flag = 1;
+			break ;
+		}
 	}
 	tmp->str[j] = NULL;
 	tmp->type = ARG;
-	tmp->next = NULL;
+	tmp->type = ARG;
 }
 
 void	tokenize(char *arg, t_line *tmp)
@@ -114,7 +120,6 @@ void	tokenize(char *arg, t_line *tmp)
 	tmp->str[0] = ft_strdup(arg);
 	tmp->str[1] = NULL;
 	tmp->type = get_token(arg);
-	tmp->next = NULL;
 }
 
 void	tokenize_cmd(char *str, t_line *tmp)
@@ -135,5 +140,6 @@ void	tokenize_cmd(char *str, t_line *tmp)
 	tmp->str[0][j] = '\0';
 	tmp->str[1] = NULL;
 	tmp->type = CMD;
-	tmp->next = NULL;
 }
+
+

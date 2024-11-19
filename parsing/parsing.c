@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/19 02:27:37 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/19 02:40:51 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	expanding(t_line **head, t_list *env)
 	while (new)
 	{
 		i = 0;
-		if (isredir((*head)->type) == 2)
+		if (isredir((*head)->type))
 		{
 			new = new->next;
 			flag = 1;
@@ -117,15 +117,5 @@ int	parse(char *str, t_line **head, t_parse *data, t_data* ex_data)
 	lexer(arg, head, data);
 	expanding(head, data->env);
 	triming_quotes(*head);
-	tmp = *head;
-	while (tmp)
-	{
-		printf("this is a node\n");
-		printf("----------------\n");
-		for (int i = 0;tmp->str[i];i++)
-			printf("%s\n", tmp->str[i]);
-		printf("%d\n", tmp->type);
-		tmp = tmp->next;
-	}
 	return (parse_error(*head));
 }

@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/19 02:28:10 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/19 02:43:37 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int		checkspaces(char *line);
 int		checkquotes(char *line);
 int		check_case_1(char c);
 int 	is_empty(char *str);
+int		count_words(const char *s, char c);
 char	*find_and_replace(char *line, t_list *data, int flag);
 char	*spacing(char *line);
 t_token	get_token(char *str);

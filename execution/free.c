@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/10 02:42:47 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/19 02:15:27 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,25 @@ void	free_io(t_io_fds *io_fds)
 	}
 }
 
+void	free_envp(t_list **head)
+{
+	t_list	*tmp;
+
+	tmp = (*head);
+	while (*head)
+	{
+		free((*head)->content);
+		tmp = (*head)->next;
+		free(*head);
+		*head = tmp;
+	}
+}
+
 void	free_all(t_data *data)
 {
 	// if (data->envp_arr)
 	free_arr(data->envp_arr);
+	free_envp(&data->envp);
 	data->envp_arr = NULL;
 }
 

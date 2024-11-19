@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/11 11:54:03 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/19 02:28:10 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int		checkquotes(char *line);
 int		checkspaces(char *line);
 int		quotes_open(char *s, int i);
 int		is_space(char c);
+int		isredir(int i);
 int		checkspaces(char *line);
 int		checkquotes(char *line);
 int		check_case_1(char c);

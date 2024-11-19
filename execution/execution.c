@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/12 09:07:30 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/19 02:14:40 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,16 +92,16 @@ int	minishell(t_data *data)
 			free_line(&data->head);
 			continue;
 		}
-		// head = data->head;
-		// while (head)
-		// {
-		// 	printf("this is a node\n");
-		// 	printf("----------------\n");
-		// 	for (int i = 0;head->str[i];i++)
-		// 		printf("%s\n", head->str[i]);
-		// 	printf("%d\n", head->type);
-		// 	head = head->next;
-		// }
+		head = data->head;
+		while (head)
+		{
+			printf("this is a node\n");
+			printf("----------------\n");
+			for (int i = 0;head->str[i];i++)
+				printf("%s\n", head->str[i]);
+			printf("%d\n", head->type);
+			head = head->next;
+		}
 		get_final_list(&data->head, &data->cmd);
 		// cmd = data->cmd;
 		// while (cmd)

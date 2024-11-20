@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 21:36:20 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/21 00:41:36 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	should_pipe(t_cmd *cmd)
 	return (0);
 }
 
-void	init_command(t_cmd *cmd, t_data *data, int *pipe)
+void	init_command(t_cmd *cmd, t_data *data)
 {
 	// init_io(&cmd->io_fds);
 	if (should_pipe(cmd) || (cmd->next && cmd->next->type == CMD))
@@ -99,15 +99,23 @@ int exec_cmd(char **command, char **envp, t_data *data)
 int single_command(t_data *data, char *cmd)
 {
 	t_line *temp = data->head;
+	char	*path;
 
 	while (temp)
 	{
 		if (temp->next && temp->next->type == 7)
 			temp = temp->next;
+		path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
 		if (builtin(data->cmd->argv[0]))
 			exec_builtin(data, data->cmd->argv);
 		else
 		{
+			if (access(path, F_OK | X_OK) != 0)
+			{
+				free(path);
+				return (ft_error(7, data));
+			}
+			free(path);
 			data->pid = fork();
 			if (data->pid == -1)
 				return (ft_error(1, data));

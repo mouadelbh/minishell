@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/19 23:06:38 by prizmo           ###   ########.fr       */
+/*   Updated: 2024/11/20 13:23:55 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,22 +51,19 @@ int	handle_input(t_data *data)
 	return (0);
 }
 
-void	free_cmd(t_cmd **head)
+void	free_cmd(t_cmd **cmd)
 {
-	t_cmd	*tmp;
 	int		i;
 
 	i = 0;
-	tmp = (*head);
-	while (*head)
+	while (*cmd)
 	{
 		i = 0;
-		while ((*head)->argv[i])
-			free((*head)->argv[i++]);
-		free((*head)->argv);
-		tmp = (*head)->next;
-		free(*head);
-		*head = tmp;
+		while ((*cmd)->argv[i])
+			free((*cmd)->argv[i++]);
+		free((*cmd)->argv);
+		free(*cmd);
+		*cmd = (*cmd)->next;
 	}
 }
 
@@ -91,30 +88,16 @@ int	minishell(t_data *data)
 			free_line(&data->head);
 			continue;
 		}
-		// head = data->head;
-		// while (head)
-		// {
-		// 	printf("this is a node\n");
-		// 	printf("----------------\n");
-		// 	for (int i = 0;head->str[i];i++)
-		// 		printf("str[%i]:%s\n", i,head->str[i]);
-		// 	printf("type = %d\n", head->type);
-		// 	head = head->next;
-		// }
 		get_final_list(&data->head, &data->cmd);
-		// cmd = data->cmd;
-		// while (cmd)
-		// {
-		// 	printf("this is a node\n");
-		// 	printf("----------------\n");
-		// 	for (int i = 0;cmd->argv[i];i++)
-		// 		printf("%s\n", cmd->argv[i]);
-		// 	printf("%d\n", cmd->type);
-		// 	cmd = cmd->next;
-		// }
-		data->envp_arr = set_list_arra(data->envp);
+		if (data->envp)
+			data->envp_arr = set_list_arra(data->envp);
+		else
+		{
+			printf("Error: envp is NULL\n");
+			continue;
+		}
 		data->status = handle_input(data);
-		free_line(&data->head);
+		// free_line(&data->head);
 		free_all(data);
 	}
 	return (data->status);

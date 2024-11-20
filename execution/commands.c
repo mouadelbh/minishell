@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/12 16:57:02 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:20:28 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ static int	valid_command(t_cmd *cmd, t_data *data)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd->cmd, 2);
 		ft_putstr_fd(": command not found\n", 2);
-		global.g_exit_status = COMMAND_NOT_FOUND;
 		free(full_command);
+		global.g_exit_status = COMMAND_NOT_FOUND;
 		return (0);
 	}
 	free(full_command);
@@ -82,7 +82,7 @@ int	exec_cmd(char *av, char **env, t_data *data)
 	char	*path;
 
 	cmd = ft_split(av, ' ');
-	free(av);
+	// free(av);
 	if (cmd[0][0] == '/')
 		path = ft_strdup(cmd[0]);
 	else if (cmd[0][0] != '\0')
@@ -90,7 +90,10 @@ int	exec_cmd(char *av, char **env, t_data *data)
 		path = get_full_cmd(cmd[0], env);
 	}
 	if (!path)
+	{
+		free_arr(cmd);
 		return (ft_error(7, data), 1);
+	}
 	if (execve(path, cmd, env) == -1)
 	{
 		perror("execve");
@@ -102,18 +105,21 @@ int	exec_cmd(char *av, char **env, t_data *data)
 	return (0);
 }
 
-int	single_command(t_data *data, char *cmd)
+int single_command(t_data *data, char *cmd)
 {
-	t_line	*temp = data->head;
+	t_line *temp = data->head;
 
 	while (temp)
 	{
 		if (temp->next && temp->next->type == 7)
+		{
+			// free(cmd);
 			temp = temp->next;
+		}
 		if (builtin(data->cmd->argv[0]))
 		{
 			exec_builtin(data, data->cmd->argv);
-			free(cmd);		
+			free(cmd);
 		}
 		else
 		{
@@ -123,8 +129,11 @@ int	single_command(t_data *data, char *cmd)
 			if (data->pid == 0)
 			{
 				data->status = exec_cmd(cmd, data->envp_arr, data);
+				free(cmd);
+				exit(data->status);
 			}
-			waitpid(0, NULL, 0);
+			waitpid(data->pid, &data->status, 0);
+			free(cmd);
 		}
 		temp = temp->next;
 	}
@@ -212,80 +221,6 @@ t_cmd	*set_command_list(t_cmd *cmd)
 	return (new_list);
 }
 
-/* t_cmd *set_command_list(t_cmd *cmd)
-{
-	t_cmd *new_list;
-	t_cmd *current;
-	t_cmd *temp;
-	t_cmd *orig_cmd = cmd;
-
-	if (!cmd)
-		return (NULL);
-
-	while (cmd && cmd->type != CMD)
-	{
-		free_cmd_node(cmd);
-		cmd = cmd->next;
-	}
-	if (!cmd)
-	{
-		while (orig_cmd)
-		{
-			temp = orig_cmd->next;
-			free_cmd_node(orig_cmd);
-			orig_cmd = temp;
-		}
-		return (NULL);
-	}
-	new_list = init_new_cmd(cmd);
-	if (!new_list)
-	{
-		while (orig_cmd)
-		{
-			temp = orig_cmd->next;
-			free_cmd_node(orig_cmd);
-			orig_cmd = temp;
-		}
-		return (NULL);
-	}
-	current = new_list;
-	cmd = cmd->next;
-	while (cmd)
-	{
-		if (cmd->type == CMD)
-		{
-			temp = init_new_cmd(cmd);
-			if (!temp)
-			{
-				while (new_list)
-				{
-					temp = new_list->next;
-					free(new_list);
-					new_list = temp;
-				}
-				while (orig_cmd)
-				{
-					temp = orig_cmd->next;
-					free_cmd_node(orig_cmd);
-					orig_cmd = temp;
-				}
-				return (NULL);
-			}
-			current->next = temp;
-			temp->prev = current;
-			current = temp;
-		}
-		cmd = cmd->next;
-	}
-	while (orig_cmd)
-	{
-		temp = orig_cmd->next;
-		free_cmd_node(orig_cmd);
-		orig_cmd = temp;
-	}
-	return (new_list);
-}
- */
 int	complex_command(t_data *data)
 {
 	t_line	*temp = data->head;
@@ -294,7 +229,10 @@ int	complex_command(t_data *data)
 	if (data->cmd)
 	{
 		if (!create_files(data->cmd, data))
+		{
+			free_cmd_list(&data->cmd);
 			return (1);
+		}
 		data->cmd = set_command_list(data->cmd);
 		ret = set_values(data);
 		return (handle_execute(data));

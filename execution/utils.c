@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/12 16:59:26 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:00:00 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,17 +173,31 @@ char	*get_full_cmd(char *av, char **env)
 	(void)env;
 	path = ft_split(getenv("PATH"), ':');
 	if (!path)
+	{
 		perror("Path error");
+		return (NULL);
+	}
 	while (path[i])
 	{
 		tmp = ft_strjoin(path[i], "/");
+		if (!tmp)
+		{
+			free_arr(path);
+			return (NULL);
+		}
 		full_cmd = ft_strjoin(tmp, av);
+		free(tmp);
+		if (!full_cmd)
+		{
+			free_arr(path);
+			return (NULL);
+		}
 		if (access(full_cmd, X_OK | F_OK) == 0)
 		{
-			free(tmp);
+			free_arr(path);
 			return (full_cmd);
 		}
-		free(tmp);
+		free(full_cmd);
 		i++;
 	}
 	free_arr(path);
@@ -239,9 +253,9 @@ char	*to_str(char **arr)
 	{
 		temp = ft_strjoin(result, arr[i]);
 		if (arr[i + 1])
-			result = ft_strcat(temp, " ");
+			result = ft_strjoin(temp, " ");
 		else
-			result = ft_strcat(temp, "");
+			result = ft_strjoin(temp, "");
 		free(temp);
 		i++;
 	}
@@ -276,30 +290,37 @@ void set_cmd_strings(t_cmd *cmd)
 {
 	t_cmd	*current = cmd;
 	int		i;
-	size_t	total_length;
+	char	*temp;
+	char	*new_cmd;
 
 	while (current != NULL)
 	{
-		total_length = 0;
 		i = 0;
+		current->cmd = NULL;
 		while (current->argv[i] != NULL)
 		{
-			total_length += ft_strlen(current->argv[i]) + 1;
-			i++;
-		}
-		current->cmd = malloc(total_length * sizeof(char));
-		if (current->cmd == NULL)
-		{
-			perror("Failed to allocate memory");
-			exit(EXIT_FAILURE);
-		}
-		current->cmd[0] = '\0';
-		i = 0;
-		while (current->argv[i] != NULL)
-		{
-			strcat(current->cmd, current->argv[i]);
+			temp = ft_strjoin(current->cmd, current->argv[i]);
+			if (temp == NULL)
+			{
+				perror("Failed to allocate memory");
+				exit(EXIT_FAILURE);
+			}
 			if (current->argv[i + 1] != NULL)
-				strcat(current->cmd, " ");
+			{
+				new_cmd = ft_strjoin(temp, " ");
+			}
+			else
+			{
+				new_cmd = ft_strdup(temp);
+			}
+			free(temp);
+			if (new_cmd == NULL)
+			{
+				perror("Failed to allocate memory");
+				exit(EXIT_FAILURE);
+			}
+			free(current->cmd);
+			current->cmd = new_cmd;
 			i++;
 		}
 		current = current->next;

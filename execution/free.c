@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/19 23:06:11 by prizmo           ###   ########.fr       */
+/*   Updated: 2024/11/20 13:35:02 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,26 +35,6 @@ static void	free_io(t_cmd *cmd)
 	}
 }
 
-/* static void	free_io(t_cmd *cmd)
-{
-	if (cmd->io_fds)
-	{
-		if (cmd->io_fds->infile)
-			free(cmd->io_fds->infile);
-		if (cmd->io_fds->outfile)
-			free(cmd->io_fds->outfile);
-		if (cmd->io_fds->heredoc_name)
-			free(cmd->io_fds->heredoc_name);
-		if (cmd->pipe_output)
-		{
-			printf("Freeing the pipe_fd\n");
-			free(cmd->pipe_fd);
-			cmd->pipe_fd = NULL;
-		}
-		free(cmd->io_fds);
-	}
-} */
-
 static void	free_cmd_struct(t_cmd *cmd)
 {
 	t_cmd	*tmp;
@@ -80,7 +60,7 @@ void	free_all(t_data *data)
 		free_io(data->cmd);
 	}
 	free_line(&data->head);
-	// free_cmd_list(&data->cmd);
+	free_cmd_list(&data->cmd);
 	free_cmd_struct(data->cmd);
 	data->envp_arr = NULL;
 }

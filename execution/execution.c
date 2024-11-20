@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/19 23:06:38 by prizmo           ###   ########.fr       */
+/*   Updated: 2024/11/20 13:47:55 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ int	handle_input(t_data *data)
 	data->cmd_count = count_symbols(data);
 	if (data->cmd_count == 0 && data->head->type == CMD)
 	{
-		if (data->cmd)
-			cmd = to_str(data->cmd->argv);
+		// if (data->cmd)
+		// 	cmd = to_str(data->cmd->argv);
+		cmd = NULL;
 		data->status = single_command(data, cmd);
 	}
 	else
@@ -91,30 +92,9 @@ int	minishell(t_data *data)
 			free_line(&data->head);
 			continue;
 		}
-		// head = data->head;
-		// while (head)
-		// {
-		// 	printf("this is a node\n");
-		// 	printf("----------------\n");
-		// 	for (int i = 0;head->str[i];i++)
-		// 		printf("str[%i]:%s\n", i,head->str[i]);
-		// 	printf("type = %d\n", head->type);
-		// 	head = head->next;
-		// }
 		get_final_list(&data->head, &data->cmd);
-		// cmd = data->cmd;
-		// while (cmd)
-		// {
-		// 	printf("this is a node\n");
-		// 	printf("----------------\n");
-		// 	for (int i = 0;cmd->argv[i];i++)
-		// 		printf("%s\n", cmd->argv[i]);
-		// 	printf("%d\n", cmd->type);
-		// 	cmd = cmd->next;
-		// }
 		data->envp_arr = set_list_arra(data->envp);
 		data->status = handle_input(data);
-		free_line(&data->head);
 		free_all(data);
 	}
 	return (data->status);

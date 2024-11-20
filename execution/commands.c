@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 14:05:55 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:11:13 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,32 +76,6 @@ int	handle_execute(t_data *data)
 	return (close_file(data));
 }
 
-// int	exec_cmd(char *av, char **env, t_data *data)
-// {
-// 	char	**cmd;
-// 	char	*path;
-
-// 	cmd = ft_split(av, ' ');
-// 	free(av);
-// 	if (cmd[0][0] == '/')
-// 		path = ft_strdup(cmd[0]);
-// 	else if (cmd[0][0] != '\0')
-// 	{
-// 		path = get_full_cmd(cmd[0], env);
-// 	}
-// 	if (!path)
-// 		return (ft_error(7, data), 1);
-// 	if (execve(path, cmd, env) == -1)
-// 	{
-// 		perror("execve");
-// 		global.g_exit_status = GENERAL_ERROR;
-// 		free(path);
-// 		free_arr(cmd);
-// 		return (1);
-// 	}
-// 	return (0);
-// }
-
 int exec_cmd(char **command, char **envp, t_data *data)
 {
 	char	*path;
@@ -109,12 +83,8 @@ int exec_cmd(char **command, char **envp, t_data *data)
 	if (command[0][0] == '/')
 		path = ft_strdup(command[0]);
 	else if (command[0][0] != '\0')
-	{
 		path = get_full_cmd(command[0], envp);
-	}
 	if (!path)
-	{
-		free_arr(cmd);
 		return (ft_error(7, data), 1);
 	if (execve(path, command, envp) == -1)
 	{
@@ -135,7 +105,6 @@ int single_command(t_data *data, char *cmd)
 	{
 		if (temp->next && temp->next->type == 7)
 		{
-			// free(cmd);
 			temp = temp->next;
 		}
 		if (builtin(data->cmd->argv[0]))
@@ -149,7 +118,6 @@ int single_command(t_data *data, char *cmd)
 				return (ft_error(1, data));
 			if (data->pid == 0)
 			{
-				// data->status = exec_cmd(cmd, data->envp_arr, data);
 				data->status = exec_cmd(data->cmd->argv, data->envp_arr, data);
 			}
 			waitpid(data->pid, &data->status, 0);
@@ -178,7 +146,7 @@ t_cmd	*init_new_cmd(t_cmd *src)
 	return (new);
 }
 
-static void	free_cmd_node(t_cmd *cmd)
+void	free_cmd_node(t_cmd *cmd)
 {
 	if (cmd->argv)
 		free_arr(cmd->argv);

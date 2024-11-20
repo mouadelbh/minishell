@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 14:06:14 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 15:28:42 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,30 +172,18 @@ char	*get_full_cmd(char *av, char **env)
 	(void)env;
 	path = ft_split(getenv("PATH"), ':');
 	if (!path)
-	{
-		perror("Path error");
-		return (NULL);
-	}
+		return (perror("Path error"), NULL);
 	while (path[i])
 	{
 		tmp = ft_strjoin(path[i], "/");
 		if (!tmp)
-		{
-			free_arr(path);
-			return (NULL);
-		}
+			return (free_arr(path), NULL);
 		full_cmd = ft_strjoin(tmp, av);
 		free(tmp);
 		if (!full_cmd)
-		{
-			free_arr(path);
-			return (NULL);
-		}
+			return (free_arr(path), NULL);
 		if (access(full_cmd, X_OK | F_OK) == 0)
-		{
-			free_arr(path);
-			return (full_cmd);
-		}
+			return (free_arr(path), full_cmd);
 		free(full_cmd);
 		i++;
 	}

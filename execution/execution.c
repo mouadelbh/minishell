@@ -6,28 +6,27 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/20 14:06:05 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 15:26:03 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_cmd_list(t_cmd **head)
+void	free_cmd_list(t_cmd **cmd)
 {
-	t_cmd	*tmp;
 	int		i;
+	t_cmd	*temp;
 
 	i = 0;
-	tmp = (*head);
-	while (*head)
+	while (*cmd)
 	{
 		i = 0;
-		while ((*head)->argv[i])
-			free((*head)->argv[i++]);
-		free((*head)->argv);
-		tmp = (*head)->next;
-		free(*head);
-		*head = tmp;
+		while ((*cmd)->argv[i])
+			free((*cmd)->argv[i++]);
+		free((*cmd)->argv);
+		temp = *cmd;
+		*cmd = (*cmd)->next;
+		free(temp);
 	}
 }
 
@@ -92,6 +91,7 @@ int	minishell(t_data *data)
 		get_final_list(&data->head, &data->cmd);
 		data->envp_arr = set_list_arra(data->envp);
 		data->status = handle_input(data);
+		free_line(&data->head);
 		free_all(data);
 	}
 	return (data->status);

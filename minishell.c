@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:18:31 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/20 13:10:22 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 15:58:38 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,19 @@ void	free_arr(char **arr)
 	arr = NULL;
 }
 
+static void	free_env(t_list **envp)
+{
+	t_list	*tmp;
+
+	while (*envp)
+	{
+		tmp = (*envp)->next;
+		free((*envp)->content);
+		free(*envp);
+		*envp = tmp;
+	}
+}
+
 int	main(int ac, char **av, char **env)
 {
 	(void)av;
@@ -44,6 +57,6 @@ int	main(int ac, char **av, char **env)
 	program.status = 0;
 	program.exit = 0;
 	minishell(&program);
-	// free_all(&program);
+	free_env(&program.envp);
 	return (global.g_exit_status);
 }

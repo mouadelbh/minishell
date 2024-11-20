@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 14:11:13 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 15:17:16 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,28 +100,20 @@ int single_command(t_data *data, char *cmd)
 {
 	t_line *temp = data->head;
 
-	(void)cmd;
 	while (temp)
 	{
 		if (temp->next && temp->next->type == 7)
-		{
 			temp = temp->next;
-		}
 		if (builtin(data->cmd->argv[0]))
-		{
 			exec_builtin(data, data->cmd->argv);
-		}
 		else
 		{
 			data->pid = fork();
 			if (data->pid == -1)
 				return (ft_error(1, data));
 			if (data->pid == 0)
-			{
 				data->status = exec_cmd(data->cmd->argv, data->envp_arr, data);
-			}
 			waitpid(data->pid, &data->status, 0);
-			free(cmd);
 		}
 		temp = temp->next;
 	}

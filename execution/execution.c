@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/20 13:23:55 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:06:05 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ int	handle_input(t_data *data)
 	data->cmd_count = count_symbols(data);
 	if (data->cmd_count == 0 && data->head->type == CMD)
 	{
-		if (data->cmd)
-			cmd = to_str(data->cmd->argv);
+		// if (data->cmd)
+		// 	cmd = to_str(data->cmd->argv);
+		cmd = NULL;
 		data->status = single_command(data, cmd);
 	}
 	else
@@ -89,15 +90,8 @@ int	minishell(t_data *data)
 			continue;
 		}
 		get_final_list(&data->head, &data->cmd);
-		if (data->envp)
-			data->envp_arr = set_list_arra(data->envp);
-		else
-		{
-			printf("Error: envp is NULL\n");
-			continue;
-		}
+		data->envp_arr = set_list_arra(data->envp);
 		data->status = handle_input(data);
-		// free_line(&data->head);
 		free_all(data);
 	}
 	return (data->status);

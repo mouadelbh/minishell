@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 15:28:42 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 20:00:17 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,13 +295,9 @@ void set_cmd_strings(t_cmd *cmd)
 				exit(EXIT_FAILURE);
 			}
 			if (current->argv[i + 1] != NULL)
-			{
 				new_cmd = ft_strjoin(temp, " ");
-			}
 			else
-			{
 				new_cmd = ft_strdup(temp);
-			}
 			free(temp);
 			if (new_cmd == NULL)
 			{

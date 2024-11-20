@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 15:17:16 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 20:16:03 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	should_pipe(t_cmd *cmd)
 
 void	init_command(t_cmd *cmd, t_data *data)
 {
-	init_io(&cmd->io_fds);
+	// init_io(&cmd->io_fds);
 	if (should_pipe(cmd) || (cmd->next && cmd->next->type == CMD))
 		cmd->pipe_output = true;
 }

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/20 15:26:03 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 20:30:56 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	handle_input(t_data *data)
 		// if (data->cmd)
 		// 	cmd = to_str(data->cmd->argv);
 		cmd = NULL;
+		init_io(&data->cmd->io_fds);
 		data->status = single_command(data, cmd);
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 20:15:58 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 21:35:52 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 int	create_files(t_cmd *cmd, t_data *data)
 {
 	int	i;
+	int	pipe;
 
 	i = 1;
+	pipe = 0;
 	while (cmd)
 	{
 		init_io(&cmd->io_fds);

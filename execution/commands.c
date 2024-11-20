@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 20:16:03 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 21:36:20 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	should_pipe(t_cmd *cmd)
 	return (0);
 }
 
-void	init_command(t_cmd *cmd, t_data *data)
+void	init_command(t_cmd *cmd, t_data *data, int *pipe)
 {
 	// init_io(&cmd->io_fds);
 	if (should_pipe(cmd) || (cmd->next && cmd->next->type == CMD))
@@ -210,7 +210,7 @@ int	complex_command(t_data *data)
 	{
 		if (!create_files(data->cmd, data))
 		{
-			free_cmd_list(&data->cmd);
+			// free_cmd_list(&data->cmd);
 			return (1);
 		}
 		data->cmd = set_command_list(data->cmd);

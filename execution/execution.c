@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/20 20:30:56 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/21 22:33:49 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,30 @@ void	free_cmd_list(t_cmd **cmd)
 	}
 }
 
+static int	count_commands(t_data *data)
+{
+	int		count;
+	t_line	*temp;
+
+	count = 0;
+	temp = data->head;
+	while (temp)
+	{
+		if (temp->type == CMD)
+			count++;
+		temp = temp->next;
+	}
+	return (count);
+}
+
 int	handle_input(t_data *data)
 {
 	t_line	*temp = data->head;
 	char	*cmd;
 
-	data->cmd_count = count_symbols(data);
-	if (data->cmd_count == 0 && data->head->type == CMD)
+	data->sym_count = count_symbols(data);
+	data->cmd_count = count_commands(data);
+	if (data->sym_count == 0 && data->head->type == CMD)
 	{
 		// if (data->cmd)
 		// 	cmd = to_str(data->cmd->argv);

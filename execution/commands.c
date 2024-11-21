@@ -6,13 +6,13 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/21 00:41:36 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/21 22:45:21 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	should_pipe(t_cmd *cmd)
+int should_pipe(t_cmd *cmd)
 {
 	t_cmd	*temp = cmd;
 	int		pipe_count = 0;
@@ -23,7 +23,8 @@ int	should_pipe(t_cmd *cmd)
 			pipe_count++;
 		temp = temp->next;
 	}
-	if (pipe_count % 2 == 0)
+	// Check if there are more than one command to determine if piping is needed
+	if (pipe_count > 1)
 		return (1);
 	return (0);
 }
@@ -163,6 +164,7 @@ void	free_cmd_node(t_cmd *cmd)
 		free(cmd->io_fds);
 	}
 	free(cmd);
+	cmd = NULL;
 }
 
 t_cmd	*set_command_list(t_cmd *cmd)
@@ -173,7 +175,7 @@ t_cmd	*set_command_list(t_cmd *cmd)
 
 	if (!cmd)
 		return (NULL);
-	while (cmd && cmd->type != CMD && cmd->next)
+	while (cmd && cmd->type != CMD)
 	{
 		free_cmd_node(cmd);
 		cmd = cmd->next;

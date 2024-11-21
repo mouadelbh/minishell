@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/20 13:46:55 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/21 22:40:42 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef	struct	s_io_fds
 typedef struct s_cmd {
 	char			**argv;
 	char			*cmd;
+	// int				commands;
 	int				type;
 	int				*pipe_fd;
 	int				pipe_output;
@@ -84,6 +85,7 @@ typedef struct s_data
 	char		*old_dir;
 	int			exit;
 	int			pipe_count;
+	int			sym_count;
 	int			cmd_count;
 }				t_data;
 
@@ -147,5 +149,6 @@ void	init_heredoc(t_cmd *cmd, t_data *data);
 void	free_all(t_data *data);
 void	free_data(t_data *data, int exit_code);
 void	free_cmd_list(t_cmd **head);
+int		handle_pipes(t_data *data);
 
 #endif

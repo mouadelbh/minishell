@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 21:28:33 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/07 16:47:36 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 09:31:51 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,6 @@ void	show_command_info(t_cmd *command)
 		ft_putstr_fd("Is piped? ", 2);
 		ft_putstr_fd(cmd->pipe_output?"Yes":"No", 2);
 		ft_putchar_fd('\n', 2);
-/* 		if (cmd->pipe_output)
-		{
-			ft_putchar_fd('\n', 2);
-			ft_putstr_fd("pipe[0]: ", 2);
-			ft_putnbr_fd(cmd->pipe_fd[0], 2);
-			ft_putchar_fd('\n', 2);
-			ft_putstr_fd("pipe[1]: ", 2);
-			ft_putnbr_fd(cmd->pipe_fd[1], 2);
-			ft_putchar_fd('\n', 2);
-		} */
 		cmd = cmd->next;
 	}
 }

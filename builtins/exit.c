@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:48:20 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/11 10:50:29 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/20 16:00:16 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int ft_exit(t_data *data, char **cmd)
 		printf("exit\n");
 	if (cmd[1] && cmd[2])
 	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 2);
 		if (is_num(cmd[1]))
 			return (1);
 		else
@@ -80,9 +80,17 @@ int ft_exit(t_data *data, char **cmd)
 	}
 	else if (cmd[1] && !cmd[2])
 	{
-		exit_code = get_code(cmd[1], &error);
+		if (!is_num(cmd[1]))
+			printf("exit\nminishell: exit: %s: numeric argument required\n", cmd[1]);
 	}
+	if (is_num(cmd[1]))
+		exit_code = get_code(cmd[1], &error);
+	else if (!cmd[1])
+		exit_code = data->status;
+	else
+		exit_code = 1;
 	free_data(data, exit_code);
-	data->exit = 1;
+	data->exit = exit_code;
+	exit(exit_code);
 	return (0);
 }

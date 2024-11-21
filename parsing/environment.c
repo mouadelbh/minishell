@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:07 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/21 17:35:34 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/21 17:59:10 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ t_list	*get_pwd(void)
 	env = malloc(sizeof(t_list));
 	if (!env)
 		return (NULL);
-	tmp = malloc(sizeof(char) * PAT_MAX + 1);
+	tmp = malloc(sizeof(char) * PATH + 1);
 	if (!tmp)
 		return (free(env), NULL);
-	if (!getcwd(tmp, PAT_MAX))
+	if (!getcwd(tmp, PATH))
 		return (free(env), free(tmp), NULL);
 	env->content = ft_strjoin("PWD=", tmp);
 	env->next = NULL;

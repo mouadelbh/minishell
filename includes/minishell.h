@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/11 10:50:52 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:46:55 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,21 +71,6 @@ typedef struct s_cmd {
 	struct s_cmd	*prev;
 }					t_cmd;
 
-typedef struct s_redir_info
-{
-	t_cmd	*last_out;
-	t_cmd	*last_in;
-	t_cmd	*last_append;
-	t_cmd	*last_heredoc;
-} 			t_redir_info;
-
-typedef struct s_builtin
-{
-	char		*command;
-	int			has_args;
-	char		*argument;
-}				t_builtin;
-
 typedef struct s_data
 {
 	pid_t		pid;
@@ -99,6 +84,7 @@ typedef struct s_data
 	char		*old_dir;
 	int			exit;
 	int			pipe_count;
+	int			cmd_count;
 }				t_data;
 
 void	show_command_ios(t_cmd *cmd);
@@ -127,28 +113,27 @@ int 	count_pipes(t_data *data);
 int		count_symbols(t_data *data);
 char	*ft_strcat(char *dest, char *src);
 char 	*get_full_cmd(char *av, char **env);
-char 	*array_to_string(t_line *head);
 char 	*to_str(char **arr);
 char 	*new_strjoin(char *s1, char *s2);
 char 	**set_list_arra(t_list *envp);
 void 	show_command_info(t_cmd *cmd_list);
 void 	show_io_fds(t_io_fds *io_fds);
 void 	set_cmd_strings(t_cmd *cmd);
-void	create_files(t_cmd *cmd, t_data *data);
+int		create_files(t_cmd *cmd, t_data *data);
 void	init_command(t_cmd *cmd, t_data *data);
 int		handle_input(t_data *data);
 int		handle_execute(t_data *data);
-int		exec_cmd(char *av, char **env, t_data *data);
+// int		exec_cmd(char *av, char **env, t_data *data);
+int		exec_cmd(char **command, char **envp, t_data *data);
 int		single_command(t_data *data, char *cmd);
 int		complex_command(t_data *data);
 int		set_values(t_data *data);
 int		execute_command(t_data *data, t_cmd *cmd);
 int		close_file(t_data *data);
-void	create_files(t_cmd *cmd, t_data *data);
 void	init_cmd(t_cmd *cmd);
 void	init_io(t_io_fds **io_fds);
-void	init_write_to(t_cmd *cmd, t_data *data);
-void	init_read_from(t_cmd *cmd, t_data *data);
+int		init_write_to(t_cmd *cmd, t_data *data);
+int		init_read_from(t_cmd *cmd, t_data *data);
 void	init_append(t_cmd *cmd, t_data *data);
 void	close_fds(t_cmd *cmds, bool close_backups);
 bool	check_infile_outfile(t_io_fds *io);
@@ -161,5 +146,6 @@ void	close_pipe_fds(t_cmd *cmds, t_cmd *skip_cmd);
 void	init_heredoc(t_cmd *cmd, t_data *data);
 void	free_all(t_data *data);
 void	free_data(t_data *data, int exit_code);
+void	free_cmd_list(t_cmd **head);
 
 #endif

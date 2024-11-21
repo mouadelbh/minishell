@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:17:37 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/10 02:19:10 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/10 20:38:44 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ bool	create_pipes(t_data *data)
 	tmp = data->cmd;
 	while (tmp)
 	{
-		// if (tmp->pipe_output && (tmp->pipe_fd || (tmp->prev && tmp->prev->pipe_fd)))
 		if (tmp->pipe_output)
 		{
 			fd = malloc(sizeof * fd * 2);

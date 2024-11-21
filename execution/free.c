@@ -3,70 +3,85 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/19 02:15:27 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/20 20:30:40 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// void	free_all(t_data *data)
-// {
-// 	t_line	*temp;
-// 	t_line	*next;
-
-// 	temp = data->head;
-// 	while (temp)
-// 	{
-// 		next = temp->next;
-// 		free(temp->str);
-// 		free(temp);
-// 		temp = next;
-// 	}
-// }
-
-void	free_io(t_io_fds *io_fds)
+static void	free_io(t_cmd *cmd)
 {
-	if (io_fds)
+	while (cmd)
 	{
-		if (io_fds->infile)
-			free(io_fds->infile);
-		if (io_fds->outfile)
-			free(io_fds->outfile);
-		if (io_fds->heredoc_name)
-			free(io_fds->heredoc_name);
-		free(io_fds);
+		if (cmd->io_fds != NULL)
+		{
+			if (cmd->io_fds->infile)
+				free(cmd->io_fds->infile);
+			if (cmd->io_fds->outfile)
+				free(cmd->io_fds->outfile);
+			if (cmd->io_fds->heredoc_name)
+				free(cmd->io_fds->heredoc_name);
+			if (cmd->pipe_output)
+			{
+				free(cmd->pipe_fd);
+				cmd->pipe_fd = NULL;
+			}
+			free(cmd->io_fds);
+		}
+		cmd = cmd->next;
 	}
 }
 
-void	free_envp(t_list **head)
+static void	free_cmd_struct(t_cmd *cmd)
 {
-	t_list	*tmp;
+	t_cmd	*tmp;
 
-	tmp = (*head);
-	while (*head)
+	while (cmd)
 	{
-		free((*head)->content);
-		tmp = (*head)->next;
-		free(*head);
-		*head = tmp;
+		tmp = cmd->next;
+		if (cmd->argv)
+			free_arr(cmd->argv);
+		if (cmd->cmd)
+			free(cmd->cmd);
+		free(cmd);
+		cmd = tmp;
 	}
 }
 
 void	free_all(t_data *data)
 {
-	// if (data->envp_arr)
-	free_arr(data->envp_arr);
-	free_envp(&data->envp);
+	if (data->envp_arr)
+		free_arr(data->envp_arr);
+	// if (data->cmd_count != 0)
+	// {
+	// 	free_io(data->cmd);
+	// }
+	free_io(data->cmd);
+	// free_line(&data->head);
+	free_cmd_list(&data->cmd);
+	free_cmd_struct(data->cmd);
 	data->envp_arr = NULL;
+}
+
+static void	free_env(t_list **envp)
+{
+	t_list	*tmp;
+
+	while (*envp)
+	{
+		tmp = (*envp)->next;
+		free((*envp)->content);
+		free(*envp);
+		*envp = tmp;
+	}
 }
 
 void	free_data(t_data *data, int exit_code)
 {
-	// free_io(data->cmd->io_fds);
-	// free_cmd(data->cmd);
 	free_all(data);
-	exit(exit_code);
+	free_env(&data->envp);
+	// exit(exit_code);
 }

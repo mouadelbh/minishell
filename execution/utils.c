@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/10 02:43:07 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 20:00:17 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ int	ft_error(int error, t_data *data)
 		ft_putchar_fd(' ', 2);
 		ft_putstr_fd("command not found\n", STDERR_FILENO);
 	}
-	// reset_shell(data);
 	return (EXIT_FAILURE);
 }
 
@@ -165,7 +164,7 @@ int	count_pipes(t_data *data)
 char	*get_full_cmd(char *av, char **env)
 {
 	int		i;
-	// char	*result;
+	char	*tmp;
 	char	*full_cmd;
 	char	**path;
 
@@ -173,61 +172,23 @@ char	*get_full_cmd(char *av, char **env)
 	(void)env;
 	path = ft_split(getenv("PATH"), ':');
 	if (!path)
-		perror("Path error");
+		return (perror("Path error"), NULL);
 	while (path[i])
 	{
-		full_cmd = ft_strjoin(ft_strjoin(path[i], "/"), av);
-		// free(result);
+		tmp = ft_strjoin(path[i], "/");
+		if (!tmp)
+			return (free_arr(path), NULL);
+		full_cmd = ft_strjoin(tmp, av);
+		free(tmp);
+		if (!full_cmd)
+			return (free_arr(path), NULL);
 		if (access(full_cmd, X_OK | F_OK) == 0)
-		{
-			return (full_cmd);
-		}
-		// free(full_cmd);
+			return (free_arr(path), full_cmd);
+		free(full_cmd);
 		i++;
 	}
-	// free_arr(path);
+	free_arr(path);
 	return (NULL);
-}
-
-char	*array_to_string(t_line *temp)
-{
-	size_t total_length = 0;
-	char *cmd;
-	size_t cmd_size;
-	t_line *current = temp;
-
-	// Calculate the total length needed
-	while (current && current->str[0][0] != '|' && current->str[0][0] != '>' && current->str[0][0] != '<')
-	{
-		for (size_t i = 0; current->str[i]; i++)
-			total_length += strlen(current->str[i]) + 1;
-		current = current->next;
-	}
-
-	// Allocate memory for the result string
-	cmd_size = total_length + 1; // +1 for the null terminator
-	cmd = (char *)malloc(cmd_size);
-	if (!cmd)
-	{
-		perror("malloc");
-		return NULL;
-	}
-	cmd[0] = '\0'; // Initialize the result string
-
-	// Concatenate each element with a space
-	current = temp;
-	while (current && current->str[0][0] != '|' && current->str[0][0] != '>' && current->str[0][0] != '<')
-	{
-		for (size_t i = 0; current->str[i]; i++)
-		{
-			ft_strlcat(cmd, current->str[i], cmd_size);
-			if (current->str[i + 1] || (current->next &&
-				(current->next->type == 7 || current->next->type == 8)))
-				ft_strlcat(cmd, " ", cmd_size);
-		}
-		current = current->next;
-	}
-	return cmd;
 }
 
 int	count_symbols(t_data *data)
@@ -249,36 +210,42 @@ char *ft_strcat(char *s1, char *s2)
 {
 	size_t	len1;
 	size_t	len2;
+	char	*dest;
 
 	if (!s1 && !s2)
-		return (NULL); // Both are NULL
+		return (NULL);
 	if (!s1)
-		return (strdup(s2)); // s1 is NULL, return a copy of s2
+		return (strdup(s2));
 	if (!s2)
-		return (strdup(s1)); // s2 is NULL, return a copy of s1
+		return (strdup(s1));
 	len1 = strlen(s1);
 	len2 = strlen(s2);
-	char *dest = malloc(len1 + len2 + 1);
+	dest = malloc(len1 + len2 + 1);
 	if (!dest)
-		return (NULL); // Check for allocation failure
+		return (NULL);
 	memcpy(dest, s1, len1);
 	memcpy(dest + len1, s2, len2);
 	dest[len1 + len2] = '\0';
-	return (dest); // Return the pointer to the new string
+	return (dest);
 }
 
 char	*to_str(char **arr)
 {
 	char	*result;
+	char	*temp;
 	int		i;
 
 	i = 0;
 	result = NULL;
 	while (arr[i])
 	{
-		result = ft_strcat(result, arr[i]);
+		temp = ft_strjoin(result, arr[i]);
+		free(result);
 		if (arr[i + 1])
-			result = ft_strcat(result, " ");
+			result = ft_strjoin(temp, " ");
+		else
+			result = ft_strjoin(temp, "");
+		free(temp);
 		i++;
 	}
 	return (result);
@@ -312,30 +279,33 @@ void set_cmd_strings(t_cmd *cmd)
 {
 	t_cmd	*current = cmd;
 	int		i;
-	size_t	total_length;
+	char	*temp;
+	char	*new_cmd;
 
 	while (current != NULL)
 	{
-		total_length = 0;
 		i = 0;
+		current->cmd = NULL;
 		while (current->argv[i] != NULL)
 		{
-			total_length += ft_strlen(current->argv[i]) + 1;
-			i++;
-		}
-		current->cmd = malloc(total_length * sizeof(char));
-		if (current->cmd == NULL)
-		{
-			perror("Failed to allocate memory");
-			exit(EXIT_FAILURE);
-		}
-		current->cmd[0] = '\0';
-		i = 0;
-		while (current->argv[i] != NULL)
-		{
-			strcat(current->cmd, current->argv[i]);
+			temp = ft_strjoin(current->cmd, current->argv[i]);
+			if (temp == NULL)
+			{
+				perror("Failed to allocate memory");
+				exit(EXIT_FAILURE);
+			}
 			if (current->argv[i + 1] != NULL)
-				strcat(current->cmd, " ");
+				new_cmd = ft_strjoin(temp, " ");
+			else
+				new_cmd = ft_strdup(temp);
+			free(temp);
+			if (new_cmd == NULL)
+			{
+				perror("Failed to allocate memory");
+				exit(EXIT_FAILURE);
+			}
+			free(current->cmd);
+			current->cmd = new_cmd;
 			i++;
 		}
 		current = current->next;
@@ -344,31 +314,30 @@ void set_cmd_strings(t_cmd *cmd)
 
 char	**set_list_arra(t_list *env)
 {
-    char	**result;
-    t_list	*temp = env;
-    int		i;
+	char	**result;
+	t_list	*temp = env;
+	int		i;
 
-    i = ft_lstsize(env);
-    result = malloc(sizeof(char *) * (i + 1));
-    if (!result)
-        return NULL;
-    result[i] = NULL;
-    i = 0;
-    while (temp)
-    {
-        result[i] = ft_strdup(temp->content); // Make a copy of the string
-        if (!result[i])
-        {
-            // Free previously allocated memory in case of failure
-            while (i > 0)
-            {
-                free(result[--i]);
-            }
-            free(result);
-            return NULL;
-        }
-        temp = temp->next;
-        i++;
-    }
-    return (result);
+	i = ft_lstsize(env);
+	result = malloc(sizeof(char *) * (i + 1));
+	if (!result)
+		return NULL;
+	result[i] = NULL;
+	i = 0;
+	while (temp)
+	{
+		result[i] = ft_strdup(temp->content);
+		if (!result[i])
+		{
+			while (i > 0)
+			{
+				free(result[--i]);
+			}
+			free(result);
+			return NULL;
+		}
+		temp = temp->next;
+		i++;
+	}
+	return (result);
 }

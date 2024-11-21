@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/11 10:50:29 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/21 00:41:36 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,27 @@ int	should_pipe(t_cmd *cmd)
 
 void	init_command(t_cmd *cmd, t_data *data)
 {
-	init_io(&cmd->io_fds);
+	// init_io(&cmd->io_fds);
 	if (should_pipe(cmd) || (cmd->next && cmd->next->type == CMD))
 		cmd->pipe_output = true;
+}
+
+static int	valid_command(t_cmd *cmd, t_data *data)
+{
+	char	*full_command;
+	
+	full_command = get_full_cmd(cmd->argv[0], data->envp_arr);
+	if (access(full_command, F_OK | X_OK) == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->cmd, 2);
+		ft_putstr_fd(": command not found\n", 2);
+		free(full_command);
+		global.g_exit_status = COMMAND_NOT_FOUND;
+		return (0);
+	}
+	free(full_command);
+	return (1);
 }
 
 int	handle_execute(t_data *data)
@@ -42,11 +60,14 @@ int	handle_execute(t_data *data)
 	cmd = data->cmd;
 	while (data->pid != 0 && cmd)
 	{
-		if (cmd->type == CMD)
+		if (cmd->type == CMD && valid_command(cmd, data))
 		{
 			data->pid = fork();
 			if (data->pid == -1)
+			{
 				ft_putstr_fd("fork error\n", 2);
+				return (1);
+			}
 		}
 		if (data->pid == 0)
 			execute_command(data, cmd);
@@ -55,49 +76,52 @@ int	handle_execute(t_data *data)
 	return (close_file(data));
 }
 
-int	exec_cmd(char *av, char **env, t_data *data)
+int exec_cmd(char **command, char **envp, t_data *data)
 {
-	char	**cmd;
 	char	*path;
 
-	cmd = ft_split(av, ' ');
-	if (cmd[0][0] == '/')
-		path = ft_strdup(cmd[0]);
-	else if (cmd[0][0] != '\0')
-	{
-		path = get_full_cmd(cmd[0], env);
-	}
+	if (command[0][0] == '/')
+		path = ft_strdup(command[0]);
+	else if (command[0][0] != '\0')
+		path = get_full_cmd(command[0], envp);
 	if (!path)
 		return (ft_error(7, data), 1);
-	if (execve(path, cmd, env) == -1)
+	if (execve(path, command, envp) == -1)
 	{
 		perror("execve");
 		global.g_exit_status = GENERAL_ERROR;
+		free(path);
 		return (1);
 	}
 	return (0);
 }
 
-int	single_command(t_data *data, char *cmd)
+int single_command(t_data *data, char *cmd)
 {
-	t_line	*temp = data->head;
+	t_line *temp = data->head;
+	char	*path;
 
 	while (temp)
 	{
 		if (temp->next && temp->next->type == 7)
 			temp = temp->next;
+		path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
 		if (builtin(data->cmd->argv[0]))
 			exec_builtin(data, data->cmd->argv);
 		else
 		{
+			if (access(path, F_OK | X_OK) != 0)
+			{
+				free(path);
+				return (ft_error(7, data));
+			}
+			free(path);
 			data->pid = fork();
 			if (data->pid == -1)
 				return (ft_error(1, data));
 			if (data->pid == 0)
-			{
-				data->status = exec_cmd(cmd, data->envp_arr, data);
-			}
-			waitpid(0, NULL, 0);
+				data->status = exec_cmd(data->cmd->argv, data->envp_arr, data);
+			waitpid(data->pid, &data->status, 0);
 		}
 		temp = temp->next;
 	}
@@ -122,6 +146,25 @@ t_cmd	*init_new_cmd(t_cmd *src)
 	return (new);
 }
 
+void	free_cmd_node(t_cmd *cmd)
+{
+	if (cmd->argv)
+		free_arr(cmd->argv);
+	if (cmd->cmd)
+		free(cmd->cmd);
+	if (cmd->io_fds)
+	{
+		if (cmd->io_fds->infile)
+			free(cmd->io_fds->infile);
+		if (cmd->io_fds->outfile)
+			free(cmd->io_fds->outfile);
+		if (cmd->io_fds->heredoc_name)
+			free(cmd->io_fds->heredoc_name);
+		free(cmd->io_fds);
+	}
+	free(cmd);
+}
+
 t_cmd	*set_command_list(t_cmd *cmd)
 {
 	t_cmd	*new_list;
@@ -130,8 +173,11 @@ t_cmd	*set_command_list(t_cmd *cmd)
 
 	if (!cmd)
 		return (NULL);
-	while (cmd && cmd->type != CMD)
+	while (cmd && cmd->type != CMD && cmd->next)
+	{
+		free_cmd_node(cmd);
 		cmd = cmd->next;
+	}
 	if (!cmd)
 		return (NULL);
 	new_list = init_new_cmd(cmd);
@@ -170,7 +216,11 @@ int	complex_command(t_data *data)
 
 	if (data->cmd)
 	{
-		create_files(data->cmd, data);
+		if (!create_files(data->cmd, data))
+		{
+			// free_cmd_list(&data->cmd);
+			return (1);
+		}
 		data->cmd = set_command_list(data->cmd);
 		ret = set_values(data);
 		return (handle_execute(data));

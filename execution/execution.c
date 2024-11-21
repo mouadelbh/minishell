@@ -6,28 +6,27 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/21 17:47:18 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/21 18:41:41 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_cmd_list(t_cmd **head)
+void	free_cmd_list(t_cmd **cmd)
 {
-	t_cmd	*tmp;
 	int		i;
+	t_cmd	*temp;
 
 	i = 0;
-	tmp = (*head);
-	while (*head)
+	while (*cmd)
 	{
 		i = 0;
-		while ((*head)->argv[i])
-			free((*head)->argv[i++]);
-		free((*head)->argv);
-		tmp = (*head)->next;
-		free(*head);
-		*head = tmp;
+		while ((*cmd)->argv[i])
+			free((*cmd)->argv[i++]);
+		free((*cmd)->argv);
+		temp = *cmd;
+		*cmd = (*cmd)->next;
+		free(temp);
 	}
 }
 
@@ -36,11 +35,13 @@ int	handle_input(t_data *data)
 	t_line	*temp = data->head;
 	char	*cmd;
 
-	int i = count_symbols(data);
-	if (i == 0)
+	data->cmd_count = count_symbols(data);
+	if (data->cmd_count == 0 && data->head->type == CMD)
 	{
-		if (data->cmd)
-			cmd = to_str(data->cmd->argv);
+		// if (data->cmd)
+		// 	cmd = to_str(data->cmd->argv);
+		cmd = NULL;
+		init_io(&data->cmd->io_fds);
 		data->status = single_command(data, cmd);
 	}
 	else
@@ -51,22 +52,19 @@ int	handle_input(t_data *data)
 	return (0);
 }
 
-void	free_cmd(t_cmd **head)
+void	free_cmd(t_cmd **cmd)
 {
-	t_cmd	*tmp;
 	int		i;
 
 	i = 0;
-	tmp = (*head);
-	while (*head)
+	while (*cmd)
 	{
 		i = 0;
-		while ((*head)->argv[i])
-			free((*head)->argv[i++]);
-		free((*head)->argv);
-		tmp = (*head)->next;
-		free(*head);
-		*head = tmp;
+		while ((*cmd)->argv[i])
+			free((*cmd)->argv[i++]);
+		free((*cmd)->argv);
+		free(*cmd);
+		*cmd = (*cmd)->next;
 	}
 }
 
@@ -78,8 +76,7 @@ int	minishell(t_data *data)
 	int		new_fd;
 	int		err;
 
-	err = 1;
-	while (!data->status)
+	while (!data->exit)
 	{
 		data->head = NULL;
 		data->cmd = NULL;
@@ -92,33 +89,27 @@ int	minishell(t_data *data)
 			free_line(&data->head);
 			continue;
 		}
-		// head = data->head;
-		// while (head)
-		// {
-		// 	printf("this is a node\n");
-		// 	printf("----------------\n");
-		// 	for (int i = 0;head->str[i];i++)
-		// 		printf("str[%i]:%s\n", i,head->str[i]);
-		// 	printf("type = %d\n", head->type);
-		// 	head = head->next;
-		// }
-		printf("here\n");
-		get_final_list(&data->head, &data->cmd);
-		cmd = data->cmd;
-		while (cmd)
+		for (t_line *tmp = data->head; tmp; tmp = tmp->next)
 		{
-			printf("this is a node\n");
-			printf("----------------\n");
-			for (int i = 0;cmd->argv[i];i++)
-				printf("%s\n", cmd->argv[i]);
-			printf("%d\n", cmd->type);
-			cmd = cmd->next;
+			printf("this is a head node \n");
+			printf("---------------\n");
+			for (int i = 0; tmp->str[i]; i++)
+				printf("str[%i] = %s\n", i, tmp->str[i]);
+			printf("type = %i\n", tmp->type);
 		}
-		printf("here\n");
+		get_final_list(&data->head, &data->cmd);
+		// for (t_cmd *tmp = data->cmd; tmp;tmp = tmp->next)
+		// {
+		// 	printf("this is a node \n");
+		// 	printf("---------------\n");
+		// 	for (int i = 0;tmp->argv[i];i++)
+		// 		printf("str[%i] = %s\n", i, tmp->argv[i]);
+		// 	printf("type = %i\n", tmp->type);
+		// }
 		data->envp_arr = set_list_arra(data->envp);
 		data->status = handle_input(data);
 		free_line(&data->head);
-		free_cmd_list(&data->cmd);
+		free_all(data);
 	}
 	return (data->status);
 }

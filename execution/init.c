@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/10 01:48:40 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/20 20:37:16 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	init_io(t_io_fds **io_fds)
 
 void init_append(t_cmd *cmd, t_data *data)
 {
-	init_io(&cmd->io_fds);
 	if (!remove_old_file_ref(cmd->io_fds, false))
 		return;
 		
@@ -72,22 +71,26 @@ void init_append(t_cmd *cmd, t_data *data)
 	}
 }
 
-void init_write_to(t_cmd *cmd, t_data *data)
+int init_write_to(t_cmd *cmd, t_data *data)
 {
-	init_io(&cmd->io_fds);
 	if (!remove_old_file_ref(cmd->io_fds, false))
-		return;
+		return (0);
 	cmd->io_fds->outfile = ft_strdup(cmd->argv[1]);
 	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
 	{
-		ft_error(3, data);
-		return;
+		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
+		return (0);
+	}
+	if (cmd->io_fds->outfile[0] == '\0' || (cmd->io_fds->outfile[0] == 36 && cmd->io_fds->outfile[1] != '\0'))
+	{
+		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
+		return (0);
 	}
 	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
 	{
-		perror("file");
-		return;
+		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
+		return (0);
 	}
 	t_cmd *current = cmd->prev;
 	while (current && current->type != CMD)
@@ -101,19 +104,20 @@ void init_write_to(t_cmd *cmd, t_data *data)
 		current->io_fds->outfile = cmd->io_fds->outfile;
 		current->io_fds->out_fd = cmd->io_fds->out_fd;
 	}
+	return (1);
 }
 
-void init_read_from(t_cmd *cmd, t_data *data)
+int	init_read_from(t_cmd *cmd, t_data *data)
 {
 	init_io(&cmd->io_fds);
 	if (!remove_old_file_ref(cmd->io_fds, true))
-		return;
+		return (0);
 	cmd->io_fds->infile = ft_strdup(cmd->argv[1]);
 	cmd->io_fds->in_fd = open(cmd->io_fds->infile, O_RDONLY);
 	if (cmd->io_fds->in_fd == -1)
 	{
 		ft_putstr_fd("infile error\n", 2);
-		return;
+		return (0);
 	}
 	t_cmd *current = cmd->prev;
 	while (current && current->type != CMD)
@@ -127,4 +131,5 @@ void init_read_from(t_cmd *cmd, t_data *data)
 		current->io_fds->infile = cmd->io_fds->infile;
 		current->io_fds->in_fd = cmd->io_fds->in_fd;
 	}
+	return (1);
 }

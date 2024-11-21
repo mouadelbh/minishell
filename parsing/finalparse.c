@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/21 17:47:52 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/21 19:03:04 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,38 @@ t_cmd	*get_current(t_line **node)
     return (tmp);
 }
 
+void    skip_to_arg(t_line **save)
+{
+    *save = (*save)->next;
+    if (*save)
+        *save = (*save)->next;
+}
+
+// void    switch_nodes(t_line **head, t_line *save, int cmd)
+// {
+
+// }
+
+// void    arange_arguments(t_line **head)
+// {
+//     t_line  *node;
+//     t_line  *save;
+//     int     cmd;
+
+//     node = *head;
+//     cmd = 0;
+//     while (*head)
+//     {
+//         save = *head;
+//         if ((*head)->type == CMD && (!(*head)->prev || (*head)->prev->type == PIPE))
+//             cmd = 1;
+//         if (isredir((*head)->type))
+//             skip_to_arg(&save);
+//         if (save && (save->type != PIPE || !isredir((*head)->type)))
+//             switch_nodes(head, save, cmd);
+//     }
+// }
+
 void	get_final_list(t_line **head, t_cmd **cmd)
 {
     t_cmd   *new;
@@ -149,6 +181,7 @@ void	get_final_list(t_line **head, t_cmd **cmd)
 
     tmp = *head;
     new = NULL;
+    arange_arguments(head);
     while (tmp)
     {
         if (tmp->type == PIPE)

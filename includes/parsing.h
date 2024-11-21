@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/21 17:56:08 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/21 17:59:31 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 #define EXIT_OUT_OF_RANGE 255
 #define CTRL_C 130
 
-# define PAT_MAX 4096
+# define PATH 4096
 typedef enum
 {
 	NONE,		// 0

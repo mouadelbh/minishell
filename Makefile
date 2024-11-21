@@ -13,7 +13,7 @@ EXEC_F	=	minishell.c builtins/echo.c builtins/cd.c \
 FILES	=	$(PARS_F) $(EXEC_F)
 OBJS	=	$(FILES:.c=.o)
 LIBFT	=	libft/libft.a
-FLAGS	=	-g #-fsanitize=address #-Wall -Wextra -Werror
+FLAGS	=	-g -fsanitize=address #-Wall -Wextra -Werror
 
 all: $(NAME)
 
@@ -21,6 +21,12 @@ $(NAME): $(OBJS) $(LIBFT)
 	@echo "$(GREEN_BOLD)Linking $(NAME)...$(RESET)"
 	@cc $(FLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
 	@echo "$(GREEN_BOLD)$(NAME) built successfully!$(RESET)"
+	@echo "███╗   ███╗██╗███╗   ██╗██╗██╗  ██╗███████╗██╗     ██╗     "
+	@echo "████╗ ████║██║████╗  ██║██║██║  ██║██╔════╝██║     ██║     "
+	@echo "██╔████╔██║██║██╔██╗ ██║██║███████║█████╗  ██║     ██║     "
+	@echo "██║╚██╔╝██║██║██║╚██╗██║██║██╔══██║██╔══╝  ██║     ██║     "
+	@echo "██║ ╚═╝ ██║██║██║ ╚████║██║██║  ██║███████╗███████╗███████╗"
+	@echo "╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝"
 
 $(LIBFT):
 	@echo "$(YELLOW_BOLD)Building libft...$(RESET)"

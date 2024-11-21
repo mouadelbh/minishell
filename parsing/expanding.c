@@ -6,12 +6,16 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:16 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/19 09:22:38 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/21 17:51:55 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../includes/parsing.h"
+
+int	isspace(int c)
+{
+	return (c == ' ' || (c >= 9 && c <= 13));
+}
 
 void	reset_expand(char *str)
 {
@@ -197,7 +201,7 @@ char	*find_and_replace(char *str, t_list *env, int flag)
 		else if (str[i] == -1)
 		{
 			ca = find(str, i, env, &size);
-			if (ca >= 0 && flag == 0)
+			if (ca >= 0)
 				tmp = replace(tmp, ca, env, size, flag);
 			else if (ca < 0 && flag == 0)
 				tmp = delete(tmp, size);

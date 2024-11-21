@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/21 17:33:41 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/21 17:47:18 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int	minishell(t_data *data)
 		// 	printf("type = %d\n", head->type);
 		// 	head = head->next;
 		// }
+		printf("here\n");
 		get_final_list(&data->head, &data->cmd);
 		cmd = data->cmd;
 		while (cmd)
@@ -113,6 +114,7 @@ int	minishell(t_data *data)
 			printf("%d\n", cmd->type);
 			cmd = cmd->next;
 		}
+		printf("here\n");
 		data->envp_arr = set_list_arra(data->envp);
 		data->status = handle_input(data);
 		free_line(&data->head);

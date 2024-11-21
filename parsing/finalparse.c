@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/21 17:33:12 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/21 17:47:52 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ static int	size_to_alloc(t_line *node)
     return (size);
 }
 
-char    *get_splited(char **argv, int len)
+char    **get_splited(char **argv, int len)
 {
     char    **str;
-    char    *splited;
+    char    **splited;
     int     i;
     int     j;
 
@@ -99,6 +99,7 @@ void    split_command(t_cmd **node)
             ft_free(tmp->argv);
             tmp->argv = new;
         }
+        tmp = tmp->next;
     }
 }
 

@@ -6,16 +6,11 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:16 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/21 17:51:55 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/21 17:55:05 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
-
-int	isspace(int c)
-{
-	return (c == ' ' || (c >= 9 && c <= 13));
-}
 
 void	reset_expand(char *str)
 {

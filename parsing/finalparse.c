@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/22 15:16:20 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:36:42 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,25 +153,25 @@ void	skip_to_arg(t_line **save)
 
 // }
 
-t_line	*copy_node(t_line *node)
-{
-	t_line	*new;
-	int		i;
+// t_line	*copy_node(t_line *node)
+// {
+// 	t_line	*new;
+// 	int		i;
 
-	i = 0;
-	new = malloc(sizeof(t_line));
-	new->str = malloc(sizeof(node->str) + sizeof(char *));
-	while (node->str[i])
-	{
-		new->str[i] = ft_strdup(node->str[i]);
-		i++;
-	}
-	new->str[i] = NULL;
-	new->type = node->type;
-	new->data = node->data;
-	new->next = NULL;
-	new->prev = NULL;
-}
+// 	i = 0;
+// 	new = malloc(sizeof(t_line));
+// 	new->str = malloc(sizeof(node->str) + sizeof(char *));
+// 	while (node->str[i])
+// 	{
+// 		new->str[i] = ft_strdup(node->str[i]);
+// 		i++;
+// 	}
+// 	new->str[i] = NULL;
+// 	new->type = node->type;
+// 	new->data = node->data;
+// 	new->next = NULL;
+// 	new->prev = NULL;
+// }
 
 // void	arange_arguments(t_line *head, t_line **new)
 // {
@@ -180,9 +180,10 @@ t_line	*copy_node(t_line *node)
 // 	int		cmd;
 
 // 	cmd = 0;
+// 	node = NULL;
 // 	while (head)
 // 	{
-// 		if ("")
+// 		if
 // 		head = head->next;
 // 	}
 // }
@@ -194,7 +195,7 @@ void	get_final_list(t_line **head, t_cmd **cmd)
 	int		i;
 
 	new = NULL;
-	tmp = NULL;
+	tmp = *head;
 	// arange_arguments(head, &tmp);
 	while (tmp)
 	{

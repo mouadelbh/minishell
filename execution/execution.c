@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/21 18:41:41 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:34:41 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,23 +89,24 @@ int	minishell(t_data *data)
 			free_line(&data->head);
 			continue;
 		}
-		for (t_line *tmp = data->head; tmp; tmp = tmp->next)
-		{
-			printf("this is a head node \n");
-			printf("---------------\n");
-			for (int i = 0; tmp->str[i]; i++)
-				printf("str[%i] = %s\n", i, tmp->str[i]);
-			printf("type = %i\n", tmp->type);
-		}
-		get_final_list(&data->head, &data->cmd);
-		// for (t_cmd *tmp = data->cmd; tmp;tmp = tmp->next)
+		// for (t_line *tmp = data->head; tmp; tmp = tmp->next)
 		// {
-		// 	printf("this is a node \n");
+		// 	printf("this is a head node \n");
 		// 	printf("---------------\n");
-		// 	for (int i = 0;tmp->argv[i];i++)
-		// 		printf("str[%i] = %s\n", i, tmp->argv[i]);
+		// 	for (int i = 0; tmp->str[i]; i++)
+		// 		printf("str[%i] = %s\n", i, tmp->str[i]);
 		// 	printf("type = %i\n", tmp->type);
 		// }
+		get_final_list(&data->head, &data->cmd);
+		printf("%p\n", data->cmd);
+		for (t_cmd *tmp = data->cmd; tmp;tmp = tmp->next)
+		{
+			printf("this is a node \n");
+			printf("---------------\n");
+			for (int i = 0;tmp->argv[i];i++)
+				printf("str[%i] = %s\n", i, tmp->argv[i]);
+			printf("type = %i\n", tmp->type);
+		}
 		data->envp_arr = set_list_arra(data->envp);
 		data->status = handle_input(data);
 		free_line(&data->head);

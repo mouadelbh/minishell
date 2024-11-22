@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/21 17:59:59 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/22 11:52:18 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int is_empty(char *str)
 	int i;
 
 	i = 0;
-	while (str[i] && isspace(str[i]))
+	while (str[i] && is_space(str[i]))
 		i++;
 	if (!str[i])
 		return (1);
@@ -95,7 +95,7 @@ void	reset_shell(t_data *data)
 	exit(global.g_exit_status);
 }
 
-int	isspace(int c)
+int	is_space(int c)
 {
 	return (c == ' ' || (c >= 9 && c <= 13));
 }

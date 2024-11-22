@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/22 14:51:23 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:16:20 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ t_cmd	*get_current(t_line **node)
 		j = 0;
 		while ((*node)->str[j])
 		{
-			while (is_empty((*node)->str[j]))
+			while ((*node)->str[j] && is_empty((*node)->str[j]))
 				j++;
 			if (!(*node)->str[j])
 				break ;

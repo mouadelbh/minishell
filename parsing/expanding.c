@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:16 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/22 11:52:13 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:13:56 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,8 @@ void	reset_expand(char *str)
 
 static int	check_case(char *str, int i)
 {
-	if (!str[i] || is_space(str[i]) || str[i] == '=' \
-	|| str[i] == '\'' || str[i] == '\"')
-		return (1);
-	if (check_token(str[i]))
-		return (1);
-	return (0);
+	return (!str[i] || is_space(str[i]) || str[i] == '=' \
+	|| str[i] == '\'' || str[i] == '\"' || str[i] == '/' || check_token(str[i]));
 }
 
 int	find(char *tmp, int i, t_list *env, int *size)

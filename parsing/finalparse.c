@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   finalparse.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/22 15:16:20 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:38:36 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ void	get_final_list(t_line **head, t_cmd **cmd)
 	int		i;
 
 	new = NULL;
-	tmp = NULL;
+	tmp = *head;
 	// arange_arguments(head, &tmp);
 	while (tmp)
 	{

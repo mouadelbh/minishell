@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/22 15:21:57 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:35:45 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,23 @@ void	free_cmd(t_cmd **cmd)
 	}
 }
 
+static void show_cmd(t_cmd *cmd)
+{
+	t_cmd	*temp;
+
+	temp = cmd;
+	if (!temp)
+		printf("cmd is NULL\n");
+	while (temp)
+	{
+		printf("cmd: %s\n", temp->cmd);
+		printf("type: %d\n", temp->type);
+		printf("pipe_output: %d\n", temp->pipe_output);
+		show_command_ios(temp);
+		temp = temp->next;
+	}
+}
+
 int	minishell(t_data *data)
 {
 	t_line	*head;
@@ -87,23 +104,13 @@ int	minishell(t_data *data)
 			free_line(&data->head);
 			continue;
 		}
-		for (t_line *tmp = data->head; tmp; tmp = tmp->next)
-		{
-			printf("this is a head node \n");
-			printf("---------------\n");
-			for (int i = 0; tmp->str[i]; i++)
-				printf("str[%i] = %s\n", i, tmp->str[i]);
-			printf("type = %i\n", tmp->type);
-		}
 		get_final_list(&data->head, &data->cmd);
-		// for (t_cmd *tmp = data->cmd; tmp;tmp = tmp->next)
-		// {
-		// 	printf("this is a node \n");
-		// 	printf("---------------\n");
-		// 	for (int i = 0;tmp->argv[i];i++)
-		// 		printf("str[%i] = %s\n", i, tmp->argv[i]);
-		// 	printf("type = %i\n", tmp->type);
-		// }
+		if (!data->cmd)
+		{
+			free_line(&data->head);
+			printf("CMD IS NULL\n");
+			continue;
+		}
 		data->envp_arr = set_list_arra(data->envp);
 		data->status = handle_input(data);
 		free_line(&data->head);

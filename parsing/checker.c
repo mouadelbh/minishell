@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:00 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/19 02:38:43 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/22 11:52:03 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_dollar(char *s, int i)
 {
-	if (!s[i + 1] || isspace(s[i + 1]) || s[i + 1] == '$' || quotes_open(s, i) == 1)
+	if (!s[i + 1] || is_space(s[i + 1]) || s[i + 1] == '$' || quotes_open(s, i) == 1)
 		return (1);
 	if ((s[i + 1] == '\"' || s[i + 1] == '\'') && quotes_open(s, i))
 		return (1);

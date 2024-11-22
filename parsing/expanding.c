@@ -6,10 +6,9 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:16 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/19 09:22:38 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:13:56 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../includes/parsing.h"
 
@@ -31,12 +30,8 @@ void	reset_expand(char *str)
 
 static int	check_case(char *str, int i)
 {
-	if (!str[i] || isspace(str[i]) || str[i] == '=' \
-	|| str[i] == '\'' || str[i] == '\"')
-		return (1);
-	if (check_token(str[i]))
-		return (1);
-	return (0);
+	return (!str[i] || is_space(str[i]) || str[i] == '=' \
+	|| str[i] == '\'' || str[i] == '\"' || str[i] == '/' || check_token(str[i]));
 }
 
 int	find(char *tmp, int i, t_list *env, int *size)
@@ -197,7 +192,7 @@ char	*find_and_replace(char *str, t_list *env, int flag)
 		else if (str[i] == -1)
 		{
 			ca = find(str, i, env, &size);
-			if (ca >= 0 && flag == 0)
+			if (ca >= 0)
 				tmp = replace(tmp, ca, env, size, flag);
 			else if (ca < 0 && flag == 0)
 				tmp = delete(tmp, size);

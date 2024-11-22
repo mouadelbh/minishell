@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/21 22:45:21 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/22 18:48:44 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int should_pipe(t_cmd *cmd)
 			pipe_count++;
 		temp = temp->next;
 	}
-	// Check if there are more than one command to determine if piping is needed
 	if (pipe_count > 1)
 		return (1);
 	return (0);
@@ -31,7 +30,6 @@ int should_pipe(t_cmd *cmd)
 
 void	init_command(t_cmd *cmd, t_data *data)
 {
-	// init_io(&cmd->io_fds);
 	if (should_pipe(cmd) || (cmd->next && cmd->next->type == CMD))
 		cmd->pipe_output = true;
 }
@@ -152,7 +150,10 @@ void	free_cmd_node(t_cmd *cmd)
 	if (cmd->argv)
 		free_arr(cmd->argv);
 	if (cmd->cmd)
+	{
 		free(cmd->cmd);
+		cmd->cmd = NULL;
+	}
 	if (cmd->io_fds)
 	{
 		if (cmd->io_fds->infile)
@@ -175,7 +176,7 @@ t_cmd	*set_command_list(t_cmd *cmd)
 
 	if (!cmd)
 		return (NULL);
-	while (cmd && cmd->type != CMD)
+	while (cmd && cmd->type != CMD && cmd->next)
 	{
 		free_cmd_node(cmd);
 		cmd = cmd->next;

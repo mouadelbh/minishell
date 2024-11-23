@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   finalparse.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/22 15:38:36 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/23 17:34:19 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ t_cmd	*get_current(t_line **node)
 		tmp->type = (*node)->type;
 		(*node) = (*node)->next;
 	}
-	while ((*node) && ((*node)->type == 7 || (*node)->type == 8))
+	while (*node && ((*node)->type == 7 || (*node)->type == 8))
 	{
 		j = 0;
 		while ((*node)->str[j])

@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/23 17:22:48 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/23 17:53:23 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,10 +124,11 @@ t_cmd	*get_current(t_line **node)
 	while ((*node) && ((*node)->type == 7 || (*node)->type == 8))
 	{
 		j = 0;
-		if ((*node)->type == CMD && (*node)->prev && (*node)->prev->type)
+		if ((*node)->type == CMD && (*node)->prev && (*node)->prev->type == CMD)
 			(*node)->type = ARG;
 		while ((*node)->str[j])
 		{
+			printf("%i\n", (*node)->type);
 			while ((*node)->str[j] && is_empty((*node)->str[j]))
 				j++;
 			if (!(*node)->str[j])
@@ -254,6 +255,14 @@ void	get_final_list(t_line **head, t_cmd **cmd)
 	tmp = NULL;
 	new = NULL;
 	arange_arguments(*head, &tmp);
+	// for (t_line *t = tmp; t; t = t->next)
+	// {
+	// 	printf("this is a node\n");
+	// 	printf("--------------\n");
+	// 	for (int i = 0;t->str[i];i++)
+	// 		printf("str[%i]:%s\n", i, t->str[i]);
+	// 	printf("type: %i\n", t->type);
+	// }
 	newhead = tmp;
 	while (tmp)
 	{
@@ -266,4 +275,5 @@ void	get_final_list(t_line **head, t_cmd **cmd)
 	}
 	free_line(&newhead);
 	split_command(cmd);
+	printf("%p\n", cmd);
 }

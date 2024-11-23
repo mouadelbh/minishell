@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/22 13:10:08 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/23 09:14:26 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	triming_quotes(t_line *head);
 void	get_final_list(t_line **head, t_cmd **cmd);
 void	free_line(t_line **head);
 void	handlesig(int sig);
+void	lstadd_line(t_line **head, t_line *new);
 int		parse(char *line, t_line **head, t_parse *data, t_data *ex_data);
 int		check_token(int c);
 int		special_char(char *str, int i);

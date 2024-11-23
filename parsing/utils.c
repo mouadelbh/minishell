@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/22 11:52:18 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/23 10:07:07 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ void	handlesig(int sig)
 	{
 		ft_putstr_fd("\n", 1);
 		rl_on_new_line();
-		// rl_replace_line("", 0);
-		// rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_redisplay();
 		global.g_exit_status = CTRL_C;
 	}

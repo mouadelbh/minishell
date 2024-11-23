@@ -6,13 +6,13 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:49 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/22 13:10:03 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/23 10:54:33 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
 
-static void	lstadd_back(t_line **head, t_line *new)
+void	lstadd_line(t_line **head, t_line *new)
 {
 	t_line	*tmp;
 
@@ -75,7 +75,7 @@ void	lexer(char **arg, t_line **head, t_parse *data)
 		tmp->next = NULL;
 		tmp->prev = NULL;
 		tmp->data = data;
-		lstadd_back(head, tmp);
+		lstadd_line(head, tmp);
 		if (!tmp)
 			return ;
 		if (is_command(arg, i, &flag) && !check_token(arg[i][0]))

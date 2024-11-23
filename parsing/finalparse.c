@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/22 15:36:42 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/23 15:22:29 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	lstadd_back(t_cmd **lst, t_cmd *new)
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new;
-	new->prev = tmp; // Set the previous pointer
+	new->prev = tmp;
 }
 
 static int	size_to_alloc(t_line *node)
@@ -124,6 +124,8 @@ t_cmd	*get_current(t_line **node)
 	while ((*node) && ((*node)->type == 7 || (*node)->type == 8))
 	{
 		j = 0;
+		if ((*node)->type == CMD && (*node)->prev && (*node)->prev->type)
+			(*node)->type = ARG;
 		while ((*node)->str[j])
 		{
 			while ((*node)->str[j] && is_empty((*node)->str[j]))
@@ -141,62 +143,116 @@ t_cmd	*get_current(t_line **node)
 	return (tmp);
 }
 
-void	skip_to_arg(t_line **save)
+t_line	*copy_node(t_line *node)
 {
-	*save = (*save)->next;
-	if (*save)
-		*save = (*save)->next;
+	t_line	*new;
+	int		i;
+
+	i = 0;
+	new = malloc(sizeof(t_line));
+	new->str = malloc(sizeof(node->str) + sizeof(char *));
+	while (node->str[i])
+	{
+		new->str[i] = ft_strdup(node->str[i]);
+		i++;
+	}
+	new->str[i] = NULL;
+	new->type = node->type;
+	new->data = node->data;
+	new->next = NULL;
+	new->prev = NULL;
 }
 
-// void    switch_nodes(t_line **head, t_line *save, int cmd)
-// {
+void	skip_red(t_line **head, int *count, int cmd)
+{
+	*count += 1;
+	*head = (*head)->next;
+	if (cmd && (*head)->type == CMD)
+		(*head)->type = ARG;
+	if (*head)
+		*head = (*head)->next;
+}
 
-// }
+void	get_arranged(t_line **current, t_line **new)
+{
+	t_line	*save;
+	int		cmd;
 
-// t_line	*copy_node(t_line *node)
-// {
-// 	t_line	*new;
-// 	int		i;
+	cmd = 0;
+	save = NULL;
+	if ((*current)->type == CMD)
+		cmd = 1;
+	while (*current)
+	{
+		if (isredir((*current)->type))
+		{
+			lstadd_line(&save, copy_node((*current)));
+			*current = (*current)->next;
+			if (*current)
+			{
+				lstadd_line(&save, copy_node((*current)));
+				*current = (*current)->next;
+			}
+			if (*current && cmd == 1 && (*current)->type == CMD)
+				(*current)->type = ARG;
+		}
+		else
+		{
+			lstadd_line(new, copy_node(*current));
+			*current = (*current)->next;
+		}
+	}
+	while (save)
+	{
+		lstadd_line(new, copy_node(save));
+		save = save->next;
+	}
+}
 
-// 	i = 0;
-// 	new = malloc(sizeof(t_line));
-// 	new->str = malloc(sizeof(node->str) + sizeof(char *));
-// 	while (node->str[i])
-// 	{
-// 		new->str[i] = ft_strdup(node->str[i]);
-// 		i++;
-// 	}
-// 	new->str[i] = NULL;
-// 	new->type = node->type;
-// 	new->data = node->data;
-// 	new->next = NULL;
-// 	new->prev = NULL;
-// }
+void	arange_arguments(t_line *head, t_line **final)
+{
+	t_line	*current;
+	t_line	*new;
+	t_line	*node;
 
-// void	arange_arguments(t_line *head, t_line **new)
-// {
-// 	t_line	*node;
-// 	t_line	*save;
-// 	int		cmd;
-
-// 	cmd = 0;
-// 	node = NULL;
-// 	while (head)
-// 	{
-// 		if
-// 		head = head->next;
-// 	}
-// }
+	new = NULL;
+	while (head)
+	{
+		current = NULL;
+		while (head && head->type != PIPE)
+		{
+			lstadd_line(&current, copy_node(head));
+			head = head->next;
+		}
+		get_arranged(&current, &new);
+		node = new;
+		while (node)
+		{
+			lstadd_line(final, copy_node(node));
+			node = node->next;
+		}
+		if (head && head->type == PIPE)
+		{
+			lstadd_line(final, copy_node(head));
+			head = head->next;
+		}
+		free_line(&current);
+		free_line(&new);
+		new = NULL;
+	}
+}
 
 void	get_final_list(t_line **head, t_cmd **cmd)
 {
 	t_cmd	*new;
 	t_line	*tmp;
+	t_line	*newhead;
 	int		i;
 
+	tmp = NULL;
 	new = NULL;
-	tmp = *head;
-	// arange_arguments(head, &tmp);
+	arange_arguments(*head, &tmp);
+	newhead = tmp;
 	while (tmp)
 	{
 		if (tmp->type == PIPE)
@@ -206,5 +262,6 @@ void	get_final_list(t_line **head, t_cmd **cmd)
 		new = get_current(&tmp);
 		lstadd_back(cmd, new);
 	}
+	free_line(&newhead);
 	split_command(cmd);
 }

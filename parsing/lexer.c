@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:49 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/23 10:54:33 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/23 17:20:40 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	is_command(char **arg, int i, int *flag)
 		return (0);
 }
 
-void	lexer(char **arg, t_line **head, t_parse *data)
+void	lexer(char **arg, t_line **head)
 {
 	t_line	*tmp;
 	int		i;
@@ -74,7 +74,6 @@ void	lexer(char **arg, t_line **head, t_parse *data)
 		tmp = malloc(sizeof(t_line));
 		tmp->next = NULL;
 		tmp->prev = NULL;
-		tmp->data = data;
 		lstadd_line(head, tmp);
 		if (!tmp)
 			return ;

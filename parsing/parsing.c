@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/19 09:27:06 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/23 17:21:58 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	expanding(t_line **head, t_list *env)
 	}
 }
 
-int	parse(char *str, t_line **head, t_parse *data, t_data* ex_data)
+int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 {
 	char	**arg;
 	t_line *tmp;
@@ -116,8 +116,8 @@ int	parse(char *str, t_line **head, t_parse *data, t_data* ex_data)
 		global.g_exit_status = 139;
 		return (-1);
 	}
-	lexer(arg, head, data);
-	expanding(head, data->env);
+	lexer(arg, head);
+	expanding(head, env);
 	triming_quotes(*head);
 	return (parse_error(*head));
 }

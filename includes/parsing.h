@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/23 09:14:26 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/23 17:22:17 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,16 @@ typedef struct s_data t_data;
 
 #define BUFFER_SIZE	4098
 
-typedef struct	s_parsing_data
-{
-	t_list	*env;
-}	t_parse;
-
 typedef struct	s_token
 {
 	char 			**str;
 	t_token			type;
-	t_parse			*data;
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_line;
 
 void	ft_free(char **arg);
-void	lexer(char **arg, t_line **head, t_parse *data);
+void	lexer(char **arg, t_line **head);
 void	tokenize_cmd(char *str, t_line *tmp);
 void	tokenize(char *arg, t_line *tmp);
 void	tokenize_arg(char **arg, int *i, t_line *tmp, int *flag);
@@ -76,7 +70,7 @@ void	get_final_list(t_line **head, t_cmd **cmd);
 void	free_line(t_line **head);
 void	handlesig(int sig);
 void	lstadd_line(t_line **head, t_line *new);
-int		parse(char *line, t_line **head, t_parse *data, t_data *ex_data);
+int		parse(char *line, t_line **head, t_list *env,t_data *ex_data);
 int		check_token(int c);
 int		special_char(char *str, int i);
 int		checkquotes(char *line);

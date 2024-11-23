@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/23 15:22:29 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/23 17:22:48 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ t_cmd	*get_current(t_line **node)
 	tmp->pipe_output = 0;
 	tmp->argv[i] = NULL;
 	tmp->next = NULL;
-	tmp->prev = NULL; // Initialize the previous pointer to NULL
+	tmp->prev = NULL;
 	return (tmp);
 }
 
@@ -158,7 +158,6 @@ t_line	*copy_node(t_line *node)
 	}
 	new->str[i] = NULL;
 	new->type = node->type;
-	new->data = node->data;
 	new->next = NULL;
 	new->prev = NULL;
 }
@@ -176,6 +175,7 @@ void	skip_red(t_line **head, int *count, int cmd)
 void	get_arranged(t_line **current, t_line **new)
 {
 	t_line	*save;
+	t_line	*node;
 	int		cmd;
 
 	cmd = 0;
@@ -202,11 +202,13 @@ void	get_arranged(t_line **current, t_line **new)
 			*current = (*current)->next;
 		}
 	}
+	node = save;
 	while (save)
 	{
 		lstadd_line(new, copy_node(save));
 		save = save->next;
 	}
+	free_line(&node);
 }
 
 void	arange_arguments(t_line *head, t_line **final)

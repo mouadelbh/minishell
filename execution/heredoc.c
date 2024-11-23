@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 20:16:19 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/23 21:23:12 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void init_heredoc(t_cmd *cmd, t_data *data)
 		line = readline("> ");
 		if (!line)
 			break;
+		
 		if (strcmp(line, cmd->argv[1]) == 0)
 		{
 			free(line);

@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/23 17:22:17 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/23 21:44:23 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct	s_token
 }	t_line;
 
 void	ft_free(char **arg);
+void	split_command(t_cmd **node);
 void	lexer(char **arg, t_line **head);
 void	tokenize_cmd(char *str, t_line *tmp);
 void	tokenize(char *arg, t_line *tmp);
@@ -70,6 +71,7 @@ void	get_final_list(t_line **head, t_cmd **cmd);
 void	free_line(t_line **head);
 void	handlesig(int sig);
 void	lstadd_line(t_line **head, t_line *new);
+void	arange_arguments(t_line *head, t_line **final);
 int		parse(char *line, t_line **head, t_list *env,t_data *ex_data);
 int		check_token(int c);
 int		special_char(char *str, int i);

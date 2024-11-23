@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/23 17:53:23 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/23 22:14:17 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,216 +33,78 @@ static int	size_to_alloc(t_line *node)
 	int	i;
 	int	size;
 
-	size = 0;
-	if (node->type != PIPE)
+	size = 1;
+	if (node->type == PIPE)
+		return (size);
+	if (isredir(node->type))
 	{
-		size++;
-		node = node->next;
+		size += 2;
+		return (size);
 	}
-	while (node && (node->type == 7 || node->type == 8))
+	while (node && (node->type == CMD || node->type == ARG))
 	{
 		i = 0;
 		while (node->str[i])
 		{
-			if (is_empty(node->str[i]))
-				size--;
+			if (!is_empty(node->str[i]))
+				size++;
 			i++;
-			size++;
 		}
 		node = node->next;
 	}
 	return (size);
 }
 
-char	**get_splited(char **argv, int len)
+static t_cmd	*copy_node(t_line *node)
 {
-	char	**str;
-	char	**splited;
-	int		i;
-	int		j;
-
-	i = 0;
-	while (argv[i])
-		i++;
-	str = malloc(sizeof(char *) * (i + len));
-	if (!str)
-		return (NULL);
-	i = 0;
-	splited = ft_split(argv[0], ' ');
-	if (!splited)
-		return (NULL);
-	while (splited[i])
-	{
-		str[i] = ft_strdup(splited[i]);
-		free(splited[i++]);
-	}
-	j = 1;
-	while (argv[j])
-		str[i++] = ft_strdup(argv[j++]);
-	str[i] = NULL;
-	return (free(splited), str);
-}
-
-void	split_command(t_cmd **node)
-{
-	t_cmd	*tmp;
-	char	**new;
-	int		len;
-
-	tmp = *node;
-	while (tmp)
-	{
-		len = count_words(tmp->argv[0], ' ');
-		if (tmp->type == CMD && len > 1)
-		{
-			new = get_splited(tmp->argv, len);
-			ft_free(tmp->argv);
-			tmp->argv = new;
-		}
-		tmp = tmp->next;
-	}
-}
-
-t_cmd	*get_current(t_line **node)
-{
-	t_cmd	*tmp;
-	int		i;
-	int		size;
-	int		j;
-
-	tmp = malloc(sizeof(t_cmd));
-	if (!tmp)
-		return (NULL);
-	tmp->argv = malloc(sizeof(char *) * (size_to_alloc((*node)) + 1));
-	i = 0;
-	if ((*node)->type != PIPE && !is_empty((*node)->str[0]))
-	{
-		tmp->argv[i++] = ft_strdup((*node)->str[0]);
-		tmp->type = (*node)->type;
-		(*node) = (*node)->next;
-	}
-	while ((*node) && ((*node)->type == 7 || (*node)->type == 8))
-	{
-		j = 0;
-		if ((*node)->type == CMD && (*node)->prev && (*node)->prev->type == CMD)
-			(*node)->type = ARG;
-		while ((*node)->str[j])
-		{
-			printf("%i\n", (*node)->type);
-			while ((*node)->str[j] && is_empty((*node)->str[j]))
-				j++;
-			if (!(*node)->str[j])
-				break ;
-			tmp->argv[i++] = ft_strdup((*node)->str[j++]);
-		}
-		(*node) = (*node)->next;
-	}
-	tmp->pipe_output = 0;
-	tmp->argv[i] = NULL;
-	tmp->next = NULL;
-	tmp->prev = NULL;
-	return (tmp);
-}
-
-t_line	*copy_node(t_line *node)
-{
-	t_line	*new;
+	t_cmd	*new;
 	int		i;
 
 	i = 0;
-	new = malloc(sizeof(t_line));
-	new->str = malloc(sizeof(node->str) + sizeof(char *));
-	while (node->str[i])
-	{
-		new->str[i] = ft_strdup(node->str[i]);
-		i++;
-	}
-	new->str[i] = NULL;
+	new = malloc(sizeof(t_cmd));
+	new->argv = malloc(sizeof(char *) * size_to_alloc(node));
+	new->pipe_output = 0;
 	new->type = node->type;
 	new->next = NULL;
 	new->prev = NULL;
 }
 
-void	skip_red(t_line **head, int *count, int cmd)
+void	get_current(t_line **node, t_cmd **new)
 {
-	*count += 1;
-	*head = (*head)->next;
-	if (cmd && (*head)->type == CMD)
-		(*head)->type = ARG;
-	if (*head)
-		*head = (*head)->next;
-}
+	int		i;
+	int		j;
 
-void	get_arranged(t_line **current, t_line **new)
-{
-	t_line	*save;
-	t_line	*node;
-	int		cmd;
-
-	cmd = 0;
-	save = NULL;
-	if ((*current)->type == CMD)
-		cmd = 1;
-	while (*current)
+	(*new) = copy_node(*node);
+	i = 0;
+	j = 0;
+	if ((*node)->type == PIPE)
 	{
-		if (isredir((*current)->type))
-		{
-			lstadd_line(&save, copy_node((*current)));
-			*current = (*current)->next;
-			if (*current)
-			{
-				lstadd_line(&save, copy_node((*current)));
-				*current = (*current)->next;
-			}
-			if (*current && cmd == 1 && (*current)->type == CMD)
-				(*current)->type = ARG;
-		}
-		else
-		{
-			lstadd_line(new, copy_node(*current));
-			*current = (*current)->next;
-		}
+		(*new)->argv[i++] = ft_strdup((*node)->str[0]);
+		(*new)->argv[i] = NULL;
+		(*node) = (*node)->next;
+		return ;
 	}
-	node = save;
-	while (save)
+	else if (isredir((*node)->type))
 	{
-		lstadd_line(new, copy_node(save));
-		save = save->next;
+		(*new)->argv[i++] = ft_strdup(((*node)->str[0]));
+		(*node) = (*node)->next;
+		(*new)->argv[i++] = ft_strdup((*node)->str[0]);
+		(*node) = (*node)->next;
+		(*new)->argv[i] = NULL;
+		return ;
 	}
-	free_line(&node);
-}
-
-void	arange_arguments(t_line *head, t_line **final)
-{
-	t_line	*current;
-	t_line	*new;
-	t_line	*node;
-
-	new = NULL;
-	while (head)
+	while ((*node) && ((*node)->type == CMD || (*node)->type == ARG))
 	{
-		current = NULL;
-		while (head && head->type != PIPE)
+		j = 0;
+		while ((*node)->str[j])
 		{
-			lstadd_line(&current, copy_node(head));
-			head = head->next;
+			if (!is_empty((*node)->str[j]))
+				(*new)->argv[i++] = ft_strdup((*node)->str[j]);
+			j++;
 		}
-		get_arranged(&current, &new);
-		node = new;
-		while (node)
-		{
-			lstadd_line(final, copy_node(node));
-			node = node->next;
-		}
-		if (head && head->type == PIPE)
-		{
-			lstadd_line(final, copy_node(head));
-			head = head->next;
-		}
-		free_line(&current);
-		free_line(&new);
-		new = NULL;
+		(*node) = (*node)->next;
 	}
+	(*new)->argv[i] = NULL;
 }
 
 void	get_final_list(t_line **head, t_cmd **cmd)
@@ -255,23 +117,28 @@ void	get_final_list(t_line **head, t_cmd **cmd)
 	tmp = NULL;
 	new = NULL;
 	arange_arguments(*head, &tmp);
-	// for (t_line *t = tmp; t; t = t->next)
+	newhead = tmp;
+	// while (newhead)
 	// {
 	// 	printf("this is a node\n");
 	// 	printf("--------------\n");
-	// 	for (int i = 0;t->str[i];i++)
-	// 		printf("str[%i]:%s\n", i, t->str[i]);
-	// 	printf("type: %i\n", t->type);
+	// 	for (int i = 0;newhead->str[i];i++)
+	// 		printf("argv[%i]:%s\n", i, newhead->str[i]);
+	// 	printf("type: %i\n", newhead->type);
+	// 	newhead = newhead->next;
 	// }
-	newhead = tmp;
 	while (tmp)
 	{
-		if (tmp->type == PIPE)
-			tmp = tmp->next;
-		if (!tmp)
-			break ;
-		new = get_current(&tmp);
+		get_current(&tmp, &new);
 		lstadd_back(cmd, new);
+	}
+	for (t_cmd *t = *cmd; t; t = t->next)
+	{
+		printf("this is a node\n");
+		printf("--------------\n");
+		for (int i = 0;t->argv[i];i++)
+			printf("argv[%i]:%s\n", i, t->argv[i]);
+		printf("type: %i\n", t->type);
 	}
 	free_line(&newhead);
 	split_command(cmd);

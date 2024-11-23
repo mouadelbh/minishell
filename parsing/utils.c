@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/23 10:07:07 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/23 21:18:47 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ int is_empty(char *str)
 	int i;
 
 	i = 0;
+	if (!str)
+		return (1);
 	while (str[i] && is_space(str[i]))
 		i++;
 	if (!str[i])

@@ -6,29 +6,11 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/22 18:11:20 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/23 20:18:58 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	free_cmd_list(t_cmd **cmd)
-{
-	int		i;
-	t_cmd	*temp;
-
-	i = 0;
-	while (*cmd)
-	{
-		i = 0;
-		while ((*cmd)->argv[i])
-			free((*cmd)->argv[i++]);
-		free((*cmd)->argv);
-		temp = *cmd;
-		*cmd = (*cmd)->next;
-		free(temp);
-	}
-}
 
 int	handle_input(t_data *data)
 {
@@ -48,22 +30,6 @@ int	handle_input(t_data *data)
 		complex_command(data);
 	}
 	return (0);
-}
-
-void	free_cmd(t_cmd **cmd)
-{
-	int		i;
-
-	i = 0;
-	while (*cmd)
-	{
-		i = 0;
-		while ((*cmd)->argv[i])
-			free((*cmd)->argv[i++]);
-		free((*cmd)->argv);
-		free(*cmd);
-		*cmd = (*cmd)->next;
-	}
 }
 
 static void show_cmd(t_cmd *cmd)

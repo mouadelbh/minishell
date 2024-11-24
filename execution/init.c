@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 20:37:16 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/23 20:08:45 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,9 @@ int init_write_to(t_cmd *cmd, t_data *data)
 	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
 	{
-		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
+		ft_putstr_fd("minishell: ", 2);
+		perror(cmd->io_fds->outfile);
+		ft_putstr_fd("ambiguous redirect\n", 2);
 		return (0);
 	}
 	t_cmd *current = cmd->prev;
@@ -116,7 +118,9 @@ int	init_read_from(t_cmd *cmd, t_data *data)
 	cmd->io_fds->in_fd = open(cmd->io_fds->infile, O_RDONLY);
 	if (cmd->io_fds->in_fd == -1)
 	{
-		ft_putstr_fd("infile error\n", 2);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->argv[1], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		return (0);
 	}
 	t_cmd *current = cmd->prev;

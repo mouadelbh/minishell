@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/23 17:21:58 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/24 17:17:09 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 	}
 	line = spacing(str);
 	arg = ft_split(line, ' ');
+	for (int k = 0;arg[k]; k++)
+		printf("%s\n",arg[k]);
 	free(line);
 	if (!arg)
 	{

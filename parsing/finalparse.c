@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/23 22:14:17 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/24 16:43:48 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,27 @@ static t_cmd	*copy_node(t_line *node)
 	new->prev = NULL;
 }
 
+int	empty_node(t_line *node)
+{
+	int	i;
+
+	i = 0;
+	while (node->str[i] && !node->str[i++][0]);
+	if (!node->str[i])
+		return (1);
+	return (0);
+}
+
 void	get_current(t_line **node, t_cmd **new)
 {
 	int		i;
 	int		j;
 
+	if (!(*node)->str && empty_node(*node))
+	{
+		(*node) = (*node)->next;
+		return ;
+	}
 	(*new) = copy_node(*node);
 	i = 0;
 	j = 0;
@@ -98,7 +114,7 @@ void	get_current(t_line **node, t_cmd **new)
 		j = 0;
 		while ((*node)->str[j])
 		{
-			if (!is_empty((*node)->str[j]))
+			if ((*node)->str[j][0])
 				(*new)->argv[i++] = ft_strdup((*node)->str[j]);
 			j++;
 		}

@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/23 17:21:01 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/24 16:37:08 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ int	minishell(t_data *data)
 		}
 		get_final_list(&data->head, &data->cmd);
 		data->envp_arr = set_list_arra(data->envp);
-		data->status = handle_input(data);
+		if (data->cmd)
+			data->status = handle_input(data);
 		free_all(data);
 	}
 	return (data->status);

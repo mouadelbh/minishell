@@ -6,13 +6,13 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:49 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/22 13:10:03 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:42:32 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
 
-static void	lstadd_back(t_line **head, t_line *new)
+void	lstadd_line(t_line **head, t_line *new)
 {
 	t_line	*tmp;
 
@@ -61,7 +61,7 @@ int	is_command(char **arg, int i, int *flag)
 		return (0);
 }
 
-void	lexer(char **arg, t_line **head, t_parse *data)
+void	lexer(char **arg, t_line **head)
 {
 	t_line	*tmp;
 	int		i;
@@ -74,8 +74,7 @@ void	lexer(char **arg, t_line **head, t_parse *data)
 		tmp = malloc(sizeof(t_line));
 		tmp->next = NULL;
 		tmp->prev = NULL;
-		tmp->data = data;
-		lstadd_back(head, tmp);
+		lstadd_line(head, tmp);
 		if (!tmp)
 			return ;
 		if (is_command(arg, i, &flag) && !check_token(arg[i][0]))

@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/25 15:47:48 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:30:37 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,41 @@ void	unflag_spaces(char **line)
 }
 
 int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
+void	flag_spaces(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (is_space(line[i]) && quotes_open(line, i))
+			line[i] = 31;
+		i++;
+	}
+}
+
+void	unflag_spaces(char **line)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	if (!line)
+		return ;
+	while (line[i])
+	{
+		j = 0;
+		while (line[i][j])
+		{
+			if (line[i][j] == 31)
+				line[i][j] = ' ';
+			j++;
+		}
+		i++;
+	}
+}
+
+int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 {
 	char	**arg;
 	t_line *tmp;
@@ -144,8 +179,10 @@ int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 	}
 	line = spacing(str);
 	flag_spaces(line);
+	flag_spaces(line);
 	arg = ft_split(line, ' ');
 	free(line);
+	unflag_spaces(arg);
 	unflag_spaces(arg);
 	if (!arg)
 	{

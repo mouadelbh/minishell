@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:47:56 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/12 20:49:07 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:05:48 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,21 @@ char	*find_value(char *name, t_list *envp)
 	int		i;
 	char	*key;
 	t_list	*temp = envp;
+	char	*result;
 
 	i = 0;
 	key = new_substr(name, '=');
 	while (temp)
 	{
 		if (ft_strncmp(key, temp->content, ft_strlen(key)) == 0)
-			return (temp->content);
+		{
+			result = strdup(temp->content);
+			free(key);
+			return (result);
+		}
 		temp = temp->next;
 	}
+	free(key);
 	return (NULL);
 }
 
@@ -60,7 +66,7 @@ static t_list	*create_env_node(const char *key)
 	if (!new_node->content)
 		return (free(new_node), NULL);
 	new_node->next = NULL;
-	return new_node;
+	return (new_node);
 }
 
 void create_env_value(t_data *data, char *key)
@@ -79,26 +85,19 @@ void create_env_value(t_data *data, char *key)
 	}
 }
 
-// void	list_env(t_data *data, char **cmd)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (data->envp_arr[i])
-// 	{
-// 		printf("declare -x %s\n", data->envp_arr[i]);
-// 		i++;
-// 	}
-// }
-
 int ft_export(t_data *data, char **cmd)
 {
 	char	*value;
 	char	*env_var;
 	char	*new_value;
 
-	if (!cmd[1])
-		ft_env(data, cmd);
+
+	if (!ft_strchr(cmd[1], '='))
+	{
+		if (!cmd[1])
+			ft_env(data, cmd, 1);
+		return (0);
+	}
 	value = find_value(cmd[1], data->envp);
 	if (!value)
 		create_env_value(data, cmd[1]);
@@ -107,6 +106,8 @@ int ft_export(t_data *data, char **cmd)
 		env_var = new_substr(cmd[1], '=');
 		new_value = ft_strchr(cmd[1], '=');
 		modify_env_value(env_var, new_value + 1, data);
+		free(env_var);
+		free(value);
 	}
 	return (0);
 }

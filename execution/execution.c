@@ -6,29 +6,11 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/23 18:07:04 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 15:45:50 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	free_cmd_list(t_cmd **cmd)
-{
-	int		i;
-	t_cmd	*temp;
-
-	i = 0;
-	while (*cmd)
-	{
-		i = 0;
-		while ((*cmd)->argv[i])
-			free((*cmd)->argv[i++]);
-		free((*cmd)->argv);
-		temp = *cmd;
-		*cmd = (*cmd)->next;
-		free(temp);
-	}
-}
 
 int	handle_input(t_data *data)
 {
@@ -48,39 +30,6 @@ int	handle_input(t_data *data)
 		complex_command(data);
 	}
 	return (0);
-}
-
-void	free_cmd(t_cmd **cmd)
-{
-	int		i;
-
-	i = 0;
-	while (*cmd)
-	{
-		i = 0;
-		while ((*cmd)->argv[i])
-			free((*cmd)->argv[i++]);
-		free((*cmd)->argv);
-		free(*cmd);
-		*cmd = (*cmd)->next;
-	}
-}
-
-static void show_cmd(t_cmd *cmd)
-{
-	t_cmd	*temp;
-
-	temp = cmd;
-	if (!temp)
-		printf("cmd is NULL\n");
-	while (temp)
-	{
-		printf("cmd: %s\n", temp->cmd);
-		printf("type: %d\n", temp->type);
-		printf("pipe_output: %d\n", temp->pipe_output);
-		show_command_ios(temp);
-		temp = temp->next;
-	}
 }
 
 int	minishell(t_data *data)
@@ -112,6 +61,11 @@ int	minishell(t_data *data)
 			continue;
 		}
 		data->envp_arr = set_list_arra(data->envp);
+		if (!data->envp_arr || !*data->envp_arr)
+		{
+			free_line(&data->head);
+			continue;
+		}
 		data->status = handle_input(data);
 		free_line(&data->head);
 		free_all(data);

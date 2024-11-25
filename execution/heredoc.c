@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 20:16:19 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/24 20:08:24 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 void init_heredoc(t_cmd *cmd, t_data *data)
 {
-	// init_io(&cmd->io_fds);
-	int temp_fd = open("/tmp/heredoc_zizi", O_CREAT | O_RDWR | O_TRUNC, 0644);
+	char	*temp;
+
+	int temp_fd = open("/tmp/ncajha3f83", O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (temp_fd == -1)
 	{
 		perror("heredoc temp file");
@@ -27,6 +28,11 @@ void init_heredoc(t_cmd *cmd, t_data *data)
 		line = readline("> ");
 		if (!line)
 			break;
+		if (ft_strchr(line, '$'))
+		{
+			line[0] = -1;
+			line = find_and_replace(line, data->envp, 0);
+		}
 		if (strcmp(line, cmd->argv[1]) == 0)
 		{
 			free(line);
@@ -37,7 +43,7 @@ void init_heredoc(t_cmd *cmd, t_data *data)
 		free(line);
 	}
 	close(temp_fd);
-	temp_fd = open("/tmp/heredoc_zizi", O_RDONLY, 0644);
+	temp_fd = open("/tmp/ncajha3f83", O_RDONLY, 0644);
 	cmd->io_fds->in_fd = temp_fd;
 	t_cmd *current = cmd->prev;
 	while (current && current->type != CMD)

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/21 22:40:42 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/25 12:53:17 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	show_command_ios(t_cmd *cmd);
 void	free_arr(char **arr);
 int		minishell(t_data *data);
 int		ft_pwd(t_data *data, char **cmd);
-int		ft_env(t_data *data, char **cmd);
+int		ft_env(t_data *data, char **cmd, int export);
 int		ft_echo(t_data *data, char **cmd);
 int		ft_cd(t_data *data, char **cmd);
 int		ft_exit(t_data *data, char **cmd);

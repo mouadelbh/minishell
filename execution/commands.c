@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/22 18:48:44 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:37:05 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,36 @@ int exec_cmd(char **command, char **envp, t_data *data)
 		return (ft_error(7, data), 1);
 	if (execve(path, command, envp) == -1)
 	{
-		perror("execve");
-		global.g_exit_status = GENERAL_ERROR;
+		global.g_exit_status = 1;
 		free(path);
 		return (1);
+	}
+	return (0);
+}
+
+int	check_cmd(char *cmd, t_data *data)
+{
+	struct stat	buf;
+
+	if (S_ISDIR(buf.st_mode))
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": is a directory\n", 2);
+		return (126);
+	}
+	return (0);
+}
+
+int	check_permission(char *path, t_data *data)
+{
+	if (access(path, X_OK) != 0 && access(path, F_OK) == 0)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(data->cmd->argv[0], 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		free(path);
+		return (126);
 	}
 	return (0);
 }
@@ -109,17 +135,20 @@ int single_command(t_data *data, char *cmd)
 			exec_builtin(data, data->cmd->argv);
 		else
 		{
-			if (access(path, F_OK | X_OK) != 0)
+			if (check_cmd(data->cmd->argv[0], data) || check_permission(path, data) != 0)
 			{
 				free(path);
-				return (ft_error(7, data));
+				global.g_exit_status = 126;
+				return (126);
 			}
 			free(path);
 			data->pid = fork();
 			if (data->pid == -1)
 				return (ft_error(1, data));
 			if (data->pid == 0)
-				data->status = exec_cmd(data->cmd->argv, data->envp_arr, data);
+			{
+				data->exit = exec_cmd(data->cmd->argv, data->envp_arr, data);
+			}
 			waitpid(data->pid, &data->status, 0);
 		}
 		temp = temp->next;

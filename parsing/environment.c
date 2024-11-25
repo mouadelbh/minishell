@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:07 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/21 17:59:10 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:15:20 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	create_env(t_list **head)
 {
 	env_lstadd_back(head, get_pwd());
 	env_lstadd_back(head, get_shlvl());
+	head = NULL;
 }
 
 void	init(t_list **data, char **env)

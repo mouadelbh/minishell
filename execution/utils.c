@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/22 18:50:44 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:11:55 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char *ft_getenv(char *name, t_data *data)
 	while (temp)
 	{
 		if (ft_strncmp(temp->content, name, ft_strlen(name)))
-			return (ft_strdup(temp->content));
+			return (temp->content);
 		temp = temp->next;
 	}
 	return (NULL);
@@ -33,7 +33,8 @@ int	modify_env_value(char *name, char *new_value, t_data *data)
 {
 	char *str;
 
-	str = getenv(name);
+	// str = getenv(name);
+	str = ft_getenv(name, data);
 	if (!str)
 		perror("getenv");
 	else
@@ -72,7 +73,7 @@ int	exec_builtin(t_data *data, char **cmd)
 	if (ft_strncmp(cmd[0], "pwd", 0) == 0)
 		res = ft_pwd(data, cmd);
 	else if (ft_strncmp(cmd[0], "env", 0) == 0)
-		res = ft_env(data, cmd);
+		res = ft_env(data, cmd, 0);
 	else if (ft_strncmp(cmd[0], "echo", 0) == 0)
 		res = ft_echo(data, cmd);
 	else if (ft_strncmp(cmd[0], "cd", 0) == 0)
@@ -129,9 +130,11 @@ void set_list_var(t_data *data, char *name, char *new_value)
 			current->content = ft_strjoin(temp, new_value);
 			if (!current->content)
 			{
+				free(temp);
 				ft_putstr_fd("Error: Memory allocation failed\n", STDERR_FILENO);
 				return;
 			}
+			free(temp);
 			break;
 		}
 		current = current->next;

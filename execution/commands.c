@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/22 18:48:44 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/25 09:50:29 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ int exec_cmd(char **command, char **envp, t_data *data)
 		return (ft_error(7, data), 1);
 	if (execve(path, command, envp) == -1)
 	{
-		perror("execve");
-		global.g_exit_status = GENERAL_ERROR;
+		printf("Reached this error\n");
+		global.g_exit_status = 1;
 		free(path);
 		return (1);
 	}

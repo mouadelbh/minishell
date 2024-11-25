@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:45:30 by prizmo            #+#    #+#             */
-/*   Updated: 2024/10/29 23:15:52 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/25 12:53:01 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,23 @@ static void	print_env(t_list *envp)
 	}
 }
 
-int	ft_env(t_data *data, char **args)
+int	ft_env(t_data *data, char **args, int export)
 {
 	int		i;
 	t_list	*env_temp = data->envp;
 
-	if (args && args[1])
-		return (perror("env"), EXIT_FAILURE);
 	i = 0;
 	if (!data->envp)
 		return (EXIT_FAILURE);
-	print_env(env_temp);
+	if (export == 0)
+		print_env(env_temp);
+	else
+	{
+		while (env_temp)
+		{
+			printf("declare -x %s\n", (char *)env_temp->content);
+			env_temp = env_temp->next;
+		}
+	}
 	return (EXIT_SUCCESS);
 }

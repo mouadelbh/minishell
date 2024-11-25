@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/24 16:40:21 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 15:18:49 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int	quotes_open(char *s, int i)
 	}
 	if (quotes[0] % 2)
 		return (1);
-	else if (quotes[1] % 2 || quotes[0] % 2)
+	else if (quotes[1] % 2)
 		return (2);
 	else
 		return (0);

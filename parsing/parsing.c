@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/24 17:17:09 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 15:25:25 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,40 @@ void	expanding(t_line **head, t_list *env)
 	}
 }
 
+void	flag_spaces(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (is_space(line[i]) && quotes_open(line, i))
+			line[i] = 31;
+		i++;
+	}
+}
+
+void	unflag_spaces(char **line)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	if (!line)
+		return ;
+	while (line[i])
+	{
+		j = 0;
+		while (line[i][j])
+		{
+			if (line[i][j] == 31)
+				line[i][j] = ' ';
+			j++;
+		}
+		i++;
+	}
+}
+
 int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 {
 	char	**arg;
@@ -109,10 +143,10 @@ int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 		return (-1);
 	}
 	line = spacing(str);
+	flag_spaces(line);
 	arg = ft_split(line, ' ');
-	for (int k = 0;arg[k]; k++)
-		printf("%s\n",arg[k]);
 	free(line);
+	unflag_spaces(arg);
 	if (!arg)
 	{
 		global.g_exit_status = 139;
@@ -120,6 +154,6 @@ int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 	}
 	lexer(arg, head);
 	expanding(head, env);
-	triming_quotes(*head);
+	// triming_quotes(*head);
 	return (parse_error(*head));
 }

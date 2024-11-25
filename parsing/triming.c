@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 11:18:29 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/06 20:29:27 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 15:22:48 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,45 +21,37 @@ int	check_trim(char *str, int i)
 	return (0);
 }
 
-static int	size_to_alloc(char *str)
+char	*trim(char *str)
 {
-	int	i;
-	int	size;
+	char	*result;
+	int		i = 0, j;
+	int		len;
+	int		in_single = 0, in_double = 0;
 
-	i = 0;
-	size = 0;
-	while (str[i])
-	{
-		if (check_trim(str, i))
-			size--;
-		size++;
-		i++;
-	}
-	return (size);
-}
-
-static char	*trim(char *str)
-{
-	char	*new;
-	int		i;
-	int		j;
-
-	new = malloc(size_to_alloc(str) + 1);
-	if (!new)
+	i = 0, j = 0;
+	len = ft_strlen(str);
+	result = malloc(len + 1);
+	if (!result)
 		return (NULL);
-	i = 0;
-	j = 0;
 	while (str[i])
 	{
-		if (check_trim(str, i))
+		if (str[i] == '\'' && !in_double)
+		{
+			in_single = !in_single;
 			i++;
-		if (!str[i])
-			break ;
-		new[j++] = str[i++];
+			continue ;
+		}
+		else if (str[i] == '\"' && !in_single)
+		{
+			in_double = !in_double;
+			i++;
+			continue ;
+		}
+		result[j++] = str[i++];
 	}
-	new[j] = '\0';
-	free(str);
-	return (new);
+	result[j] = '\0';
+	// free(str);
+	return (result);
 }
 
 void	triming_quotes(t_line *head)

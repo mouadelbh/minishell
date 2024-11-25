@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:47:56 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/25 12:54:39 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:05:48 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ char	*find_value(char *name, t_list *envp)
 	int		i;
 	char	*key;
 	t_list	*temp = envp;
+	char	*result;
 
 	i = 0;
 	key = new_substr(name, '=');
@@ -46,8 +47,9 @@ char	*find_value(char *name, t_list *envp)
 	{
 		if (ft_strncmp(key, temp->content, ft_strlen(key)) == 0)
 		{
+			result = strdup(temp->content);
 			free(key);
-			return (temp->content);
+			return (result);
 		}
 		temp = temp->next;
 	}
@@ -104,6 +106,8 @@ int ft_export(t_data *data, char **cmd)
 		env_var = new_substr(cmd[1], '=');
 		new_value = ft_strchr(cmd[1], '=');
 		modify_env_value(env_var, new_value + 1, data);
+		free(env_var);
+		free(value);
 	}
 	return (0);
 }

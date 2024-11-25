@@ -6,60 +6,56 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 11:18:29 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/06 20:29:27 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:47:55 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
 
-int	check_trim(char *str, int i)
+static char	*camouflage(char *str)
 {
-	if (str[i] == '\"' && (quotes_open(str, i) != 1))
-		return (1);
-	if (str[i] == '\'' && (quotes_open(str, i) != 2))
-		return (1);
-	return (0);
+	char	*tmp;
+
+	tmp = malloc(2);
+	tmp[0] = 31;
+	tmp[1] = '\0';
+	free(str);
+	return (tmp);
 }
 
-static int	size_to_alloc(char *str)
+char	*trim(char *str, int type)
 {
-	int	i;
-	int	size;
-
-	i = 0;
-	size = 0;
-	while (str[i])
-	{
-		if (check_trim(str, i))
-			size--;
-		size++;
-		i++;
-	}
-	return (size);
-}
-
-static char	*trim(char *str)
-{
-	char	*new;
-	int		i;
+	char	*result;
 	int		j;
+	int		i;
+	int		in[2];
 
-	new = malloc(size_to_alloc(str) + 1);
-	if (!new)
-		return (NULL);
+	if (type == CMD && (!ft_strncmp(str, "\"\"", 2) || !ft_strncmp(str, "\'\'", 2)))
+		return (camouflage(str));
+	ft_bzero(in, 8);
 	i = 0;
 	j = 0;
+	result = malloc(ft_strlen(str) + 1);
+	if (!result)
+		return (NULL);
 	while (str[i])
 	{
-		if (check_trim(str, i))
+		if (str[i] == '\'' && !in[0])
+		{
+			in[1] = !in[1];
 			i++;
-		if (!str[i])
-			break ;
-		new[j++] = str[i++];
+			continue ;
+		}
+		else if (str[i] == '\"' && !in[1])
+		{
+			in[0] = !in[0];
+			i++;
+			continue ;
+		}
+		result[j++] = str[i++];
 	}
-	new[j] = '\0';
-	free(str);
-	return (new);
+	result[j] = '\0';
+	return (free(str), result);
 }
 
 void	triming_quotes(t_line *head)
@@ -72,7 +68,7 @@ void	triming_quotes(t_line *head)
 		while (head->str[i])
 		{
 			if (ft_strchr(head->str[i], '\'') || ft_strchr(head->str[i], '\"'))
-				head->str[i] = trim(head->str[i]);
+				head->str[i] = trim(head->str[i], head->type);
 			i++;
 		}
 		head = head->next;

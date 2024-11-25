@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/25 14:37:36 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:00:52 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	minishell(t_data *data)
 {
 	t_line	*head;
 	t_cmd	*cmd;
-	t_parse	p_data;
 	int		new_fd;
 	int		err;
 
@@ -45,9 +44,8 @@ int	minishell(t_data *data)
 		data->head = NULL;
 		data->cmd = NULL;
 		data->arg = readline(READLINE_MSG);
-		p_data.env = data->envp;
 		data->pid = -1;
-		err = parse(data->arg, &data->head, &p_data, data);
+		err = parse(data->arg, &data->head, data->envp, data);
 		if (err == -1)
 		{
 			free_line(&data->head);

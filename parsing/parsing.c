@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/25 20:30:37 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:35:50 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,41 +90,6 @@ void	expanding(t_line **head, t_list *env)
 	}
 }
 
-void	flag_spaces(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (is_space(line[i]) && quotes_open(line, i))
-			line[i] = 31;
-		i++;
-	}
-}
-
-void	unflag_spaces(char **line)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	if (!line)
-		return ;
-	while (line[i])
-	{
-		j = 0;
-		while (line[i][j])
-		{
-			if (line[i][j] == 31)
-				line[i][j] = ' ';
-			j++;
-		}
-		i++;
-	}
-}
-
-int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 void	flag_spaces(char *line)
 {
 	int	i;

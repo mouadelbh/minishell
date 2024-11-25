@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/24 16:37:08 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:47:12 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	free_cmd_list(t_cmd **cmd)
 	while (*cmd)
 	{
 		i = 0;
-		while ((*cmd)->argv[i])
+		while ((*cmd)->argv && (*cmd)->argv[i])
 			free((*cmd)->argv[i++]);
 		free((*cmd)->argv);
 		temp = *cmd;

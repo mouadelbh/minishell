@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:25 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/23 10:18:29 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 18:52:21 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,12 @@ void	free_line(t_line **head)
 	while (*head)
 	{
 		i = 0;
-		while ((*head)->str[i])
-			free((*head)->str[i++]);
-		free((*head)->str);
+		if ((*head)->str)
+		{
+			while ((*head)->str[i])
+				free((*head)->str[i++]);
+			free((*head)->str);
+		}
 		tmp = (*head)->next;
 		free(*head);
 		*head = tmp;

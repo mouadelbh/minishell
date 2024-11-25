@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/25 15:23:42 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:47:37 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	size_to_alloc(t_line *node)
 	int	i;
 	int	size;
 
-	size = 1;
+	size = 2;
 	if (node->type == PIPE)
 		return (size);
 	if (isredir(node->type))
@@ -46,7 +46,7 @@ static int	size_to_alloc(t_line *node)
 		i = 0;
 		while (node->str[i])
 		{
-			if (!is_empty(node->str[i]))
+			if (node->str[i][0])
 				size++;
 			i++;
 		}
@@ -62,7 +62,7 @@ static t_cmd	*copy_node(t_line *node)
 
 	i = 0;
 	new = malloc(sizeof(t_cmd));
-	new->argv = malloc(sizeof(char *) * size_to_alloc(node));
+	new->argv = malloc(sizeof(char *) * size_to_alloc(node) + 1);
 	new->pipe_output = 0;
 	new->type = node->type;
 	new->next = NULL;
@@ -74,7 +74,10 @@ int	empty_node(t_line *node)
 	int	i;
 
 	i = 0;
-	while (node->str[i] && !node->str[i++][0]);
+	if (!node->str)
+		return (1);
+	while (node->str[i] && !node->str[i][0])
+		i++;
 	if (!node->str[i])
 		return (1);
 	return (0);
@@ -85,7 +88,7 @@ void	get_current(t_line **node, t_cmd **new)
 	int		i;
 	int		j;
 
-	if (!(*node)->str && empty_node(*node))
+	if (empty_node(*node))
 	{
 		(*node) = (*node)->next;
 		return ;
@@ -148,14 +151,14 @@ void	get_final_list(t_line **head, t_cmd **cmd)
 		get_current(&tmp, &new);
 		lstadd_back(cmd, new);
 	}
-	for (t_cmd *t = *cmd; t; t = t->next)
-	{
-		printf("this is a node\n");
-		printf("--------------\n");
-		for (int i = 0;t->argv[i];i++)
-			printf("argv[%i]:%s\n", i, t->argv[i]);
-		printf("type: %i\n", t->type);
-	}
 	free_line(&newhead);
+	// for (t_cmd *t = *cmd; t; t = t->next)
+	// {
+	// 	printf("this is a node\n");
+	// 	printf("--------------\n");
+	// 	for (int i = 0;t->argv[i];i++)
+	// 		printf("argv[%i]:%s\n", i, t->argv[i]);
+	// 	printf("type: %i\n", t->type);
+	// }
 	split_command(cmd);
 }

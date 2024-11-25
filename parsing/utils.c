@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/25 15:18:49 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:37:31 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ void	reset_shell(t_data *data)
 {
 	ft_putstr_fd("exit\n", 1);
 	free_env(data->envp);
+	free_all(data);
 	data->status = 1;
 	exit(global.g_exit_status);
 }

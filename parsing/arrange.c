@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:07:46 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/25 19:42:28 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:45:32 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ static t_line	*copy_node(t_line *node)
 
 	i = 0;
 	new = malloc(sizeof(t_line));
-	new->str = malloc(sizeof(node->str) + sizeof(char *));
+	while (node->str[i])
+		i++;
+	new->str = malloc(sizeof(char *) * (i + 1));
+	i = 0;
 	while (node->str[i])
 	{
 		new->str[i] = ft_strdup(node->str[i]);
@@ -29,6 +32,7 @@ static t_line	*copy_node(t_line *node)
 	new->type = node->type;
 	new->next = NULL;
 	new->prev = NULL;
+	return (new);
 }
 
 void	get_arranged(t_line **current, t_line **new)
@@ -68,7 +72,7 @@ void	get_arranged(t_line **current, t_line **new)
 		lstadd_line(new, copy_node(node));
 		node = node->next;
 	}
-	free_line(&save);
+	free_line(save);
 }
 
 void	arange_arguments(t_line *head, t_line **final)
@@ -87,14 +91,14 @@ void	arange_arguments(t_line *head, t_line **final)
 			head = head->next;
 		}
 		get_arranged(&current, &new);
-		free_line(&current);
+		free_line(current);
 		node = new;
 		while (node)
 		{
 			lstadd_line(final, copy_node(node));
 			node = node->next;
 		}
-		free_line(&new);
+		free_line(new);
 		if (head && head->type == PIPE)
 		{
 			lstadd_line(final, copy_node(head));

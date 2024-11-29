@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/25 19:47:37 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:48:00 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static t_cmd	*copy_node(t_line *node)
 	new->type = node->type;
 	new->next = NULL;
 	new->prev = NULL;
+	return (new);
 }
 
 int	empty_node(t_line *node)
@@ -151,7 +152,7 @@ void	get_final_list(t_line **head, t_cmd **cmd)
 		get_current(&tmp, &new);
 		lstadd_back(cmd, new);
 	}
-	free_line(&newhead);
+	free_line(newhead);
 	// for (t_cmd *t = *cmd; t; t = t->next)
 	// {
 	// 	printf("this is a node\n");

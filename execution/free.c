@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/25 20:01:04 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:41:38 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	free_cmd_struct(t_cmd *cmd)
 		tmp = cmd->next;
 		if (cmd->argv)
 			free_arr(cmd->argv);
-		// free(cmd);
+		free(cmd);
 		cmd = tmp;
 	}
 }
@@ -54,6 +54,7 @@ void	free_all(t_data *data)
 	if (data->envp_arr)
 		free_arr(data->envp_arr);
 	free_io(data->cmd);
+	free_line(data->head);
 	free_cmd_struct(data->cmd);
 	data->envp_arr = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/23 21:44:23 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:34:48 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	tokenize_quotarg(char **arg, int *i, t_line *tmp, char c);
 void	init(t_list **data, char **env);
 void	triming_quotes(t_line *head);
 void	get_final_list(t_line **head, t_cmd **cmd);
-void	free_line(t_line **head);
+void	free_line(t_line *head);
 void	handlesig(int sig);
 void	lstadd_line(t_line **head, t_line *new);
 void	arange_arguments(t_line *head, t_line **final);

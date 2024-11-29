@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/25 20:35:50 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/11/25 15:58:34 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,10 +144,8 @@ int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 	}
 	line = spacing(str);
 	flag_spaces(line);
-	flag_spaces(line);
 	arg = ft_split(line, ' ');
 	free(line);
-	unflag_spaces(arg);
 	unflag_spaces(arg);
 	if (!arg)
 	{
@@ -156,6 +154,6 @@ int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 	}
 	lexer(arg, head);
 	expanding(head, env);
-	// triming_quotes(*head);
+	triming_quotes(*head);
 	return (parse_error(*head));
 }

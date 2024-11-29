@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:21 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/25 20:30:31 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:47:37 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	get_current(t_line **node, t_cmd **new)
 		(*new)->argv[i] = NULL;
 		return ;
 	}
-	while (*node && ((*node)->type == 7 || (*node)->type == 8))
+	while ((*node) && ((*node)->type == CMD || (*node)->type == ARG))
 	{
 		j = 0;
 		while ((*node)->str[j])

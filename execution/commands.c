@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/01 19:05:30 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/01 20:43:41 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,7 @@ int	handle_execute(t_data *data)
 	{
 		if (command_is_valid(data, cmd, builtin(cmd->argv[0])))
 		{
+			data->status = 0;
 			data->pid = fork();
 			if (data->pid == -1)
 			{
@@ -159,11 +160,13 @@ int	handle_execute(t_data *data)
 				return (1);
 			}
 		}
+		else
+			data->status = 1;
 		if (data->pid == 0)
-			execute_command(data, cmd);
+			data->status = execute_command(data, cmd);
 		cmd = cmd->next;
 	}
-	return (close_file(data));
+	return (close_file(data), data->status);
 }
 
 int exec_cmd(char **command, char **envp, t_data *data)
@@ -201,7 +204,7 @@ int single_command(t_data *data, char *cmd)
 		path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
 		if (builtin(data->cmd->argv[0]))
 		{
-			exec_builtin(data, data->cmd->argv);
+			data->status = exec_builtin(data, data->cmd->argv);
 		}
 		else
 		{
@@ -216,7 +219,7 @@ int single_command(t_data *data, char *cmd)
 				return (ft_error(1, data));
 			if (data->pid == 0)
 			{
-				data->exit = exec_cmd(data->cmd->argv, data->envp_arr, data);
+				data->status = exec_cmd(data->cmd->argv, data->envp_arr, data);
 			}
 			waitpid(data->pid, &data->status, 0);
 		}

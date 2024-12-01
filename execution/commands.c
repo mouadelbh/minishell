@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/25 14:37:05 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/01 19:05:30 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,113 @@ void	init_command(t_cmd *cmd, t_data *data)
 		cmd->pipe_output = true;
 }
 
-static int	valid_command(t_cmd *cmd, t_data *data)
+// static int	valid_command(t_cmd *cmd, t_data *data)
+// {
+// 	char	*full_command;
+	
+// 	full_command = get_full_cmd(cmd->argv[0], data->envp_arr);
+// 	if (access(full_command, F_OK | X_OK) == -1)
+// 	{
+// 		ft_putstr_fd("minishell: ", 2);
+// 		ft_putstr_fd(cmd->cmd, 2);
+// 		ft_putstr_fd(": command not found\n", 2);
+// 		free(full_command);
+// 		global.g_exit_status = COMMAND_NOT_FOUND;
+// 		return (0);
+// 	}
+// 	free(full_command);
+// 	return (1);
+// }
+
+// int	check_permission(char *path, t_data *data)
+// {
+// 	if (access(path, X_OK) != 0 && access(path, F_OK) == 0)
+// 	{
+// 		ft_putstr_fd("minishell: ", 2);
+// 		ft_putstr_fd(data->cmd->argv[0], 2);
+// 		ft_putstr_fd(": Permission denied\n", 2);
+// 		free(path);
+// 		return (126);
+// 	}
+// 	return (0);
+// }
+
+// int	check_cmd(char *cmd, t_data *data)
+// {
+// 	struct stat	buf;
+
+// 	if (S_ISDIR(buf.st_mode))
+// 	{
+// 		ft_putstr_fd("minishell: ", 2);
+// 		ft_putstr_fd(cmd, 2);
+// 		ft_putstr_fd(": is a directory\n", 2);
+// 		return (126);
+// 	}
+// 	return (0);
+// }
+
+int	valid_command(t_cmd *cmd, t_data *data)
 {
 	char	*full_command;
-	
+
 	full_command = get_full_cmd(cmd->argv[0], data->envp_arr);
-	if (access(full_command, F_OK | X_OK) == -1)
+	if (access(full_command, F_OK) == -1)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->cmd, 2);
+		ft_putstr_fd(cmd->argv[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
-		free(full_command);
-		global.g_exit_status = COMMAND_NOT_FOUND;
+		// free(full_command);
+		data->status = 1;
 		return (0);
 	}
-	free(full_command);
+	// free(full_command);
 	return (1);
+}
+
+int	check_cmd(char *cmd, t_data *data)
+{
+	struct stat	buf;
+
+	if (stat(cmd, &buf) == -1)
+		return (0);
+	if (S_ISDIR(buf.st_mode))
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": is a directory\n", 2);
+		data->status = 126;
+		return (1);
+	}
+	return (0);
+}
+
+int	check_permission(char *path, t_data *data)
+{
+	if (access(path, X_OK) != 0 && access(path, F_OK) == 0)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(data->cmd->argv[0], 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		// free(path);
+		data->status = 126;
+		return (1);
+	}
+	return (0);
+}
+
+int	command_is_valid(t_data *data, t_cmd *cmd, int is_builtin)
+{
+	char	*full_cmd;
+	if (is_builtin)
+	{
+		return (1);
+	}
+	full_cmd = get_full_cmd(cmd->argv[0], data->envp_arr);
+	if (check_cmd(cmd->argv[0], data) || check_permission(full_cmd, data))
+		return (0);
+	if (cmd->type == CMD)
+		return (valid_command(cmd, data));
+	return (0);
 }
 
 int	handle_execute(t_data *data)
@@ -59,7 +150,7 @@ int	handle_execute(t_data *data)
 	cmd = data->cmd;
 	while (data->pid != 0 && cmd)
 	{
-		if (cmd->type == CMD && valid_command(cmd, data))
+		if (command_is_valid(data, cmd, builtin(cmd->argv[0])))
 		{
 			data->pid = fork();
 			if (data->pid == -1)
@@ -79,6 +170,7 @@ int exec_cmd(char **command, char **envp, t_data *data)
 {
 	char	*path;
 
+	path = NULL;
 	if (command[0][0] == '/')
 		path = ft_strdup(command[0]);
 	else if (command[0][0] != '\0')
@@ -87,36 +179,12 @@ int exec_cmd(char **command, char **envp, t_data *data)
 		return (ft_error(7, data), 1);
 	if (execve(path, command, envp) == -1)
 	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(command[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
 		global.g_exit_status = 1;
 		free(path);
 		return (1);
-	}
-	return (0);
-}
-
-int	check_cmd(char *cmd, t_data *data)
-{
-	struct stat	buf;
-
-	if (S_ISDIR(buf.st_mode))
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": is a directory\n", 2);
-		return (126);
-	}
-	return (0);
-}
-
-int	check_permission(char *path, t_data *data)
-{
-	if (access(path, X_OK) != 0 && access(path, F_OK) == 0)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(data->cmd->argv[0], 2);
-		ft_putstr_fd(": Permission denied\n", 2);
-		free(path);
-		return (126);
 	}
 	return (0);
 }
@@ -132,16 +200,17 @@ int single_command(t_data *data, char *cmd)
 			temp = temp->next;
 		path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
 		if (builtin(data->cmd->argv[0]))
+		{
 			exec_builtin(data, data->cmd->argv);
+		}
 		else
 		{
-			if (check_cmd(data->cmd->argv[0], data) || check_permission(path, data) != 0)
+			if (check_cmd(path, data) == 1 || check_permission(path, data) == 1)
 			{
 				free(path);
 				global.g_exit_status = 126;
 				return (126);
 			}
-			free(path);
 			data->pid = fork();
 			if (data->pid == -1)
 				return (ft_error(1, data));

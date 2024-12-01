@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 21:28:33 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 09:31:51 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/01 17:56:07 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,10 @@ void	debug()
 
 	if (!count)
 		count = 0;
-	printf("Here: %d\n", count);
+	// printf("Here: %d\n", count);
+	ft_putstr_fd("Debugging\n", 2);
+	ft_putnbr_fd(count, 2);
+	ft_putchar_fd('\n', 2);
 	count++;
 }
 

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/25 13:11:55 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/01 17:54:13 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ char	*get_full_cmd(char *av, char **env)
 	(void)env;
 	path = ft_split(getenv("PATH"), ':');
 	if (!path)
-		return (perror("Path error"), NULL);
+		ft_error(3, NULL);
 	while (path[i])
 	{
 		tmp = ft_strjoin(path[i], "/");
@@ -191,7 +191,7 @@ char	*get_full_cmd(char *av, char **env)
 		i++;
 	}
 	free_arr(path);
-	return (NULL);
+	return (av);
 }
 
 int	count_symbols(t_data *data)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/29 17:41:38 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/01 17:34:54 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void	free_env(t_list **envp)
 
 void	free_data(t_data *data, int exit_code)
 {
-	free_all(data);
+	// free_all(data);
 	free_env(&data->envp);
 	// exit(exit_code);
 }

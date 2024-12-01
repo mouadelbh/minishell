@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/29 20:22:52 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/01 17:35:10 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	minishell(t_data *data)
 			continue;
 		}
 		data->status = handle_input(data);
-		free_all(data);
+		// free_all(data);
 	}
 	return (data->status);
 }

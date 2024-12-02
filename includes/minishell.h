@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/25 12:53:17 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/02 09:53:52 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int		modify_env_value(char *name, char *new_value, t_data *data);
 char	*ft_getenv(char *name, t_data *data);
 char	*find_value(char *name, t_list *envp);
 char	*new_substr(const char *str, int c);
-void	create_env_value(t_data *data, char *key);
+void	create_env_value(t_data *data, char *key, int empty_value);
 void	set_list_var(t_data *data, char *name, char *new_value);
 void 	debug(void);
 void	printa(char *str, char **arr);
@@ -148,7 +148,5 @@ void	close_pipe_fds(t_cmd *cmds, t_cmd *skip_cmd);
 void	init_heredoc(t_cmd *cmd, t_data *data);
 void	free_all(t_data *data);
 void	free_data(t_data *data, int exit_code);
-void	free_cmd_list(t_cmd **head);
-int		handle_pipes(t_data *data);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:07 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/21 17:59:10 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/02 09:49:52 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static void	set_env(t_list **head, char **envp)
 		if (!new)
 			return ;
 		new->content = ft_strdup(envp[i]);
+		new->empty_value = 0;
 		new->next = NULL;
 		env_lstadd_back(head, new);
 		i++;

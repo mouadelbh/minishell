@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:45:30 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/25 12:53:01 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:52:41 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	print_env(t_list *envp)
 {
 	if (envp == NULL)
 		return;
-	while (envp)
+	while (envp && !envp->empty_value)
 	{
 		printf("%s\n", (char *)envp->content);
 		envp = envp->next;

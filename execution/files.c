@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   files.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 21:35:52 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/02 23:53:46 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ int	create_files(t_cmd *cmd, t_data *data)
 
 bool	check_infile_outfile(t_io_fds *io)
 {
-	if (!io || (!io->infile && !io->outfile))
-		return (true);
-	else if ((io->infile && io->in_fd == -1)
+	if ((io->infile && io->in_fd == -1)
 		|| (io->outfile && io->out_fd == -1))
 			return (false);
+	if (!io || (!io->infile && !io->outfile))
+		return (true);
 	return (true);
 }
 
@@ -81,14 +81,16 @@ bool	remove_old_file_ref(t_io_fds *io, bool infile)
 			unlink(io->infile);
 		}
 		free(io->infile);
-		close(io->in_fd);
+		if (io->in_fd != -1)
+			close(io->in_fd);
 	}
 	else if (infile == false && (io && io->outfile))
 	{
 		if (io->out_fd == -1 || (io->infile && io->in_fd == -1))
 			return (false);
 		free(io->outfile);
-		close(io->out_fd);
+		if (io->out_fd != -1)
+			close(io->out_fd);
 	}
 	return (true);
 }

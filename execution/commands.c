@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/02 14:12:04 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/03 00:54:15 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,15 +113,13 @@ int	handle_execute(t_data *data)
 			data->status = 0;
 			data->pid = fork();
 			if (data->pid == -1)
-			{
-				ft_putstr_fd("fork error\n", 2);
-				return (1);
-			}
+				return (ft_putstr_fd("fork error\n", 2), 1);
 		}
 		else
 			data->status = 1;
 		if (data->pid == 0)
 			data->status = execute_command(data, cmd);
+		waitpid(data->pid, &data->status, 0);
 		cmd = cmd->next;
 	}
 	return (close_file(data), data->status);
@@ -143,7 +141,7 @@ int exec_cmd(char **command, char **envp, t_data *data)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(command[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
-		global.g_exit_status = 1;
+		data->status = 1;
 		free(path);
 		return (1);
 	}
@@ -167,6 +165,7 @@ int single_command(t_data *data, char *cmd)
 			if (check_cmd(path, data) == 1 || check_permission(path, data) == 1)
 			{
 				free(path);
+				printf("No such file or directory\n");
 				global.g_exit_status = 126;
 				return (126);
 			}
@@ -174,14 +173,10 @@ int single_command(t_data *data, char *cmd)
 			if (data->pid == -1)
 				return (ft_error(1, data));
 			if (data->pid == 0)
-			{
 				data->status = exec_cmd(data->cmd->argv, data->envp_arr, data);
-			}
 			waitpid(data->pid, &data->status, 0);
 			if (data->pid == 0)
-			{
 				exit(data->status);
-			}
 		}
 		free(path);
 		temp = temp->next;

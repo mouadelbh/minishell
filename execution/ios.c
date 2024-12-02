@@ -50,14 +50,14 @@ bool	redirect_io(t_io_fds *io)
 	{
 		if (dup2(io->in_fd, STDIN_FILENO) == -1)
 			ft_putstr_fd("dup2 error\n", 2);
+		close(io->in_fd);
 	}
-	close(io->in_fd);
 	if (io->out_fd != -1)
 	{
 		if (dup2(io->out_fd, STDOUT_FILENO) == -1)
 			ft_putstr_fd("dup2 error\n", 2);
+		close(io->out_fd);
 	}
-	close(io->out_fd);
 	return (ret);
 }
 

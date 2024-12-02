@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/01 20:42:35 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/02 23:07:57 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ int	execute_command(t_data *data, t_cmd *cmd)
 
 	if (cmd->type != CMD)
 		return (1);
-	if (!check_infile_outfile(cmd->io_fds))
-	{
-		ft_putstr_fd("Ambiguous input/output redirect\n", 2);
-		return (1);	
-	}
+	// if (!check_infile_outfile(cmd->io_fds))
+	// {
+	// 	ft_putstr_fd("Ambiguous input/output redirect\n", 2);
+	// 	return (1);	
+	// }
 	set_pipe_fds(data->cmd, cmd);
 	redirect_io(cmd->io_fds);
 	close_fds(data->cmd, false);

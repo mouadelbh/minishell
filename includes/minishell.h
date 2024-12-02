@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/02 09:53:52 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/02 23:21:26 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,6 @@ int		create_files(t_cmd *cmd, t_data *data);
 void	init_command(t_cmd *cmd, t_data *data);
 int		handle_input(t_data *data);
 int		handle_execute(t_data *data);
-// int		exec_cmd(char *av, char **env, t_data *data);
 int		exec_cmd(char **command, char **envp, t_data *data);
 int		single_command(t_data *data, char *cmd);
 int		complex_command(t_data *data);

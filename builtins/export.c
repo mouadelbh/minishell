@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:47:56 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/02 12:20:25 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/02 13:18:16 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,17 +192,21 @@ char	*get_key(char *value, t_list *envp, char **env_value, int *append)
 	return (key);
 }
 
-void	append_env_value(char *key, char *env_value, char *cmd, t_list *envp)
+int	append_env_value(char *key, char *env_value, char *cmd, t_list *envp)
 {
+	int	i;
+
 	while (envp)
 	{
 		if (ft_strncmp(key, envp->content, 0) == 0)
 		{
 			envp->content = ft_strjoin(envp->content, env_value);
-			return ;
+			printf("The added value: %s\n", envp->content);
+			return (1);
 		}
 		envp = envp->next;
 	}
+	return (0);
 }
 
 int	ft_export(t_data *data, char **cmd)
@@ -214,13 +218,16 @@ int	ft_export(t_data *data, char **cmd)
 	append = 0;
 	if (!cmd[1])
 		return (ft_env(data, cmd, 1));
+	if (!is_valid_env_name(cmd[1]))
+		return (printf("minishell: export: '%s': not a valid identifier\n", cmd[1]), 1);
+	debug();
 	if (!ft_strchr(cmd[1], '=') && is_valid_env_name(cmd[1]))
 		create_env_value(data, cmd[1], 1);
 	key = get_key(cmd[1], data->envp, &env_value, &append);
 	if (append)
 	{
-		append_env_value(key, env_value, cmd[1], data->envp);
+		if (!append_env_value(key, env_value, cmd[1], data->envp))
+			modify_env_value(key, env_value, data);
 	}
-	else
-		modify_env_value(key, env_value, data)
+	return (0);
 }

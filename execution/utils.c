@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/01 17:54:13 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/02 13:14:13 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,11 @@ char *ft_getenv(char *name, t_data *data)
 	i = 0;
 	while (temp)
 	{
-		if (ft_strncmp(temp->content, name, ft_strlen(name)))
-			return (temp->content);
+		if (ft_strncmp(temp->content, name, ft_strlen(name)) == 0)
+		{
+			printf("The content: %s\nThe name: %s\n", temp->content, name);
+			return (ft_strdup(temp->content));
+		}
 		temp = temp->next;
 	}
 	return (NULL);
@@ -33,10 +36,9 @@ int	modify_env_value(char *name, char *new_value, t_data *data)
 {
 	char *str;
 
-	// str = getenv(name);
 	str = ft_getenv(name, data);
 	if (!str)
-		perror("getenv");
+		create_env_value(data, ft_strjoin(ft_strjoin(name, "="), new_value), 0);
 	else
 		set_list_var(data, name, new_value);
 	return (1);

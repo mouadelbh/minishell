@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/02 13:14:13 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:02:01 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ char *ft_getenv(char *name, t_data *data)
 	{
 		if (ft_strncmp(temp->content, name, ft_strlen(name)) == 0)
 		{
-			printf("The content: %s\nThe name: %s\n", temp->content, name);
 			return (ft_strdup(temp->content));
 		}
 		temp = temp->next;

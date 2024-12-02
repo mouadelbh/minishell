@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/23 20:08:45 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:09:43 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int init_write_to(t_cmd *cmd, t_data *data)
 
 int	init_read_from(t_cmd *cmd, t_data *data)
 {
-	init_io(&cmd->io_fds);
+	// init_io(&cmd->io_fds);
 	if (!remove_old_file_ref(cmd->io_fds, true))
 		return (0);
 	cmd->io_fds->infile = ft_strdup(cmd->argv[1]);

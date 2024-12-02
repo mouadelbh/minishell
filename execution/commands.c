@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/01 20:43:41 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:12:04 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,51 +33,6 @@ void	init_command(t_cmd *cmd, t_data *data)
 	if (should_pipe(cmd) || (cmd->next && cmd->next->type == CMD))
 		cmd->pipe_output = true;
 }
-
-// static int	valid_command(t_cmd *cmd, t_data *data)
-// {
-// 	char	*full_command;
-	
-// 	full_command = get_full_cmd(cmd->argv[0], data->envp_arr);
-// 	if (access(full_command, F_OK | X_OK) == -1)
-// 	{
-// 		ft_putstr_fd("minishell: ", 2);
-// 		ft_putstr_fd(cmd->cmd, 2);
-// 		ft_putstr_fd(": command not found\n", 2);
-// 		free(full_command);
-// 		global.g_exit_status = COMMAND_NOT_FOUND;
-// 		return (0);
-// 	}
-// 	free(full_command);
-// 	return (1);
-// }
-
-// int	check_permission(char *path, t_data *data)
-// {
-// 	if (access(path, X_OK) != 0 && access(path, F_OK) == 0)
-// 	{
-// 		ft_putstr_fd("minishell: ", 2);
-// 		ft_putstr_fd(data->cmd->argv[0], 2);
-// 		ft_putstr_fd(": Permission denied\n", 2);
-// 		free(path);
-// 		return (126);
-// 	}
-// 	return (0);
-// }
-
-// int	check_cmd(char *cmd, t_data *data)
-// {
-// 	struct stat	buf;
-
-// 	if (S_ISDIR(buf.st_mode))
-// 	{
-// 		ft_putstr_fd("minishell: ", 2);
-// 		ft_putstr_fd(cmd, 2);
-// 		ft_putstr_fd(": is a directory\n", 2);
-// 		return (126);
-// 	}
-// 	return (0);
-// }
 
 int	valid_command(t_cmd *cmd, t_data *data)
 {
@@ -137,7 +92,8 @@ int	command_is_valid(t_data *data, t_cmd *cmd, int is_builtin)
 	}
 	full_cmd = get_full_cmd(cmd->argv[0], data->envp_arr);
 	if (check_cmd(cmd->argv[0], data) || check_permission(full_cmd, data))
-		return (0);
+		return (free(full_cmd), 0);
+	// free(full_cmd);
 	if (cmd->type == CMD)
 		return (valid_command(cmd, data));
 	return (0);
@@ -146,8 +102,10 @@ int	command_is_valid(t_data *data, t_cmd *cmd, int is_builtin)
 int	handle_execute(t_data *data)
 {
 	t_cmd	*cmd;
+	t_cmd	*temp;
 
 	cmd = data->cmd;
+	temp = cmd;
 	while (data->pid != 0 && cmd)
 	{
 		if (command_is_valid(data, cmd, builtin(cmd->argv[0])))
@@ -203,9 +161,7 @@ int single_command(t_data *data, char *cmd)
 			temp = temp->next;
 		path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
 		if (builtin(data->cmd->argv[0]))
-		{
 			data->status = exec_builtin(data, data->cmd->argv);
-		}
 		else
 		{
 			if (check_cmd(path, data) == 1 || check_permission(path, data) == 1)
@@ -222,7 +178,12 @@ int single_command(t_data *data, char *cmd)
 				data->status = exec_cmd(data->cmd->argv, data->envp_arr, data);
 			}
 			waitpid(data->pid, &data->status, 0);
+			if (data->pid == 0)
+			{
+				exit(data->status);
+			}
 		}
+		free(path);
 		temp = temp->next;
 	}
 	return (data->status);

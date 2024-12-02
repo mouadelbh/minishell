@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/02 09:42:45 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/02 13:34:42 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ static void	free_cmd_struct(t_cmd *cmd)
 	while (cmd)
 	{
 		tmp = cmd->next;
-		if (cmd->argv)
-			free_arr(cmd->argv);
+		// if (cmd->argv)
+		// 	free_arr(cmd->argv);
 		free(cmd);
 		cmd = tmp;
 	}

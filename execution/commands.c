@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/03 01:42:20 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/03 01:45:05 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ int single_command(t_data *data, char *cmd)
 				return (ft_error(1, data));
 			if (data->pid == 0)
 				data->status = exec_cmd(data->cmd->argv, data->envp_arr, data);
-			// waitpid(data->pid, &data->status, 0);
+			waitpid(data->pid, &data->status, 0);
 			if (data->pid == 0)
 				exit(data->status);
 		}

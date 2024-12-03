@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/03 00:49:42 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/03 01:47:44 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int	minishell(t_data *data)
 		}
 		data->status = handle_input(data);
 		global.g_exit_status = data->status;
-		printf("exit status: %d\n", data->status);
 		free_all(data);
 	}
 	return (data->status);

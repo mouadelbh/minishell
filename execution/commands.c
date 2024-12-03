@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/03 01:45:05 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/03 01:52:46 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ int	valid_command(t_cmd *cmd, t_data *data)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd->argv[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
-		// free(full_command);
+		free(full_command);
 		data->status = 1;
 		return (0);
 	}
-	// free(full_command);
+	free(full_command);
 	return (1);
 }
 
@@ -93,7 +93,7 @@ int	command_is_valid(t_data *data, t_cmd *cmd, int is_builtin)
 	full_cmd = get_full_cmd(cmd->argv[0], data->envp_arr);
 	if (check_cmd(cmd->argv[0], data) || check_permission(full_cmd, data))
 		return (free(full_cmd), 0);
-	// free(full_cmd);
+	free(full_cmd);
 	if (cmd->type == CMD)
 		return (valid_command(cmd, data));
 	return (0);

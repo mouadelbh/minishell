@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/02 13:34:42 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/03 02:15:38 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void	free_io(t_cmd *cmd)
 				cmd->pipe_fd = NULL;
 			}
 			free(cmd->io_fds);
+			cmd->io_fds = NULL;
 		}
 		cmd = cmd->next;
 	}
@@ -42,8 +43,13 @@ static void	free_cmd_struct(t_cmd *cmd)
 	while (cmd)
 	{
 		tmp = cmd->next;
-		// if (cmd->argv)
-		// 	free_arr(cmd->argv);
+		if (cmd->argv)
+			free_arr(cmd->argv);
+		// if (cmd->cmd)
+		// {
+		// 	free(cmd->cmd);
+		// 	cmd->cmd = NULL;
+		// }
 		free(cmd);
 		cmd = tmp;
 	}
@@ -51,11 +57,14 @@ static void	free_cmd_struct(t_cmd *cmd)
 
 void	free_all(t_data *data)
 {
+	t_cmd	*cmd;
+
+	cmd = data->cmd;
 	if (data->envp_arr)
 		free_arr(data->envp_arr);
-	free_io(data->cmd);
+	free_io(cmd);
 	free_line(data->head);
-	free_cmd_struct(data->cmd);
+	free_cmd_struct(cmd);
 	data->envp_arr = NULL;
 }
 

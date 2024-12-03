@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/02 14:02:01 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/03 01:59:50 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ char	*get_full_cmd(char *av, char **env)
 		i++;
 	}
 	free_arr(path);
-	return (av);
+	return (ft_strdup(av));
 }
 
 int	count_symbols(t_data *data)
@@ -286,6 +286,7 @@ void set_cmd_strings(t_cmd *cmd)
 	char	*temp;
 	char	*new_cmd;
 
+	new_cmd = NULL;
 	while (current != NULL)
 	{
 		i = 0;
@@ -299,17 +300,10 @@ void set_cmd_strings(t_cmd *cmd)
 				exit(EXIT_FAILURE);
 			}
 			if (current->argv[i + 1] != NULL)
-				new_cmd = ft_strjoin(temp, " ");
+				current->cmd = ft_strjoin(temp, " ");
 			else
-				new_cmd = ft_strdup(temp);
+				current->cmd = ft_strdup(temp);
 			free(temp);
-			if (new_cmd == NULL)
-			{
-				perror("Failed to allocate memory");
-				exit(EXIT_FAILURE);
-			}
-			free(current->cmd);
-			current->cmd = new_cmd;
 			i++;
 		}
 		current = current->next;

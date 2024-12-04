@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/03 01:59:50 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:32:28 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,19 @@ char *ft_getenv(char *name, t_data *data)
 
 int	modify_env_value(char *name, char *new_value, t_data *data)
 {
-	char *str;
+	char	*str;
+	char	*temp;
+	char	*temp2;
 
 	str = ft_getenv(name, data);
 	if (!str)
-		create_env_value(data, ft_strjoin(ft_strjoin(name, "="), new_value), 0);
+	{
+		temp = ft_strjoin(name, "=");
+		temp2 = ft_strjoin(temp, new_value);
+		create_env_value(data, temp2, 0);
+		free(temp);
+		free(temp2);
+	}
 	else
 		set_list_var(data, name, new_value);
 	return (1);
@@ -76,7 +84,10 @@ int	exec_builtin(t_data *data, char **cmd)
 	else if (ft_strncmp(cmd[0], "env", 0) == 0)
 		res = ft_env(data, cmd, 0);
 	else if (ft_strncmp(cmd[0], "echo", 0) == 0)
+	{
+		// printf("Running echo\n");
 		res = ft_echo(data, cmd);
+	}
 	else if (ft_strncmp(cmd[0], "cd", 0) == 0)
 		res = ft_cd(data, cmd);
 	else if (ft_strncmp(cmd[0], "unset", 0) == 0)
@@ -302,7 +313,11 @@ void set_cmd_strings(t_cmd *cmd)
 			if (current->argv[i + 1] != NULL)
 				current->cmd = ft_strjoin(temp, " ");
 			else
+			{
+				if (current->cmd)
+					free(current->cmd);
 				current->cmd = ft_strdup(temp);
+			}
 			free(temp);
 			i++;
 		}

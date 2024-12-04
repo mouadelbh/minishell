@@ -3,63 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:29:00 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/20 15:50:07 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 12:26:23 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	has_flag(char *av)
+static char	**check_n_option(char **str, int *new_line)
 {
-	int		i;
-	bool	n_flag;
+	int	i;
 
-	n_flag = false;
-	i = 0;
-	if (av[i] != '-')
-		return (n_flag);
-	i++;
-	while (av[i] && av[i] == 'n')
-		i++;
-	if (av[i] == '\0')
-		n_flag = true;
-	return (n_flag);
+	*new_line = 1;
+	while (*str && ft_strncmp(*str, "-n", 2) == 0)
+	{
+		i = 2;
+		while ((*str)[i] == 'n')
+			i++;
+		if ((*str)[i] == '\0')
+		{
+			*new_line = 0;
+			str++;
+		}
+		else
+			break ;
+	}
+	return (str);
 }
 
-int ft_echo(t_data *data, char **av)
+static void	print_arguments(char **str)
 {
-	int	n_flag;
-	int	i;
-	int	k;
+	while (*str)
+	{
+		printf("%s", *str);
+		if (*(str + 1))
+			printf(" ");
+		str++;
+	}
+}
 
-	i = 1;
-	(void)data;
-	if (!av[1])
-	{
+int	ft_echo(t_data *data, char **str)
+{
+	int	new_line;
+
+	str++;
+	str = check_n_option(str, &new_line);
+	print_arguments(str);
+	if (new_line)
 		printf("\n");
-		return (EXIT_SUCCESS);
-	}
-	n_flag = has_flag(av[1]);
-	if (n_flag && !av[2])
-		return (EXIT_SUCCESS);
-	while (av[i])
-	{
-		while (has_flag(av[i]))
-			i++;
-		k = 0;
-		while (av[i][k])
-		{
-			write(1, &av[i][k], 1);
-			k++;
-		}
-		if (av[i + 1])
-			write(1, " ", 1);
-		i++;
-	}
-	if (!n_flag)
-		printf("\n");
-	return (EXIT_SUCCESS);
+	return (0);
 }

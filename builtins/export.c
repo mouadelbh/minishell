@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:47:56 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/02 14:01:18 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:30:56 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,35 +141,6 @@ void create_env_value(t_data *data, char *key, int empty_value)
 	}
 }
 
-// int ft_export(t_data *data, char **cmd)
-// {
-// 	char	*value;
-// 	char	*env_var;
-// 	char	*new_value;
-
-
-// 	if (!ft_strchr(cmd[1], '='))
-// 	{
-// 		if (!cmd[1])
-// 			ft_env(data, cmd, 1);
-// 		else if (is_valid_env_name(cmd[1]))
-// 			create_env_value(data, cmd[1], 1);
-// 		return (0);
-// 	}
-// 	value = find_value(cmd[1], data->envp);
-// 	if (!value)
-// 		create_env_value(data, cmd[1], 0);
-// 	else
-// 	{
-// 		env_var = new_substr(cmd[1], '=');
-// 		new_value = ft_strchr(cmd[1], '=');
-// 		modify_env_value(env_var, new_value + 1, data);
-// 		free(env_var);
-// 		free(value);
-// 	}
-// 	return (0);
-// }
-
 char	*get_key(char *value, t_list *envp, char **env_value, int *append)
 {
 	char	*key;
@@ -194,14 +165,16 @@ char	*get_key(char *value, t_list *envp, char **env_value, int *append)
 
 int	append_env_value(char *key, char *env_value, char *cmd, t_list *envp)
 {
-	int	i;
+	int		i;
+	char	*temp;
 
 	while (envp)
 	{
-		if (ft_strncmp(key, envp->content, 0) == 0)
+		if (ft_strncmp(key, envp->content, ft_strlen(key)) == 0)
 		{
-			envp->content = ft_strjoin(envp->content, env_value);
-			printf("The added value: %s\n", envp->content);
+			temp = ft_strjoin(envp->content, env_value);
+			free(envp->content);
+			envp->content = temp;
 			return (1);
 		}
 		envp = envp->next;

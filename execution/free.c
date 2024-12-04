@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/03 02:15:38 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:27:32 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	free_io(t_cmd *cmd)
 	{
 		if (cmd->io_fds != NULL)
 		{
-			if (cmd->io_fds->infile)
+			if (cmd->io_fds && cmd->io_fds->infile)
 				free(cmd->io_fds->infile);
 			if (cmd->io_fds->outfile)
 				free(cmd->io_fds->outfile);
@@ -62,7 +62,8 @@ void	free_all(t_data *data)
 	cmd = data->cmd;
 	if (data->envp_arr)
 		free_arr(data->envp_arr);
-	free_io(cmd);
+	if (cmd->io_fds)
+		free_io(cmd);
 	free_line(data->head);
 	free_cmd_struct(cmd);
 	data->envp_arr = NULL;

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/03 01:52:46 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:07:30 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@ int should_pipe(t_cmd *cmd)
 	return (0);
 }
 
-void	init_command(t_cmd *cmd, t_data *data)
+int	init_command(t_cmd *cmd, t_data *data)
 {
 	if (should_pipe(cmd) || (cmd->next && cmd->next->type == CMD))
 		cmd->pipe_output = true;
+	return (1);
 }
 
 int	valid_command(t_cmd *cmd, t_data *data)
@@ -87,9 +88,7 @@ int	command_is_valid(t_data *data, t_cmd *cmd, int is_builtin)
 {
 	char	*full_cmd;
 	if (is_builtin)
-	{
 		return (1);
-	}
 	full_cmd = get_full_cmd(cmd->argv[0], data->envp_arr);
 	if (check_cmd(cmd->argv[0], data) || check_permission(full_cmd, data))
 		return (free(full_cmd), 0);
@@ -157,15 +156,14 @@ int single_command(t_data *data, char *cmd)
 	{
 		if (temp->next && temp->next->type == 7)
 			temp = temp->next;
-		path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
 		if (builtin(data->cmd->argv[0]))
-			data->status = exec_builtin(data, data->cmd->argv);
+			return (exec_builtin(data, data->cmd->argv));
 		else
 		{
+			path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
 			if (check_cmd(path, data) == 1 || check_permission(path, data) == 1)
 			{
 				free(path);
-				printf("No such file or directory\n");
 				global.g_exit_status = 126;
 				return (126);
 			}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/02 14:09:43 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:16:21 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	init_io(t_io_fds **io_fds)
 	*io_fds = (t_io_fds *)malloc(sizeof(t_io_fds));
 	if (!(*io_fds))
 	{
-		ft_putstr_fd("Failed to allocate memory\n", 2);
+		perror("malloc");
 		return ;
 	}
 	(*io_fds)->in_fd = -1;
@@ -40,23 +40,28 @@ void	init_io(t_io_fds **io_fds)
 	(*io_fds)->stdout_backup = -1;
 }
 
-void init_append(t_cmd *cmd, t_data *data)
+int init_append(t_cmd *cmd, t_data *data)
 {
 	if (!remove_old_file_ref(cmd->io_fds, false))
-		return;
-		
+		return (0);
 	cmd->io_fds->outfile = ft_strdup(cmd->argv[1]);
 	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
 	{
-		ft_error(3, data);
-		return;
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->argv[1], 2);
+		ft_putstr_fd("No such file or directory\n", 2);
+		return (0);
+	}
+	if (cmd->io_fds->outfile[0] == '\0' || (cmd->io_fds->outfile[0] == 36 && cmd->io_fds->outfile[1] != '\0'))
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->argv[1], 2);
+		ft_putstr_fd("ambigious redirect\n", 2);
+		return (0);
 	}
 	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
-	{
-		perror("open");
-		return;
-	}
+		return (perror("open"), 0);
 	t_cmd *current = cmd->prev;
 	while (current && current->type != CMD)
 	{
@@ -69,6 +74,7 @@ void init_append(t_cmd *cmd, t_data *data)
 		current->io_fds->outfile = cmd->io_fds->outfile;
 		current->io_fds->out_fd = cmd->io_fds->out_fd;
 	}
+	return (1);
 }
 
 int init_write_to(t_cmd *cmd, t_data *data)
@@ -78,22 +84,21 @@ int init_write_to(t_cmd *cmd, t_data *data)
 	cmd->io_fds->outfile = ft_strdup(cmd->argv[1]);
 	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
 	{
-		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->argv[1], 2);
+		ft_putstr_fd("No such file or directory\n", 2);
 		return (0);
 	}
 	if (cmd->io_fds->outfile[0] == '\0' || (cmd->io_fds->outfile[0] == 36 && cmd->io_fds->outfile[1] != '\0'))
 	{
-		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->argv[1], 2);
+		ft_putstr_fd("ambigious redirect\n", 2);
 		return (0);
 	}
 	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		perror(cmd->io_fds->outfile);
-		ft_putstr_fd("ambiguous redirect\n", 2);
-		return (0);
-	}
+		return (perror("open"), 0);
 	t_cmd *current = cmd->prev;
 	while (current && current->type != CMD)
 	{
@@ -111,10 +116,23 @@ int init_write_to(t_cmd *cmd, t_data *data)
 
 int	init_read_from(t_cmd *cmd, t_data *data)
 {
-	// init_io(&cmd->io_fds);
 	if (!remove_old_file_ref(cmd->io_fds, true))
 		return (0);
 	cmd->io_fds->infile = ft_strdup(cmd->argv[1]);
+	if (access(cmd->io_fds->infile, F_OK) == 0 && access(cmd->io_fds->infile, R_OK) == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->argv[1], 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		return (0);
+	}
+	if (access(cmd->io_fds->infile, F_OK) == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->argv[1], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		return (0);
+	}
 	cmd->io_fds->in_fd = open(cmd->io_fds->infile, O_RDONLY);
 	if (cmd->io_fds->in_fd == -1)
 	{

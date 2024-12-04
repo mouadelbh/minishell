@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/02 23:21:26 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 09:28:34 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void 	show_command_info(t_cmd *cmd_list);
 void 	show_io_fds(t_io_fds *io_fds);
 void 	set_cmd_strings(t_cmd *cmd);
 int		create_files(t_cmd *cmd, t_data *data);
-void	init_command(t_cmd *cmd, t_data *data);
+int		init_command(t_cmd *cmd, t_data *data);
 int		handle_input(t_data *data);
 int		handle_execute(t_data *data);
 int		exec_cmd(char **command, char **envp, t_data *data);
@@ -135,7 +135,7 @@ void	init_cmd(t_cmd *cmd);
 void	init_io(t_io_fds **io_fds);
 int		init_write_to(t_cmd *cmd, t_data *data);
 int		init_read_from(t_cmd *cmd, t_data *data);
-void	init_append(t_cmd *cmd, t_data *data);
+int		init_append(t_cmd *cmd, t_data *data);
 void	close_fds(t_cmd *cmds, bool close_backups);
 bool	check_infile_outfile(t_io_fds *io);
 bool	remove_old_file_ref(t_io_fds *io, bool infile);

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/03 01:47:44 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:27:08 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	handle_input(t_data *data)
 {
 	t_line	*temp = data->head;
 	char	*cmd;
+	int		i;
 
 	data->sym_count = count_symbols(data);
 	if (data->sym_count == 0 && data->head->type == CMD)
@@ -64,6 +65,8 @@ int	minishell(t_data *data)
 			free_line(data->head);
 			continue;
 		}
+		// show_command_info(data->cmd);
+		// break ;
 		data->status = handle_input(data);
 		global.g_exit_status = data->status;
 		free_all(data);

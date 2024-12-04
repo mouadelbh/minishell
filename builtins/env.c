@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:45:30 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/02 10:52:41 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:40:45 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	print_env(t_list *envp)
 {
 	if (envp == NULL)
-		return;
+		return ;
 	while (envp && !envp->empty_value)
 	{
 		printf("%s\n", (char *)envp->content);
@@ -26,8 +26,9 @@ static void	print_env(t_list *envp)
 int	ft_env(t_data *data, char **args, int export)
 {
 	int		i;
-	t_list	*env_temp = data->envp;
+	t_list	*env_temp;
 
+	env_temp = data->envp;
 	i = 0;
 	if (!data->envp)
 		return (EXIT_FAILURE);

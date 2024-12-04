@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 16:43:22 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/20 21:31:17 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:49:42 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// Still need some adjustments
+/* Still need some adjustments */
 
-int is_valid_path(char *path)
+int	is_valid_path(char *path)
 {
-	struct stat buf;
+	struct stat	buf;
 
 	if (stat(path, &buf) == -1)
 		return (-1);
@@ -27,11 +27,11 @@ int is_valid_path(char *path)
 	return (0);
 }
 
-int ft_cd(t_data *data, char **arg)
+int	ft_cd(t_data *data, char **arg)
 {
 	char	*old_pwd;
 	char	*new_pwd;
-	int 	valid_path;
+	int		valid_path;
 
 	if (!arg[1])
 		return (printf("cd: too few arguments\n"));

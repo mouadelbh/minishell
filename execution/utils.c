@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/04 13:32:28 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:33:56 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ char *ft_getenv(char *name, t_data *data)
 	while (temp)
 	{
 		if (ft_strncmp(temp->content, name, ft_strlen(name)) == 0)
-		{
 			return (ft_strdup(temp->content));
-		}
 		temp = temp->next;
 	}
 	return (NULL);

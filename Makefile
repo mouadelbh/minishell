@@ -10,7 +10,7 @@ EXEC_F	=	minishell.c builtins/echo.c builtins/cd.c \
 			execution/pipe.c execution/commands.c \
 			execution/execute.c execution/files.c execution/ios.c \
 			execution/utils.c execution/init.c execution/heredoc.c \
-			execution/debug.c execution/free.c
+			execution/debug.c execution/free.c builtins/export_utils.c
 FILES	=	$(PARS_F) $(EXEC_F)
 OBJS	=	$(FILES:.c=.o)
 LIBFT	=	libft/libft.a

@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/29 17:32:31 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:59:28 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,20 @@ int	minishell(t_data *data)
 		err = parse(data->arg, &data->head, data->envp, data);
 		if (err == -1)
 		{
-			free_line(&data->head);
+			free_line(data->head);
 			continue;
 		}
 		get_final_list(&data->head, &data->cmd);
 		if (!data->cmd)
 		{
-			free_line(&data->head);
+			free_line(data->head);
 			printf("CMD IS NULL\n");
 			continue;
 		}
 		data->envp_arr = set_list_arra(data->envp);
 		if (!data->envp_arr || !*data->envp_arr)
 		{
-			free_line(&data->head);
+			free_line(data->head);
 			continue;
 		}
 		data->status = handle_input(data);

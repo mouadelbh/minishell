@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:07 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/21 17:59:10 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/04 18:02:37 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ t_list	*get_shlvl(void)
 		return (free(tmp), NULL);
 	tmp->content[0] = '\0';
 	ft_strlcat(tmp->content, "SHLVL=1", 8);
+	tmp->next = NULL;
 	return (tmp);
 }
 

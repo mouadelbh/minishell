@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/04 13:07:30 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:26:24 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ int	handle_execute(t_data *data)
 			data->status = 1;
 		if (data->pid == 0)
 			data->status = execute_command(data, cmd);
-		// waitpid(data->pid, &data->status, 0);
 		cmd = cmd->next;
 	}
 	return (close_file(data), data->status);

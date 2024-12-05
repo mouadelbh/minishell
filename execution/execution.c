@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/04 15:28:47 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:38:42 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ int	handle_input(t_data *data)
 
 int	minishell(t_data *data)
 {
-	t_line	*head;
-	t_cmd	*cmd;
-	int		new_fd;
 	int		err;
+	t_cmd	*cmd;
+	t_line	*head;
+	int		new_fd;
 
 	while (1)
 	{
@@ -46,6 +46,7 @@ int	minishell(t_data *data)
 		data->cmd = NULL;
 		data->arg = readline(READLINE_MSG);
 		data->pid = -1;
+		data->envp_arr = NULL;
 		err = parse(data->arg, &data->head, data->envp, data);
 		if (err == -1)
 		{

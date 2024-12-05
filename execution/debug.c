@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 21:28:33 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/01 17:56:07 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:36:49 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,9 @@ void	printa(char *message, char **str)
 
 	i = 0;
 	if (!str)
-		return;
+		return ;
+	if (!*str)
+		return ;
 	printf("%s: ", message);
 	while (str[i])
 	{

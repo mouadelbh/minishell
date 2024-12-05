@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/05 12:02:12 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/05 12:55:12 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,24 @@ void	skibidi(int sig)
 	// close(fd);
 	close(0);
 	write(1, "\n", 1);
+}
+
+int is_file_closed(int fd)
+{
+	struct stat	st;
+    // Use fstat to check if the file descriptor is valid
+    if (fstat(fd, &st) == -1) {
+        // If fstat fails with EBADF, the file descriptor is likely closed
+        if (errno == EBADF) {
+            return 1;  // File is closed
+        }
+        // Other errors might occur
+        perror("File descriptor check error");
+        return 0;
+    }
+    
+    // File descriptor is still open
+    return 0;
 }
 
 void init_heredoc(t_cmd *cmd, t_data *data)
@@ -35,7 +53,6 @@ void init_heredoc(t_cmd *cmd, t_data *data)
 		perror("heredoc temp file");
 		return;
 	}
-	line = NULL;
 	id = fork();
 	if (id == 0)
 	{		
@@ -63,10 +80,10 @@ void init_heredoc(t_cmd *cmd, t_data *data)
 		exit(0);
 	}
 	waitpid(id, &data->status, 0);
-	if (stat("/tmp/ncajha3f83", &st) == -1)
+	if (!is_file_closed(temp_fd))
 	{
 		// perror("stat");
-		return;
+		return ;
 	}
 	close(temp_fd);
 	temp_fd = open("/tmp/ncajha3f83", O_RDONLY, 0644);

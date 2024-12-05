@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/12/05 11:40:50 by mel-bouh         ###   ########.fr       */
+/*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
+/*   Updated: 2024/12/05 12:07:18 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@
 void	skibidi(int sig)
 {
 	(void)sig;
-	dup(1);
-	close(1);
+	// int fd = dup(0);
+	// close(fd);
+	close(0);
 	write(1, "\n", 1);
 }
 
@@ -28,6 +29,7 @@ void init_heredoc(t_cmd *cmd, t_data *data)
 	int		temp_fd;
 	t_cmd	*current;
 	int		id;
+	struct stat	st;
 
 	temp_fd = open("/tmp/ncajha3f83", O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (temp_fd == -1)
@@ -59,9 +61,15 @@ void init_heredoc(t_cmd *cmd, t_data *data)
 			write(temp_fd, "\n", 1);
 			free(line);
 		}
+		close(temp_fd);
 		exit(0);
 	}
 	waitpid(id, &data->status, 0);
+	if (stat("/tmp/ncajha3f83", &st) == -1)
+	{
+		// perror("stat");
+		return;
+	}
 	close(temp_fd);
 	temp_fd = open("/tmp/ncajha3f83", O_RDONLY, 0644);
 	cmd->io_fds->in_fd = temp_fd;

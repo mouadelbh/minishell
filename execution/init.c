@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/04 15:26:07 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:59:36 by prizmo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ int init_write_to(t_cmd *cmd, t_data *data)
 	if (cmd->io_fds->out_fd == -1)
 		return (perror("open"), 0);
 	current = cmd->prev;
+	if (cmd->prev && cmd->prev->type == PIPE)
+		return (0);
 	while (current && current->type != CMD)
 	{
 		current->io_fds->outfile = cmd->io_fds->outfile;

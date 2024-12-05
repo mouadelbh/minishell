@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/25 14:37:05 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/05 10:22:56 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	init_command(t_cmd *cmd, t_data *data)
 static int	valid_command(t_cmd *cmd, t_data *data)
 {
 	char	*full_command;
-	
+
 	full_command = get_full_cmd(cmd->argv[0], data->envp_arr);
 	if (access(full_command, F_OK | X_OK) == -1)
 	{
@@ -62,6 +62,8 @@ int	handle_execute(t_data *data)
 		if (cmd->type == CMD && valid_command(cmd, data))
 		{
 			data->pid = fork();
+			if (data->pid != -1)
+				change_signal();
 			if (data->pid == -1)
 			{
 				ft_putstr_fd("fork error\n", 2);
@@ -143,6 +145,8 @@ int single_command(t_data *data, char *cmd)
 			}
 			free(path);
 			data->pid = fork();
+			if (data->pid != -1)
+				change_signal();
 			if (data->pid == -1)
 				return (ft_error(1, data));
 			if (data->pid == 0)

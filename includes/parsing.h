@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/29 17:34:48 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/05 10:25:19 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ void	free_line(t_line *head);
 void	handlesig(int sig);
 void	lstadd_line(t_line **head, t_line *new);
 void	arange_arguments(t_line *head, t_line **final);
+void	change_signal(void);
+void	reset_signal(void);
 int		parse(char *line, t_line **head, t_list *env,t_data *ex_data);
 int		check_token(int c);
 int		special_char(char *str, int i);

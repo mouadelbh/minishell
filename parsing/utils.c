@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/25 19:37:31 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/05 10:30:45 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,31 @@ int	isredir(int i)
 	return (0);
 }
 
+void	handlehang(int sig)
+{
+	(void)sig;
+	ft_putstr_fd("\n", 1);
+	global.g_exit_status = CTRL_C;
+}
+
+void	change_signal(void)
+{
+	signal(SIGINT, handlehang);
+}
+
 void	handlesig(int sig)
 {
-	if (global.pid == 0)
-	{
-		ft_putstr_fd("\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		global.g_exit_status = CTRL_C;
-	}
-	else
-	{
-		ft_putstr_fd("\n", 1);
-		global.g_exit_status = CTRL_C;
-	}
+	(void)sig;
+	ft_putstr_fd("\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	global.g_exit_status = CTRL_C;
+}
+
+void	reset_signal(void)
+{
+	signal(SIGINT, handlesig);
 }
 
 int is_empty(char *str)

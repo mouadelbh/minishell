@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/25 20:01:10 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/05 10:35:02 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,31 @@ void init_heredoc(t_cmd *cmd, t_data *data)
 		return;
 	}
 	char *line = NULL;
-	while (1)
+	int fd = fork();
+	if (fd == 0)
 	{
-		line = readline("> ");
-		if (!line)
-			break;
-		if (ft_strchr(line, '$'))
+		while (1)
 		{
-			line[0] = -1;
-			line = find_and_replace(line, data->envp, 0);
-		}
-		if (strcmp(line, cmd->argv[1]) == 0)
-		{
+			line = readline("> ");
+			if (!line)
+				break;
+			if (ft_strchr(line, '$'))
+			{
+				line[0] = -1;
+				line = find_and_replace(line, data->envp, 0);
+			}
+			if (strcmp(line, cmd->argv[1]) == 0)
+			{
+				free(line);
+				break;
+			}
+			write(temp_fd, line, strlen(line));
+			write(temp_fd, "\n", 1);
 			free(line);
-			break;
 		}
-		write(temp_fd, line, strlen(line));
-		write(temp_fd, "\n", 1);
-		free(line);
+		close(temp_fd);
+		exit(0);
 	}
-	close(temp_fd);
 	temp_fd = open("/tmp/ncajha3f83", O_RDONLY, 0644);
 	cmd->io_fds->in_fd = temp_fd;
 	t_cmd *current = cmd->prev;

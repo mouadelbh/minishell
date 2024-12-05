@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/05 13:58:13 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/05 14:19:36 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,15 @@ void init_heredoc(t_cmd *cmd, t_data *data)
 			line = readline("> ");
 			if (!line)
 				break;
-			if (ft_strchr(line, '$'))
-			{
-				line[0] = -1;
-				line = find_and_replace(line, data->envp, 0);
-			}
 			if (strcmp(line, cmd->argv[1]) == 0)
 			{
 				free(line);
 				break;
+			}
+			if (ft_strchr(line, '$'))
+			{
+				line[0] = -1;
+				line = find_and_replace(line, data->envp, 0);
 			}
 			write(temp_fd, line, strlen(line));
 			write(temp_fd, "\n", 1);

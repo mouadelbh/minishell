@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/05 10:25:19 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/05 10:31:47 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef enum
 
 typedef struct s_cmd t_cmd;
 typedef struct s_data t_data;
+// typedef struct sigaction t_sig;
 
 #define BUFFER_SIZE	4098
 

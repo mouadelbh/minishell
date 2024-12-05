@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:07 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/04 18:02:37 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/05 10:31:59 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ t_list	*get_shlvl(void)
 	tmp->content[0] = '\0';
 	ft_strlcat(tmp->content, "SHLVL=1", 8);
 	tmp->next = NULL;
+	tmp->next = NULL;
 	return (tmp);
 }
 
@@ -88,9 +89,6 @@ void	create_env(t_list **head)
 
 void	init(t_list **data, char **env)
 {
-	int		i;
-
-	i = 0;
 	global.g_exit_status = 0;
 	global.pid = 0;
 	signal(SIGINT, handlesig);

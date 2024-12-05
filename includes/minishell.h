@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/25 12:53:17 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:05:52 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int		modify_env_value(char *name, char *new_value, t_data *data);
 char	*ft_getenv(char *name, t_data *data);
 char	*find_value(char *name, t_list *envp);
 char	*new_substr(const char *str, int c);
-void	create_env_value(t_data *data, char *key);
+void	create_env_value(t_data *data, char *key, int empty_value);
 void	set_list_var(t_data *data, char *name, char *new_value);
 void 	debug(void);
 void	printa(char *str, char **arr);
@@ -122,10 +122,9 @@ void 	show_command_info(t_cmd *cmd_list);
 void 	show_io_fds(t_io_fds *io_fds);
 void 	set_cmd_strings(t_cmd *cmd);
 int		create_files(t_cmd *cmd, t_data *data);
-void	init_command(t_cmd *cmd, t_data *data);
+int		init_command(t_cmd *cmd, t_data *data);
 int		handle_input(t_data *data);
 int		handle_execute(t_data *data);
-// int		exec_cmd(char *av, char **env, t_data *data);
 int		exec_cmd(char **command, char **envp, t_data *data);
 int		single_command(t_data *data, char *cmd);
 int		complex_command(t_data *data);
@@ -136,7 +135,7 @@ void	init_cmd(t_cmd *cmd);
 void	init_io(t_io_fds **io_fds);
 int		init_write_to(t_cmd *cmd, t_data *data);
 int		init_read_from(t_cmd *cmd, t_data *data);
-void	init_append(t_cmd *cmd, t_data *data);
+int		init_append(t_cmd *cmd, t_data *data);
 void	close_fds(t_cmd *cmds, bool close_backups);
 bool	check_infile_outfile(t_io_fds *io);
 bool	remove_old_file_ref(t_io_fds *io, bool infile);
@@ -148,7 +147,9 @@ void	close_pipe_fds(t_cmd *cmds, t_cmd *skip_cmd);
 void	init_heredoc(t_cmd *cmd, t_data *data);
 void	free_all(t_data *data);
 void	free_data(t_data *data, int exit_code);
-void	free_cmd_list(t_cmd **head);
-int		handle_pipes(t_data *data);
+int		is_valid_env_name(char *var);
+char	*get_key(char *value, t_list *envp, char **env_value, int *append);
+int		append_env_value(char *key, char *env_value, char *cmd, t_list *envp);
+void	free_cmd_node(t_cmd *cmd);
 
 #endif

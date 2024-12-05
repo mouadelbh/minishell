@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/25 13:11:55 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:33:56 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ char *ft_getenv(char *name, t_data *data)
 	i = 0;
 	while (temp)
 	{
-		if (ft_strncmp(temp->content, name, ft_strlen(name)))
-			return (temp->content);
+		if (ft_strncmp(temp->content, name, ft_strlen(name)) == 0)
+			return (ft_strdup(temp->content));
 		temp = temp->next;
 	}
 	return (NULL);
@@ -31,12 +31,19 @@ char *ft_getenv(char *name, t_data *data)
 
 int	modify_env_value(char *name, char *new_value, t_data *data)
 {
-	char *str;
+	char	*str;
+	char	*temp;
+	char	*temp2;
 
-	// str = getenv(name);
 	str = ft_getenv(name, data);
 	if (!str)
-		perror("getenv");
+	{
+		temp = ft_strjoin(name, "=");
+		temp2 = ft_strjoin(temp, new_value);
+		create_env_value(data, temp2, 0);
+		free(temp);
+		free(temp2);
+	}
 	else
 		set_list_var(data, name, new_value);
 	return (1);
@@ -75,7 +82,10 @@ int	exec_builtin(t_data *data, char **cmd)
 	else if (ft_strncmp(cmd[0], "env", 0) == 0)
 		res = ft_env(data, cmd, 0);
 	else if (ft_strncmp(cmd[0], "echo", 0) == 0)
+	{
+		// printf("Running echo\n");
 		res = ft_echo(data, cmd);
+	}
 	else if (ft_strncmp(cmd[0], "cd", 0) == 0)
 		res = ft_cd(data, cmd);
 	else if (ft_strncmp(cmd[0], "unset", 0) == 0)
@@ -175,7 +185,7 @@ char	*get_full_cmd(char *av, char **env)
 	(void)env;
 	path = ft_split(getenv("PATH"), ':');
 	if (!path)
-		return (perror("Path error"), NULL);
+		ft_error(3, NULL);
 	while (path[i])
 	{
 		tmp = ft_strjoin(path[i], "/");
@@ -191,7 +201,7 @@ char	*get_full_cmd(char *av, char **env)
 		i++;
 	}
 	free_arr(path);
-	return (NULL);
+	return (ft_strdup(av));
 }
 
 int	count_symbols(t_data *data)
@@ -285,6 +295,7 @@ void set_cmd_strings(t_cmd *cmd)
 	char	*temp;
 	char	*new_cmd;
 
+	new_cmd = NULL;
 	while (current != NULL)
 	{
 		i = 0;
@@ -298,17 +309,14 @@ void set_cmd_strings(t_cmd *cmd)
 				exit(EXIT_FAILURE);
 			}
 			if (current->argv[i + 1] != NULL)
-				new_cmd = ft_strjoin(temp, " ");
+				current->cmd = ft_strjoin(temp, " ");
 			else
-				new_cmd = ft_strdup(temp);
-			free(temp);
-			if (new_cmd == NULL)
 			{
-				perror("Failed to allocate memory");
-				exit(EXIT_FAILURE);
+				if (current->cmd)
+					free(current->cmd);
+				current->cmd = ft_strdup(temp);
 			}
-			free(current->cmd);
-			current->cmd = new_cmd;
+			free(temp);
 			i++;
 		}
 		current = current->next;

@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/05 10:31:38 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/05 12:08:51 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,19 @@ int	handle_input(t_data *data)
 {
 	t_line	*temp = data->head;
 	char	*cmd;
+	int		i;
 
 	data->sym_count = count_symbols(data);
 	if (data->sym_count == 0 && data->head->type == CMD)
 	{
 		cmd = NULL;
 		init_io(&data->cmd->io_fds);
-		data->status = single_command(data, cmd);
+		return (single_command(data, cmd));
 	}
 	else
 	{
 		set_cmd_strings(data->cmd);
-		complex_command(data);
+		return (complex_command(data));
 	}
 	return (0);
 }
@@ -39,7 +40,7 @@ int	minishell(t_data *data)
 	int		new_fd;
 	int		err;
 
-	while (!data->exit)
+	while (1)
 	{
 		data->head = NULL;
 		data->cmd = NULL;

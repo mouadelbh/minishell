@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/25 09:39:23 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 09:24:33 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,30 @@ int	set_values(t_data *data)
 	return (127);
 }
 
+int	new_exec(char **command, char **envp, t_data *data)
+{
+	char	*path;
+
+	if (command[0][0] == '/')
+		path = ft_strdup(command[0]);
+	else if (command[0][0] != '\0')
+		path = get_full_cmd(command[0], envp);
+	data->status = 0;
+	if (execve(path, command, envp) == -1)
+	{
+		global.g_exit_status = 1;
+		free(path);
+		return (1);
+	}
+	return (0);
+}
+
 int	execute_command(t_data *data, t_cmd *cmd)
 {
 	int	ret;
 
 	if (cmd->type != CMD)
 		return (1);
-	if (!check_infile_outfile(cmd->io_fds))
-	{
-		ft_putstr_fd("Ambiguous input/output redirect\n", 2);
-		return (1);	
-	}
 	set_pipe_fds(data->cmd, cmd);
 	redirect_io(cmd->io_fds);
 	close_fds(data->cmd, false);
@@ -53,6 +66,6 @@ int	execute_command(t_data *data, t_cmd *cmd)
 	if (ret != 127)
 		exit(0);
 	if (ret == 127)
-		return (exec_cmd(cmd->argv, data->envp_arr, data));
+		return (new_exec(cmd->argv, data->envp_arr, data));
 	return (ret);
 }

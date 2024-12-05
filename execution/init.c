@@ -3,20 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/11/23 20:08:45 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:26:07 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+void	default_io(t_io_fds *io)
+{
+	io->in_fd = STDIN_FILENO;
+	io->out_fd = STDOUT_FILENO;
+	io->infile = NULL;
+	io->outfile = NULL;
+	io->heredoc_name = NULL;
+	io->stdin_backup = -1;
+	io->stdout_backup = -1;
+}
+
+void	file_error(t_cmd *cmd, char *str)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd->argv[1], 2);
+	ft_putstr_fd(str, 2);
+}
+
 void	init_cmd(t_cmd *cmd)
 {
 	cmd->argv = NULL;
 	cmd->cmd = NULL;
-	// cmd->pipe_fd = NULL;
 	cmd->io_fds = NULL;
 	cmd->type = 0;
 	cmd->next = NULL;
@@ -28,7 +45,7 @@ void	init_io(t_io_fds **io_fds)
 	*io_fds = (t_io_fds *)malloc(sizeof(t_io_fds));
 	if (!(*io_fds))
 	{
-		ft_putstr_fd("Failed to allocate memory\n", 2);
+		perror("malloc");
 		return ;
 	}
 	(*io_fds)->in_fd = -1;
@@ -40,24 +57,23 @@ void	init_io(t_io_fds **io_fds)
 	(*io_fds)->stdout_backup = -1;
 }
 
-void init_append(t_cmd *cmd, t_data *data)
+int init_append(t_cmd *cmd, t_data *data)
 {
+	t_cmd	*current;
+
 	if (!remove_old_file_ref(cmd->io_fds, false))
-		return;
-		
+		return (0);
 	cmd->io_fds->outfile = ft_strdup(cmd->argv[1]);
 	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
-	{
-		ft_error(3, data);
-		return;
-	}
+		return (file_error(cmd, "No such file or directory\n"), 0);
+	if (cmd->io_fds->outfile[0] == '\0'
+		|| (cmd->io_fds->outfile[0] == 36
+		&& cmd->io_fds->outfile[1] != '\0'))
+		return (file_error(cmd, "ambigious redirect\n"), 0);
 	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
-	{
-		perror("open");
-		return;
-	}
-	t_cmd *current = cmd->prev;
+		return (perror("open"), 0);
+	current = cmd->prev;
 	while (current && current->type != CMD)
 	{
 		current->io_fds->outfile = cmd->io_fds->outfile;
@@ -69,32 +85,26 @@ void init_append(t_cmd *cmd, t_data *data)
 		current->io_fds->outfile = cmd->io_fds->outfile;
 		current->io_fds->out_fd = cmd->io_fds->out_fd;
 	}
+	return (1);
 }
 
 int init_write_to(t_cmd *cmd, t_data *data)
 {
+	t_cmd	*current;
+
 	if (!remove_old_file_ref(cmd->io_fds, false))
 		return (0);
 	cmd->io_fds->outfile = ft_strdup(cmd->argv[1]);
 	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
-	{
-		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
-		return (0);
-	}
-	if (cmd->io_fds->outfile[0] == '\0' || (cmd->io_fds->outfile[0] == 36 && cmd->io_fds->outfile[1] != '\0'))
-	{
-		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
-		return (0);
-	}
+		return (file_error(cmd, "No such file or directory\n"), 0);
+	if (cmd->io_fds->outfile[0] == '\0'
+		|| (cmd->io_fds->outfile[0] == 36
+		&& cmd->io_fds->outfile[1] != '\0'))
+		return (file_error(cmd, "ambigious redirect\n"), 0);
 	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		perror(cmd->io_fds->outfile);
-		ft_putstr_fd("ambiguous redirect\n", 2);
-		return (0);
-	}
-	t_cmd *current = cmd->prev;
+		return (perror("open"), 0);
+	current = cmd->prev;
 	while (current && current->type != CMD)
 	{
 		current->io_fds->outfile = cmd->io_fds->outfile;
@@ -111,19 +121,20 @@ int init_write_to(t_cmd *cmd, t_data *data)
 
 int	init_read_from(t_cmd *cmd, t_data *data)
 {
-	init_io(&cmd->io_fds);
+	t_cmd	*current;
+
 	if (!remove_old_file_ref(cmd->io_fds, true))
 		return (0);
 	cmd->io_fds->infile = ft_strdup(cmd->argv[1]);
+	if (access(cmd->io_fds->infile, F_OK) == 0
+		&& access(cmd->io_fds->infile, R_OK) == -1)
+			return (file_error(cmd, ": Permission denied\n"), 0);
+	if (access(cmd->io_fds->infile, F_OK) == -1)
+		return (file_error(cmd, ": No such file or directory\n"), 0);
 	cmd->io_fds->in_fd = open(cmd->io_fds->infile, O_RDONLY);
 	if (cmd->io_fds->in_fd == -1)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->argv[1], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		return (0);
-	}
-	t_cmd *current = cmd->prev;
+		return (perror("open"), 0);
+	current = cmd->prev;
 	while (current && current->type != CMD)
 	{
 		current->io_fds->infile = cmd->io_fds->infile;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:48:20 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/20 16:00:16 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:47:23 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,20 @@ static int	get_code(char *arg, int *error)
 	return (exit_code);
 }
 
-int	check_arguemnts(char **cmd)
+static int	arg_count(char *arg1, char *arg2)
 {
-	return (0);
+	if (arg1 && arg2)
+	{
+		ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 2);
+		if (is_num(arg1))
+			return (0);
+		else
+			printf("exit\n");
+	}
+	return (1);
 }
 
-int ft_exit(t_data *data, char **cmd)
+int	ft_exit(t_data *data, char **cmd)
 {
 	int	exit_code;
 	int	error;
@@ -70,18 +78,12 @@ int ft_exit(t_data *data, char **cmd)
 	exit_code = 0;
 	if (!cmd[1])
 		printf("exit\n");
-	if (cmd[1] && cmd[2])
+	if (!arg_count(cmd[1], cmd[2]))
+		return (1);
+	else if (cmd[1] && !cmd[2] && !is_num(cmd[1]))
 	{
-		ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 2);
-		if (is_num(cmd[1]))
-			return (1);
-		else
-			printf("exit\n");
-	}
-	else if (cmd[1] && !cmd[2])
-	{
-		if (!is_num(cmd[1]))
-			printf("exit\nminishell: exit: %s: numeric argument required\n", cmd[1]);
+		printf("exit\n");
+		printf("minishell: exit: %s: numeric argument required\n", cmd[1]);
 	}
 	if (is_num(cmd[1]))
 		exit_code = get_code(cmd[1], &error);
@@ -90,7 +92,6 @@ int ft_exit(t_data *data, char **cmd)
 	else
 		exit_code = 1;
 	free_data(data, exit_code);
-	data->exit = exit_code;
 	exit(exit_code);
 	return (0);
 }

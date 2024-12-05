@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:07 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/05 10:31:59 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/05 12:09:20 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static void	set_env(t_list **head, char **envp)
 		if (!new)
 			return ;
 		new->content = ft_strdup(envp[i]);
+		new->empty_value = 0;
 		new->next = NULL;
 		env_lstadd_back(head, new);
 		i++;

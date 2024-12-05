@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/26 15:47:27 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/04 13:40:24 by zelbassa         ###   ########.fr       */
+/*   Created: 2024/12/04 15:37:02 by zelbassa          #+#    #+#             */
+/*   Updated: 2024/12/04 15:37:12 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_pwd(t_data *data, char **cmd)
+void	free_cmd_node(t_cmd *cmd)
 {
-	char	buff[MAX_PATH];
-
-	if (getcwd(buff, sizeof(buff)) != NULL)
-		ft_putendl_fd(buff, 1);
-	else
+	if (cmd->argv)
+		free_arr(cmd->argv);
+	if (cmd->cmd)
 	{
-		perror("getcwd");
-		data->status = 0;
+		free(cmd->cmd);
+		cmd->cmd = NULL;
 	}
-	return (EXIT_FAILURE);
+	if (cmd->io_fds)
+	{
+		if (cmd->io_fds->infile)
+			free(cmd->io_fds->infile);
+		if (cmd->io_fds->outfile)
+			free(cmd->io_fds->outfile);
+		if (cmd->io_fds->heredoc_name)
+			free(cmd->io_fds->heredoc_name);
+		free(cmd->io_fds);
+	}
+	free(cmd);
+	cmd = NULL;
 }

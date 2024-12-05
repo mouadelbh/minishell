@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/05 10:22:56 by mel-bouh         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/12/05 12:08:38 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
@@ -28,84 +29,44 @@ int should_pipe(t_cmd *cmd)
 	return (0);
 }
 
-void	init_command(t_cmd *cmd, t_data *data)
+int	init_command(t_cmd *cmd, t_data *data)
 {
 	if (should_pipe(cmd) || (cmd->next && cmd->next->type == CMD))
 		cmd->pipe_output = true;
+	return (1);
 }
 
-static int	valid_command(t_cmd *cmd, t_data *data)
+int	valid_command(t_cmd *cmd, t_data *data)
 {
 	char	*full_command;
 
 	full_command = get_full_cmd(cmd->argv[0], data->envp_arr);
-	if (access(full_command, F_OK | X_OK) == -1)
+	if (access(full_command, F_OK) == -1)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->cmd, 2);
+		ft_putstr_fd(cmd->argv[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		free(full_command);
-		global.g_exit_status = COMMAND_NOT_FOUND;
+		data->status = 1;
 		return (0);
 	}
 	free(full_command);
 	return (1);
 }
 
-int	handle_execute(t_data *data)
-{
-	t_cmd	*cmd;
-
-	cmd = data->cmd;
-	while (data->pid != 0 && cmd)
-	{
-		if (cmd->type == CMD && valid_command(cmd, data))
-		{
-			data->pid = fork();
-			if (data->pid != -1)
-				change_signal();
-			if (data->pid == -1)
-			{
-				ft_putstr_fd("fork error\n", 2);
-				return (1);
-			}
-		}
-		if (data->pid == 0)
-			execute_command(data, cmd);
-		cmd = cmd->next;
-	}
-	return (close_file(data));
-}
-
-int exec_cmd(char **command, char **envp, t_data *data)
-{
-	char	*path;
-
-	if (command[0][0] == '/')
-		path = ft_strdup(command[0]);
-	else if (command[0][0] != '\0')
-		path = get_full_cmd(command[0], envp);
-	if (!path)
-		return (ft_error(7, data), 1);
-	if (execve(path, command, envp) == -1)
-	{
-		global.g_exit_status = 1;
-		free(path);
-		return (1);
-	}
-	return (0);
-}
-
 int	check_cmd(char *cmd, t_data *data)
 {
 	struct stat	buf;
 
+	if (stat(cmd, &buf) == -1)
+		return (0);
 	if (S_ISDIR(buf.st_mode))
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd, 2);
 		ft_putstr_fd(": is a directory\n", 2);
-		return (126);
+		data->status = 126;
+		return (1);
 	}
 	return (0);
 }
@@ -117,8 +78,73 @@ int	check_permission(char *path, t_data *data)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(data->cmd->argv[0], 2);
 		ft_putstr_fd(": Permission denied\n", 2);
+		// free(path);
+		data->status = 126;
+		return (1);
+	}
+	return (0);
+}
+
+int	command_is_valid(t_data *data, t_cmd *cmd, int is_builtin)
+{
+	char	*full_cmd;
+	if (is_builtin)
+		return (1);
+	full_cmd = get_full_cmd(cmd->argv[0], data->envp_arr);
+	if (check_cmd(cmd->argv[0], data) || check_permission(full_cmd, data))
+		return (free(full_cmd), 0);
+	free(full_cmd);
+	if (cmd->type == CMD)
+		return (valid_command(cmd, data));
+	return (0);
+}
+
+int	handle_execute(t_data *data)
+{
+	t_cmd	*cmd;
+	t_cmd	*temp;
+
+	cmd = data->cmd;
+	temp = cmd;
+	while (data->pid != 0 && cmd)
+	{
+		if (command_is_valid(data, cmd, builtin(cmd->argv[0])))
+		{
+			data->status = 0;
+			data->pid = fork();
+			if (data->pid != -1)
+				change_signal();
+			if (data->pid == -1)
+				return (ft_putstr_fd("fork error\n", 2), 1);
+		}
+		else
+			data->status = 1;
+		if (data->pid == 0)
+			data->status = execute_command(data, cmd);
+		cmd = cmd->next;
+	}
+	return (close_file(data), data->status);
+}
+
+int exec_cmd(char **command, char **envp, t_data *data)
+{
+	char	*path;
+
+	path = NULL;
+	if (command[0][0] == '/')
+		path = ft_strdup(command[0]);
+	else if (command[0][0] != '\0')
+		path = get_full_cmd(command[0], envp);
+	if (!path)
+		return (ft_error(7, data), 1);
+	if (execve(path, command, envp) == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(command[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		data->status = 1;
 		free(path);
-		return (126);
+		return (1);
 	}
 	return (0);
 }
@@ -132,29 +158,29 @@ int single_command(t_data *data, char *cmd)
 	{
 		if (temp->next && temp->next->type == 7)
 			temp = temp->next;
-		path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
 		if (builtin(data->cmd->argv[0]))
-			exec_builtin(data, data->cmd->argv);
+			return (exec_builtin(data, data->cmd->argv));
 		else
 		{
-			if (check_cmd(data->cmd->argv[0], data) || check_permission(path, data) != 0)
+			path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
+			if (check_cmd(path, data) == 1 || check_permission(path, data) == 1)
 			{
 				free(path);
 				global.g_exit_status = 126;
 				return (126);
 			}
-			free(path);
 			data->pid = fork();
 			if (data->pid != -1)
 				change_signal();
 			if (data->pid == -1)
 				return (ft_error(1, data));
 			if (data->pid == 0)
-			{
-				data->exit = exec_cmd(data->cmd->argv, data->envp_arr, data);
-			}
+				data->status = exec_cmd(data->cmd->argv, data->envp_arr, data);
 			waitpid(data->pid, &data->status, 0);
+			if (data->pid == 0)
+				exit(data->status);
 		}
+		free(path);
 		temp = temp->next;
 	}
 	return (data->status);

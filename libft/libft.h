@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 14:58:25 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/25 15:52:04 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/02 09:49:22 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_list
 {
 	char			*content;
 	struct s_list	*next;
+	int				empty_value;
 }	t_list;
 
 char	*ft_substr(char const *s, unsigned int start, size_t len);

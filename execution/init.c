@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/07 13:29:30 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/07 14:29:50 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,17 +130,17 @@ int	init_read_from(t_cmd *cmd, t_data *data)
 {
 	t_cmd	*current;
 
+	cmd->io_fds->infile = ft_strdup(cmd->argv[1]);
 	if (cmd->prev && cmd->prev->file_error != 1)
 		return (0);
+	cmd->io_fds->in_fd = open(cmd->io_fds->infile, O_RDONLY);
 	if (!remove_old_file_ref(cmd->io_fds, true))
 		return (0);
-	cmd->io_fds->infile = ft_strdup(cmd->argv[1]);
 	if (access(cmd->io_fds->infile, F_OK) == 0
 		&& access(cmd->io_fds->infile, R_OK) == -1)
 			return (file_error(cmd, ": Permission denied\n"), 0);
 	if (access(cmd->io_fds->infile, F_OK) == -1)
 		return (file_error(cmd, ": No such file or directory\n"), 0);
-	cmd->io_fds->in_fd = open(cmd->io_fds->infile, O_RDONLY);
 	if (cmd->io_fds->in_fd == -1)
 		return (perror(cmd->argv[1]), 0);
 	current = cmd->prev;

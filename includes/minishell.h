@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/07 13:18:53 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/07 14:22:02 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,11 +123,17 @@ void 	show_io_fds(t_io_fds *io_fds);
 void 	set_cmd_strings(t_cmd *cmd);
 int		create_files(t_cmd *cmd, t_data *data);
 int		init_command(t_cmd *cmd, t_data *data);
+t_cmd	*init_new_cmd(t_cmd *src);
+t_cmd	*set_command_list(t_cmd *cmd);
+int		command_is_valid(t_data *data, t_cmd *cmd, int is_builtin);
+int		check_cmd(char *cmd, t_data *data);
+int		check_permission(char *path, t_data *data);
 int		handle_input(t_data *data);
 int		handle_execute(t_data *data);
 int		exec_cmd(char **command, char **envp, t_data *data);
 int		single_command(t_data *data, char *cmd);
 int		complex_command(t_data *data);
+int		should_pipe(t_cmd *cmd);
 int		set_values(t_data *data);
 int		execute_command(t_data *data, t_cmd *cmd);
 int		close_file(t_data *data);

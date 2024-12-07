@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/05 15:35:51 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/07 20:46:19 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,26 +83,11 @@ int is_empty(char *str)
 	return (0);
 }
 
-void	free_env(t_list *env)
-{
-	t_list	*temp;
-	t_list	*next;
-
-	temp = env;
-	while (temp)
-	{
-		next = temp->next;
-		free(temp->content);
-		free(temp);
-		temp = next;
-	}
-}
-
 void	reset_shell(t_data *data)
 {
 	ft_putstr_fd("exit\n", 1);
-	free_env(data->envp);
-	free_all(data);
+	free_env(&data->envp);
+	free_all(data, 1);
 	data->status = 1;
 	exit(exit_status);
 }

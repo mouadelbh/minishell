@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/07 20:26:20 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/07 20:44:11 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,13 @@ void init_heredoc(t_cmd *cmd, t_data *data)
 	{
 		line = readline("> ");
 		if (!line)
+		{
+			perror("minishell: warning: \
+			here-document delimited by end-of-file\n");
+			free_all(data, 1);
+			exit(0);
 			break;
+		}
 		if (strcmp(line, cmd->argv[1]) == 0)
 		{
 			free(line);

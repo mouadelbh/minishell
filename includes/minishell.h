@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/07 20:17:58 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/07 20:45:39 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void	set_list_var(t_data *data, char *name, char *new_value);
 void 	debug(void);
 void	printa(char *str, char **arr);
 void 	reset_shell(t_data *data);
+void	free_env(t_list **envp);
 int		builtin(char *cmd);
 int 	exec_builtin(t_data *data, char **cmd);
 int 	ft_error(int error, t_data *data);
@@ -145,7 +146,7 @@ bool	set_pipe_fds(t_cmd *cmds, t_cmd *c);
 bool	restore_io(t_io_fds *io);
 void	close_pipe_fds(t_cmd *cmds, t_cmd *skip_cmd);
 void	init_heredoc(t_cmd *cmd, t_data *data);
-void	free_all(t_data *data);
+void	free_all(t_data *data, int i);
 void	free_data(t_data *data, int exit_code);
 int		is_valid_env_name(char *var);
 char	*get_key(char *value, t_list *envp, char **env_value, int *append);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/07 14:30:05 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/07 20:46:56 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,7 @@ static void	free_cmd_struct(t_cmd *cmd)
 	}
 }
 
-void	free_all(t_data *data)
-{
-	t_cmd	*cmd;
-
-	cmd = data->cmd;
-	if (data->envp_arr)
-		free_arr(data->envp_arr);
-	// if (cmd->io_fds)
-	// 	free_io(cmd);
-	// free_io(cmd);
-	free_line(data->head);
-	free_cmd_struct(cmd);
-	data->envp_arr = NULL;
-}
-
-static void	free_env(t_list **envp)
+void	free_env(t_list **envp)
 {
 	t_list	*tmp;
 
@@ -78,8 +63,25 @@ static void	free_env(t_list **envp)
 	}
 }
 
+void	free_all(t_data *data, int i)
+{
+	t_cmd	*cmd;
+
+	cmd = data->cmd;
+	if (i)
+		free_env(&data->envp);
+	if (data->envp_arr)
+		free_arr(data->envp_arr);
+	// if (cmd->io_fds)
+	// 	free_io(cmd);
+	// free_io(cmd);
+	free_line(data->head);
+	free_cmd_struct(cmd);
+	data->envp_arr = NULL;
+}
+
+
 void	free_data(t_data *data, int exit_code)
 {
-	free_all(data);
-	free_env(&data->envp);
+	free_all(data, 1);
 }

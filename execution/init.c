@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/06 17:09:31 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/07 13:29:30 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ int init_append(t_cmd *cmd, t_data *data)
 		return (file_error(cmd, "ambigious redirect\n"), 0);
 	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
 		return (file_error(cmd, "No such file or directory\n"), 0);
+	if (cmd->prev && cmd->prev->file_error != 1)
+		return (0);
 	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
 		return (perror("open"), 0);
@@ -102,6 +104,8 @@ int init_write_to(t_cmd *cmd, t_data *data)
 		return (file_error(cmd, "ambigious redirect\n"), 0);
 	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
 		return (file_error(cmd, "No such file or directory\n"), 0);
+	if (cmd->prev && cmd->prev->file_error != 1)
+		return (0);
 	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
 		return (perror(cmd->argv[1]), 0);
@@ -126,6 +130,8 @@ int	init_read_from(t_cmd *cmd, t_data *data)
 {
 	t_cmd	*current;
 
+	if (cmd->prev && cmd->prev->file_error != 1)
+		return (0);
 	if (!remove_old_file_ref(cmd->io_fds, true))
 		return (0);
 	cmd->io_fds->infile = ft_strdup(cmd->argv[1]);

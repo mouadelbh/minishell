@@ -61,4 +61,8 @@ t:
 	@$(MAKE) clean
 	@echo "$(READLINE_MSG)"
 
+asan: FLAGS += -fsanitize=address
+asan: ASAN_OPTIONS = detect_leaks=0
+asan: re
+
 .PHONY: all clean fclean re t welcome

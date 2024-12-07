@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/07 14:27:28 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/07 20:22:50 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	create_files(t_cmd *cmd, t_data *data)
 {
 	int	i;
+	int	id;
 
 	i = 1;
 	while (cmd)
@@ -29,7 +30,11 @@ int	create_files(t_cmd *cmd, t_data *data)
 		else if (cmd->type == APPEND)
 			cmd->file_error = init_append(cmd, data);
 		else if (cmd->type == HEREDOC)
+		{
+			id = fork();
 			init_heredoc(cmd, data);
+			waitpid(0, &data->status, 0);
+		}
 		i = cmd->file_error;
 		cmd = cmd->next;
 	}
@@ -71,15 +76,15 @@ bool	remove_old_file_ref(t_io_fds *io, bool infile)
 	{
 		if (io->in_fd == -1 || (io->outfile && io->out_fd == -1))
 		{
-			ft_putstr_fd("error in remove_old_ref: 74", 2);
+			// ft_putstr_fd("error in remove_old_ref: 74", 2);
 			return (false);
 		}
-		// if (io->heredoc_name != NULL)
-		// {
-		// 	free(io->heredoc_name);
-		// 	io->heredoc_name = NULL;
-		// 	unlink(io->infile);
-		// }
+		if (io->heredoc_name != NULL)
+		{
+			free(io->heredoc_name);
+			io->heredoc_name = NULL;
+			unlink(io->infile);
+		}
 		free(io->infile);
 		if (io->in_fd != -1)
 			close(io->in_fd);

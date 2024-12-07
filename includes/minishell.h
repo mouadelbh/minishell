@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/04 15:05:52 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/07 13:18:53 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef	struct	s_io_fds
 typedef struct s_cmd {
 	char			**argv;
 	char			*cmd;
-	// int				commands;
+	int				file_error;
 	int				type;
 	int				*pipe_fd;
 	int				pipe_output;

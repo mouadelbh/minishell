@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/04 15:26:07 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/07 13:29:30 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	file_error(t_cmd *cmd, char *str)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd->argv[1], 2);
+	ft_putstr_fd(" ", 2);
 	ft_putstr_fd(str, 2);
 }
 
@@ -64,12 +65,14 @@ int init_append(t_cmd *cmd, t_data *data)
 	if (!remove_old_file_ref(cmd->io_fds, false))
 		return (0);
 	cmd->io_fds->outfile = ft_strdup(cmd->argv[1]);
-	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
-		return (file_error(cmd, "No such file or directory\n"), 0);
 	if (cmd->io_fds->outfile[0] == '\0'
 		|| (cmd->io_fds->outfile[0] == 36
 		&& cmd->io_fds->outfile[1] != '\0'))
 		return (file_error(cmd, "ambigious redirect\n"), 0);
+	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
+		return (file_error(cmd, "No such file or directory\n"), 0);
+	if (cmd->prev && cmd->prev->file_error != 1)
+		return (0);
 	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
 		return (perror("open"), 0);
@@ -95,16 +98,20 @@ int init_write_to(t_cmd *cmd, t_data *data)
 	if (!remove_old_file_ref(cmd->io_fds, false))
 		return (0);
 	cmd->io_fds->outfile = ft_strdup(cmd->argv[1]);
-	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
-		return (file_error(cmd, "No such file or directory\n"), 0);
 	if (cmd->io_fds->outfile[0] == '\0'
 		|| (cmd->io_fds->outfile[0] == 36
 		&& cmd->io_fds->outfile[1] != '\0'))
 		return (file_error(cmd, "ambigious redirect\n"), 0);
+	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
+		return (file_error(cmd, "No such file or directory\n"), 0);
+	if (cmd->prev && cmd->prev->file_error != 1)
+		return (0);
 	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
-		return (perror("open"), 0);
+		return (perror(cmd->argv[1]), 0);
 	current = cmd->prev;
+	if (cmd->prev && cmd->prev->type == PIPE)
+		return (0);
 	while (current && current->type != CMD)
 	{
 		current->io_fds->outfile = cmd->io_fds->outfile;
@@ -123,6 +130,8 @@ int	init_read_from(t_cmd *cmd, t_data *data)
 {
 	t_cmd	*current;
 
+	if (cmd->prev && cmd->prev->file_error != 1)
+		return (0);
 	if (!remove_old_file_ref(cmd->io_fds, true))
 		return (0);
 	cmd->io_fds->infile = ft_strdup(cmd->argv[1]);
@@ -133,7 +142,7 @@ int	init_read_from(t_cmd *cmd, t_data *data)
 		return (file_error(cmd, ": No such file or directory\n"), 0);
 	cmd->io_fds->in_fd = open(cmd->io_fds->infile, O_RDONLY);
 	if (cmd->io_fds->in_fd == -1)
-		return (perror("open"), 0);
+		return (perror(cmd->argv[1]), 0);
 	current = cmd->prev;
 	while (current && current->type != CMD)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:48:20 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/04 13:47:23 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:35:51 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	get_code(char *arg, int *error)
 	if (!arg)
 	{
 		printf("No more arguments\n");
-		return (global.g_exit_status);
+		return (exit_status);
 	}
 	exit_code = 0;
 	if (!is_num(arg))

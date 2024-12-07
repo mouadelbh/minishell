@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/12/05 12:08:38 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:35:51 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ int single_command(t_data *data, char *cmd)
 			if (check_cmd(path, data) == 1 || check_permission(path, data) == 1)
 			{
 				free(path);
-				global.g_exit_status = 126;
+				exit_status = 126;
 				return (126);
 			}
 			data->pid = fork();

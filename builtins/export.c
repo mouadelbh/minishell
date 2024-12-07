@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:47:56 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/04 13:42:57 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:41:39 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	ft_export(t_data *data, char **cmd)
 		return (ft_env(data, cmd, 1));
 	if (!is_valid_env_name(cmd[1]))
 	{
-		printf("minishell: export: '%s': not a valid identifier\n", cmd[1]);
+		printf("minishell: export: `%s': not a valid identifier\n", cmd[1]);
 		return (1);
 	}
 	if (!ft_strchr(cmd[1], '=') && is_valid_env_name(cmd[1]))

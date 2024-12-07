@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:07 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/05 12:09:20 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:37:39 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,7 @@ void	create_env(t_list **head)
 
 void	init(t_list **data, char **env)
 {
-	global.g_exit_status = 0;
-	global.pid = 0;
+	exit_status = 0;
 	signal(SIGINT, handlesig);
 	signal(SIGQUIT, SIG_IGN);
 	if (!env[0])

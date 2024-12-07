@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:07:46 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/29 17:45:32 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:01:17 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,23 @@ static t_line	*copy_node(t_line *node)
 	return (new);
 }
 
+void	save_redir(t_line **node, t_line **save, int cmd)
+{
+	t_line	*current;
+
+	current = *node;
+	lstadd_line(save, copy_node(current));
+	current = current->next;
+	if (current)
+	{
+		lstadd_line(save, copy_node(current));
+		current = current->next;
+	}
+	if (current && cmd == 1 && current->type == CMD)
+		current->type = ARG;
+	*node = current;
+}
+
 void	get_arranged(t_line **current, t_line **new)
 {
 	t_line	*save;
@@ -49,17 +66,7 @@ void	get_arranged(t_line **current, t_line **new)
 	while (node)
 	{
 		if (isredir((node)->type))
-		{
-			lstadd_line(&save, copy_node((node)));
-			node = (node)->next;
-			if (node)
-			{
-				lstadd_line(&save, copy_node((node)));
-				node = (node)->next;
-			}
-			if (node && cmd == 1 && (node)->type == CMD)
-				(node)->type = ARG;
-		}
+			save_redir(&node, &save, cmd);
 		else
 		{
 			lstadd_line(new, copy_node(node));
@@ -75,6 +82,15 @@ void	get_arranged(t_line **current, t_line **new)
 	free_line(save);
 }
 
+static void	get_current(t_line **current, t_line **head)
+{
+	while (*head && (*head)->type != PIPE)
+	{
+		lstadd_line(current, copy_node(*head));
+		*head = (*head)->next;
+	}
+}
+
 void	arange_arguments(t_line *head, t_line **final)
 {
 	t_line	*current;
@@ -85,11 +101,7 @@ void	arange_arguments(t_line *head, t_line **final)
 	{
 		current = NULL;
 		new = NULL;
-		while (head && head->type != PIPE)
-		{
-			lstadd_line(&current, copy_node(head));
-			head = head->next;
-		}
+		get_current(&current, &head);
 		get_arranged(&current, &new);
 		free_line(current);
 		node = new;

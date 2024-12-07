@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/05 13:38:42 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:53:37 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,11 @@ int	minishell(t_data *data)
 		if (!data->envp_arr || !*data->envp_arr)
 		{
 			free_line(data->head);
+			free_line(data->head);
 			continue;
 		}
 		data->status = handle_input(data);
-		global.g_exit_status = data->status;
+		reset_signal();
 		free_all(data);
 	}
 	return (data->status);

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:18:31 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/03 20:50:27 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:36:07 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
-t_global	global;
+int	exit_status;
 
 void	free_arr(char **arr)
 {
@@ -60,5 +60,5 @@ int	main(int ac, char **av, char **env)
 	program.exit = 0;
 	minishell(&program);
 	free_env(&program.envp);
-	return (global.g_exit_status);
+	return (exit_status);
 }

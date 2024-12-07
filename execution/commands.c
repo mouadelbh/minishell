@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/04 15:26:24 by zelbassa         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/12/05 15:35:51 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
@@ -111,6 +112,8 @@ int	handle_execute(t_data *data)
 		{
 			data->status = 0;
 			data->pid = fork();
+			if (data->pid != -1)
+				change_signal();
 			if (data->pid == -1)
 				return (ft_putstr_fd("fork error\n", 2), 1);
 		}
@@ -163,10 +166,12 @@ int single_command(t_data *data, char *cmd)
 			if (check_cmd(path, data) == 1 || check_permission(path, data) == 1)
 			{
 				free(path);
-				global.g_exit_status = 126;
+				exit_status = 126;
 				return (126);
 			}
 			data->pid = fork();
+			if (data->pid != -1)
+				change_signal();
 			if (data->pid == -1)
 				return (ft_error(1, data));
 			if (data->pid == 0)

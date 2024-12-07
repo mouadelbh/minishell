@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expanding.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@1337.student.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:16 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/02 13:32:20 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:35:51 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ char	*expand_exit(char *str, int i, int exit)
 	int		j;
 	char	*new;
 
-	size = alloc_exit(str, global.g_exit_status);
+	size = alloc_exit(str, exit_status);
 	new = malloc(size + 1);
 	if (!new)
 		return (NULL);
@@ -169,7 +169,7 @@ char	*expand_exit(char *str, int i, int exit)
 		new[j] = str[j];
 		j++;
 	}
-	fill_exit(new, j++, global.g_exit_status);
+	fill_exit(new, j++, exit_status);
 	i += 2;
 	while (str[i])
 		new[j++] = str[i++];
@@ -192,7 +192,7 @@ char	*find_and_replace(char *str, t_list *env, int flag)
 	while (str[i])
 	{
 		if (str[i] == -1 && str[i + 1] == '?')
-			tmp = expand_exit(tmp, i, global.g_exit_status);
+			tmp = expand_exit(tmp, i, exit_status);
 		else if (str[i] == -1)
 		{
 			ca = find(str, i, env, &size);

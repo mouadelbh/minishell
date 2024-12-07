@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/07 13:21:25 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/07 14:27:28 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,16 @@ bool	remove_old_file_ref(t_io_fds *io, bool infile)
 	if (infile == true && io->infile)
 	{
 		if (io->in_fd == -1 || (io->outfile && io->out_fd == -1))
-			return (false);
-		if (io->heredoc_name != NULL)
 		{
-			free(io->heredoc_name);
-			io->heredoc_name = NULL;
-			unlink(io->infile);
+			ft_putstr_fd("error in remove_old_ref: 74", 2);
+			return (false);
 		}
+		// if (io->heredoc_name != NULL)
+		// {
+		// 	free(io->heredoc_name);
+		// 	io->heredoc_name = NULL;
+		// 	unlink(io->infile);
+		// }
 		free(io->infile);
 		if (io->in_fd != -1)
 			close(io->in_fd);

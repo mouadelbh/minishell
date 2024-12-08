@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:07 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/05 15:37:39 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/08 23:41:42 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ t_list	*get_shlvl(void)
 		return (free(tmp), NULL);
 	tmp->content[0] = '\0';
 	ft_strlcat(tmp->content, "SHLVL=1", 8);
-	tmp->next = NULL;
 	tmp->next = NULL;
 	return (tmp);
 }

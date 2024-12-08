@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/07 20:45:39 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/07 21:31:38 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ bool	create_pipes(t_data *data);
 bool	set_pipe_fds(t_cmd *cmds, t_cmd *c);
 bool	restore_io(t_io_fds *io);
 void	close_pipe_fds(t_cmd *cmds, t_cmd *skip_cmd);
-void	init_heredoc(t_cmd *cmd, t_data *data);
+int		init_heredoc(t_cmd *cmd, t_data *data);
 void	free_all(t_data *data, int i);
 void	free_data(t_data *data, int exit_code);
 int		is_valid_env_name(char *var);

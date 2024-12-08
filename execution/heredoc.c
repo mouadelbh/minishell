@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/08 21:38:20 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 00:03:24 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	handledoc(int sig)
 {
 	(void)sig;
 	exit_status = CTRL_C;
+	unlink("/tmp/jc03fjkdc");
 	close(0);
 	exit(0);
 }
@@ -44,56 +45,6 @@ void	print_warning(int i, char *str)
 	ft_putstr_fd("')\n", 2);
 }
 
-// void init_heredoc(t_cmd *cmd, t_data *data)
-// {
-// 	char	*line;
-// 	int		temp_fd;
-// 	t_cmd	*current;
-
-// 	temp_fd = open("/tmp/ncajha3f83", O_CREAT | O_RDWR | O_TRUNC, 0644);
-// 	if (temp_fd == -1)
-// 	{
-// 		perror("heredoc temp file");
-// 		return;
-// 	}
-// 	while (1)
-// 	{
-// 		line = readline("> ");
-// 		if (!line)
-// 		{
-// 			perror("minishell: warning: \
-// 			here-document delimited by end-of-file\n");
-// 			free_all(data, 1);
-// 			exit(0);
-// 			break;
-// 		}
-// 		if (strcmp(line, cmd->argv[1]) == 0)
-// 		{
-// 			free(line);
-// 			break;
-// 		}
-// 		if (ft_strchr(line, '$'))
-// 		{
-// 			line[0] = -1;
-// 			line = expand_string(line, data->envp);
-// 		}
-// 		write(temp_fd, line, strlen(line));
-// 		write(temp_fd, "\n", 1);
-// 		free(line);
-// 	}
-// 	close(temp_fd);
-// 	temp_fd = open("/tmp/ncajha3f83", O_RDONLY, 0644);
-// 	cmd->io_fds->in_fd = temp_fd;
-// 	current = cmd->prev;
-// 	while (current && current->type != CMD)
-// 	{
-// 		current->io_fds->in_fd = temp_fd;
-// 		current = current->prev;
-// 	}
-// 	if (current && current->type == CMD)
-// 		current->io_fds->in_fd = temp_fd;
-// }
-
 int init_heredoc(t_cmd *cmd, t_data *data)
 {
 	char	*temp;
@@ -110,17 +61,19 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	}
 	line = NULL;
 	fork_id = fork();
-	if (data->pid != -1)
-		change_signal();
+	// if (data->pid != -1)
+	// 	change_signal();
 	if (fork_id == 0)
 	{
+		signal(SIGINT, handledoc);
 		while (1)
 		{
 			line = readline("> ");
 			if (!line)
 			{
-				perror("minishell: warning: \
-				here-document delimited by end-of-file\n");
+				perror("minishell: warning: here-document delimited by end-of-file\n");
+				unlink("/tmp/jc03fjkdc");
+				ft_putchar_fd(30 , temp_fd);
 				free_all(data, 1);
 				exit(0);
 				break;
@@ -144,6 +97,11 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	}
 	waitpid(0, &data->status, 0);
 	temp_fd = open("/tmp/jc03fjkdc", O_RDONLY, 0644);
+	if (temp_fd == -1)
+	{
+		// perror("heredoc temp file");
+		return (0);
+	}
 	cmd->io_fds->in_fd = temp_fd;
 	current = cmd->prev;
 	while (current && current->type != CMD)

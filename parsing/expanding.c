@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   expanding.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/11 15:56:16 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/05 15:35:51 by mel-bouh         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/12/09 00:05:54 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/parsing.h"
 
@@ -160,6 +161,7 @@ char	*expand_exit(char *str, int i, int exit)
 	char	*new;
 
 	size = alloc_exit(str, exit_status);
+	size = alloc_exit(str, exit_status);
 	new = malloc(size + 1);
 	if (!new)
 		return (NULL);
@@ -169,6 +171,7 @@ char	*expand_exit(char *str, int i, int exit)
 		new[j] = str[j];
 		j++;
 	}
+	fill_exit(new, j++, exit_status);
 	fill_exit(new, j++, exit_status);
 	i += 2;
 	while (str[i])

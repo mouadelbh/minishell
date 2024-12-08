@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/07 20:35:27 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/09 00:04:24 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,9 @@ void	free_line(t_line *head);
 void	handlesig(int sig);
 void	lstadd_line(t_line **head, t_line *new);
 void	arange_arguments(t_line *head, t_line **final);
+void	change_signal(void);
+void	reset_signal(void);
+void	handledoc(int sig);
 void	change_signal(void);
 void	reset_signal(void);
 void	handledoc(int sig);

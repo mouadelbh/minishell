@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/08 22:50:12 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/08 23:02:41 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 # define MAX_PATH 4096
 #endif
 
-extern int exit_status;
+extern int	exit_status;
 
 typedef struct s_token t_line;
 
@@ -57,7 +57,7 @@ typedef	struct	s_io_fds
 typedef struct s_cmd {
 	char			**argv;
 	char			*cmd;
-	// int				commands;
+	int				file_error;
 	int				type;
 	int				*pipe_fd;
 	int				pipe_output;
@@ -102,6 +102,7 @@ void	set_list_var(t_data *data, char *name, char *new_value);
 void 	debug(void);
 void	printa(char *str, char **arr);
 void 	reset_shell(t_data *data);
+void	free_env(t_list **envp);
 int		builtin(char *cmd);
 int 	exec_builtin(t_data *data, char **cmd);
 int 	ft_error(int error, t_data *data);
@@ -117,11 +118,17 @@ void 	show_io_fds(t_io_fds *io_fds);
 void 	set_cmd_strings(t_cmd *cmd);
 int		create_files(t_cmd *cmd, t_data *data);
 int		init_command(t_cmd *cmd, t_data *data);
+t_cmd	*init_new_cmd(t_cmd *src);
+t_cmd	*set_command_list(t_cmd *cmd);
+int		command_is_valid(t_data *data, t_cmd *cmd, int is_builtin);
+int		check_cmd(char *cmd, t_data *data);
+int		check_permission(char *path, t_data *data);
 int		handle_input(t_data *data);
 int		handle_execute(t_data *data);
 int		exec_cmd(char **command, char **envp, t_data *data);
 int		single_command(t_data *data, char *cmd);
 int		complex_command(t_data *data);
+int		should_pipe(t_cmd *cmd);
 int		set_values(t_data *data);
 int		execute_command(t_data *data, t_cmd *cmd);
 int		close_file(t_data *data);
@@ -138,7 +145,7 @@ bool	create_pipes(t_data *data);
 bool	set_pipe_fds(t_cmd *cmds, t_cmd *c);
 bool	restore_io(t_io_fds *io);
 void	close_pipe_fds(t_cmd *cmds, t_cmd *skip_cmd);
-void	init_heredoc(t_cmd *cmd, t_data *data);
+int		init_heredoc(t_cmd *cmd, t_data *data);
 void	free_all(t_data *data, int i);
 void	free_data(t_data *data, int exit_code);
 int		is_valid_env_name(char *var);

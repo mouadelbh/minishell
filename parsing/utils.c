@@ -6,11 +6,11 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/08 22:50:34 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/08 23:01:05 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../includes/minishell.h"
 
 int	count_words(const char *s, char c)
 {

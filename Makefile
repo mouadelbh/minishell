@@ -10,7 +10,8 @@ EXEC_F	=	minishell.c builtins/echo.c builtins/cd.c \
 			execution/pipe.c execution/commands.c \
 			execution/execute.c execution/files.c execution/ios.c \
 			execution/utils.c execution/init.c execution/heredoc.c \
-			execution/debug.c execution/free.c builtins/export_utils.c
+			execution/debug.c execution/free.c builtins/export_utils.c \
+			execution/checker.c execution/free_utils.c execution/command_node.c
 FILES	=	$(PARS_F) $(EXEC_F)
 OBJS	=	$(FILES:.c=.o)
 LIBFT	=	libft/libft.a
@@ -60,5 +61,9 @@ t:
 	@$(MAKE) re
 	@$(MAKE) clean
 	@echo "$(READLINE_MSG)"
+
+asan: FLAGS += -fsanitize=address
+asan: ASAN_OPTIONS = detect_leaks=0
+asan: re
 
 .PHONY: all clean fclean re t welcome

@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/25 15:58:34 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/08 22:52:24 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
+
+int	exit_status;
 
 int	print_error(char *str)
 {
@@ -19,7 +21,7 @@ int	print_error(char *str)
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("'", 2);
 	ft_putstr_fd("\n", 2);
-	global.g_exit_status = 2;
+	exit_status = 2;
 	return (-1);
 }
 
@@ -139,7 +141,7 @@ int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 	add_history(ex_data->arg);
 	if (!checkquotes(str))
 	{
-		global.g_exit_status = 2;
+		exit_status = 2;
 		return (-1);
 	}
 	line = spacing(str);
@@ -149,7 +151,7 @@ int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 	unflag_spaces(arg);
 	if (!arg)
 	{
-		global.g_exit_status = 139;
+		exit_status = 139;
 		return (-1);
 	}
 	lexer(arg, head);

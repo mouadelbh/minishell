@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/04 15:05:52 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/08 22:50:12 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,7 @@
 # define MAX_PATH 4096
 #endif
 
-typedef struct	s_global
-{
-	int	g_exit_status;
-	int	pid;
-}	t_global;
-
-extern t_global	global;
+extern int exit_status;
 
 typedef struct s_token t_line;
 
@@ -145,7 +139,7 @@ bool	set_pipe_fds(t_cmd *cmds, t_cmd *c);
 bool	restore_io(t_io_fds *io);
 void	close_pipe_fds(t_cmd *cmds, t_cmd *skip_cmd);
 void	init_heredoc(t_cmd *cmd, t_data *data);
-void	free_all(t_data *data);
+void	free_all(t_data *data, int i);
 void	free_data(t_data *data, int exit_code);
 int		is_valid_env_name(char *var);
 char	*get_key(char *value, t_list *envp, char **env_value, int *append);

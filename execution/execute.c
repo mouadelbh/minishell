@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/04 09:24:33 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/08 22:45:05 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	new_exec(char **command, char **envp, t_data *data)
 	data->status = 0;
 	if (execve(path, command, envp) == -1)
 	{
-		global.g_exit_status = 1;
+		exit_status = 1;
 		free(path);
 		return (1);
 	}

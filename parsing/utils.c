@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/25 19:37:31 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/08 22:50:34 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,31 @@ int	isredir(int i)
 	return (0);
 }
 
+void	handlehang(int sig)
+{
+	(void)sig;
+	ft_putstr_fd("\n", 1);
+	exit_status = CTRL_C;
+}
+
+void	change_signal(void)
+{
+	signal(SIGINT, handlehang);
+}
+
 void	handlesig(int sig)
 {
-	if (global.pid == 0)
-	{
-		ft_putstr_fd("\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		global.g_exit_status = CTRL_C;
-	}
-	else
-	{
-		ft_putstr_fd("\n", 1);
-		global.g_exit_status = CTRL_C;
-	}
+	(void)sig;
+	ft_putstr_fd("\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	exit_status = CTRL_C;
+}
+
+void	reset_signal(void)
+{
+	signal(SIGINT, handlesig);
 }
 
 int is_empty(char *str)
@@ -73,28 +83,13 @@ int is_empty(char *str)
 	return (0);
 }
 
-void	free_env(t_list *env)
-{
-	t_list	*temp;
-	t_list	*next;
-
-	temp = env;
-	while (temp)
-	{
-		next = temp->next;
-		free(temp->content);
-		free(temp);
-		temp = next;
-	}
-}
-
 void	reset_shell(t_data *data)
 {
 	ft_putstr_fd("exit\n", 1);
-	free_env(data->envp);
-	free_all(data);
+	// free_env(&data->envp);
+	free_all(data, 1);
 	data->status = 1;
-	exit(global.g_exit_status);
+	exit(exit_status);
 }
 
 int	is_space(int c)

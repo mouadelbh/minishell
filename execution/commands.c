@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/04 15:26:24 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/08 22:45:05 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ int single_command(t_data *data, char *cmd)
 			if (check_cmd(path, data) == 1 || check_permission(path, data) == 1)
 			{
 				free(path);
-				global.g_exit_status = 126;
+				exit_status = 126;
 				return (126);
 			}
 			data->pid = fork();

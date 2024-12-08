@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:00 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/22 11:52:03 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:39:42 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int	check_dollar(char *s, int i)
 {
-	if (!s[i + 1] || is_space(s[i + 1]) || s[i + 1] == '$' || quotes_open(s, i) == 1)
+	if (!s[i + 1] || is_space(s[i + 1]) \
+	|| s[i + 1] == '$' || quotes_open(s, i) == 1)
 		return (1);
 	if ((s[i + 1] == '\"' || s[i + 1] == '\'') && quotes_open(s, i))
 		return (1);
@@ -37,7 +38,7 @@ int	checkspaces(char *line)
 	i = 0;
 	if (is_empty(line))
 	{
-		global.g_exit_status = 0;
+		exit_status = 0;
 		return (free(line), 0);
 	}
 	return (1);
@@ -54,13 +55,15 @@ int	checkquotes(char *line)
 	{
 		if (line[i] == '<' && line[i + 1] == '<' && !quotes_open(line, i))
 			hdoc++;
-		if (line[i] == '$' && !check_dollar(line ,i) && !hdoc)
+		if (line[i] == '$' && !check_dollar(line, i) && !hdoc)
 			line[i] = -1;
 		i++;
 	}
 	if (quotes_open(line, i) == 1)
-		return (ft_putstr_fd("minishell: syntax error near unexpected token '\''\n", 2),0);
+		return (ft_putstr_fd("minishell: syntax error near \
+		unexpected token '\''\n", 2), 0);
 	if (quotes_open(line, i) == 2)
-		return (ft_putstr_fd("minishell: syntax error near unexpected token '\"'\n", 2),0);
+		return (ft_putstr_fd("minishell: syntax error near \
+		unexpected token '\"'\n", 2), 0);
 	return (1);
 }

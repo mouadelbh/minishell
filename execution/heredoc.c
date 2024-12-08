@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/08 23:00:44 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/08 23:37:35 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	handledoc(int sig)
 {
 	(void)sig;
 	exit_status = CTRL_C;
+	unlink("/tmp/jc03fjkdc");
 	close(0);
 	exit(0);
 }
@@ -60,17 +61,19 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	}
 	line = NULL;
 	fork_id = fork();
-	if (data->pid != -1)
-		change_signal();
+	// if (data->pid != -1)
+	// 	change_signal();
 	if (fork_id == 0)
 	{
+		signal(SIGINT, handledoc);
 		while (1)
 		{
 			line = readline("> ");
 			if (!line)
 			{
-				perror("minishell: warning: \
-				here-document delimited by end-of-file\n");
+				perror("minishell: warning: here-document delimited by end-of-file\n");
+				unlink("/tmp/jc03fjkdc");
+				ft_putchar_fd(30 , temp_fd);
 				free_all(data, 1);
 				exit(0);
 				break;
@@ -94,6 +97,11 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	}
 	waitpid(0, &data->status, 0);
 	temp_fd = open("/tmp/jc03fjkdc", O_RDONLY, 0644);
+	if (temp_fd == -1)
+	{
+		// perror("heredoc temp file");
+		return (0);
+	}
 	cmd->io_fds->in_fd = temp_fd;
 	current = cmd->prev;
 	while (current && current->type != CMD)

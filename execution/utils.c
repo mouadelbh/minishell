@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/04 13:33:56 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 00:49:31 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 char *ft_getenv(char *name, t_data *data)
 {
 	int 	i;
-	t_list	*temp = data->envp;
+	t_list	*temp;
 
+	temp = data->envp;
 	if (!name || !data || !data->envp)
 		return NULL;
 	i = 0;
@@ -46,6 +47,7 @@ int	modify_env_value(char *name, char *new_value, t_data *data)
 	}
 	else
 		set_list_var(data, name, new_value);
+	free(str);
 	return (1);
 }
 
@@ -180,10 +182,14 @@ char	*get_full_cmd(char *av, char **env)
 	char	*tmp;
 	char	*full_cmd;
 	char	**path;
+	char	*env_path;
 
 	i = 0;
 	(void)env;
-	path = ft_split(getenv("PATH"), ':');
+	env_path = getenv("PATH");
+	if (!env_path)
+		return (NULL);
+	path = ft_split(env_path, ':');
 	if (!path)
 		ft_error(3, NULL);
 	while (path[i])

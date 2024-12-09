@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 00:01:57 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 01:08:43 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ int single_command(t_data *data, char *cmd)
 			if (data->pid == 0)
 				data->status = exec_cmd(data->cmd->argv, data->envp_arr, data);
 			waitpid(data->pid, &data->status, 0);
+			data->status = WEXITSTATUS(data->status);
+			// printf("status: %d\n", data->status);
 			if (data->pid == 0)
 				exit(data->status);
 		}

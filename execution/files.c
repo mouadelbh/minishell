@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/07 20:56:17 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/09 00:22:58 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,12 @@ int	create_files(t_cmd *cmd, t_data *data)
 		else if (cmd->type == APPEND)
 			cmd->file_error = init_append(cmd, data);
 		else if (cmd->type == HEREDOC)
-		{
-			id = fork();
-			if (data->pid == 0)
-			{
-				printf("pid == %i\n", data->pid);
-				init_heredoc(cmd, data);
-				exit(0);
-			}
-			waitpid(0, &data->status, 0);
-		}
+			cmd->file_error = init_heredoc(cmd, data);
+		// {
+		// 	id = fork();
+		// 	init_heredoc(cmd, data);
+		// 	waitpid(0, &data->status, 0);
+		// }
 		i = cmd->file_error;
 		cmd = cmd->next;
 	}

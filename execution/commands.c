@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/07 20:17:43 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/09 01:04:20 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	handle_execute(t_data *data)
 			data->status = 0;
 			data->pid = fork();
 			if (data->pid != -1)
-				change_signal();
+				signal(SIGINT, handlehang);
 			if (data->pid == -1)
 				return (ft_putstr_fd("fork error\n", 2), 1);
 		}
@@ -94,7 +94,7 @@ int single_command(t_data *data, char *cmd)
 			}
 			data->pid = fork();
 			if (data->pid != -1)
-				change_signal();
+				signal(SIGINT, handlehang);
 			if (data->pid == -1)
 				return (ft_error(1, data));
 			if (data->pid == 0)

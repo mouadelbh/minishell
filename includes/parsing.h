@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/07 20:35:27 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/09 01:06:06 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,11 @@ void	free_line(t_line *head);
 void	handlesig(int sig);
 void	lstadd_line(t_line **head, t_line *new);
 void	arange_arguments(t_line *head, t_line **final);
-void	change_signal(void);
 void	reset_signal(void);
 void	handledoc(int sig);
+void	handlehang(int sig);
 int		parse(char *line, t_line **head, t_list *env,t_data *ex_data);
 int		check_token(int c);
-int		special_char(char *str, int i);
 int		checkquotes(char *line);
 int		checkspaces(char *line);
 int		quotes_open(char *s, int i);
@@ -85,11 +84,11 @@ int		is_space(int c);
 int		isredir(int i);
 int		checkspaces(char *line);
 int		checkquotes(char *line);
-int		check_case_1(char c);
 int 	is_empty(char *str);
 int		count_words(const char *s, char c);
 char	*find_and_replace(char *line, t_list *data, int flag);
 char	*spacing(char *line);
+char	*ft_itoa(int value);
 t_token	get_token(char *str);
 
 #endif

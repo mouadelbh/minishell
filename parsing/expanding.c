@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/11 15:56:16 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/05 15:35:51 by mel-bouh         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/12/09 01:00:36 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/parsing.h"
 
@@ -124,58 +125,45 @@ int	alloc_exit(char *str, int exit)
 	int	size;
 	int	len;
 
-	len = 1;
+	len = 0;
+	if (exit <= 0)
+		len = 1;
 	while (exit)
 	{
 		len++;
 		exit /= 10;
 	}
-	size = ft_strlen(str) + len - 2;
+	size = ft_strlen(str) + len;
 	return (size);
-}
-
-void	fill_exit(char *new, int j, int exit)
-{
-	if (exit == 0)
-	{
-		new[j] = '0';
-		return ;
-	}
-	while (exit)
-	{
-		if (exit < 10)
-		{
-			new[j] = exit + '0';
-			break ;
-		}
-		new[j++] = exit % 10 + '0';
-		exit /= 10;
-	}
 }
 
 char	*expand_exit(char *str, int i, int exit)
 {
 	int		size;
 	int		j;
+	int		k;
+	char	*tmp;
 	char	*new;
 
-	size = alloc_exit(str, exit_status);
+	size = alloc_exit(str, exit);
 	new = malloc(size + 1);
 	if (!new)
 		return (NULL);
 	j = 0;
+	k = 0;
 	while (j < i)
 	{
 		new[j] = str[j];
 		j++;
 	}
-	fill_exit(new, j++, exit_status);
+	tmp = ft_itoa(exit);
+	while (tmp[k])
+		new[j++] = tmp[k++];
 	i += 2;
 	while (str[i])
 		new[j++] = str[i++];
 	new[j] = '\0';
-	free(str);
-	return (new);
+	return (free(str), free(tmp), new);
 }
 
 char	*find_and_replace(char *str, t_list *env, int flag)

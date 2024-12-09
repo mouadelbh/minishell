@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/07 20:41:28 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/09 00:59:56 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	minishell(t_data *data)
 			continue;
 		}
 		data->status = handle_input(data);
+		exit_status = data->status;
 		reset_signal();
 		free_all(data, 0);
 	}

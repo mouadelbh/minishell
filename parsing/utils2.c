@@ -6,11 +6,49 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:20:34 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/25 18:37:51 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/09 01:01:37 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
+
+int	nb_len(int value)
+{
+	int	len;
+
+	len = 0;
+	if (value == 0)
+		return (1);
+	while (value)
+	{
+		len++;
+		value /= 10;
+	}
+	return (len);
+}
+
+char	*ft_itoa(int value)
+{
+	char	*num;
+	int		len;
+
+	len = nb_len(value);
+	num = malloc(sizeof(char) * (len + 1));
+	if (!num)
+		return (NULL);
+	num[len--] = '\0';
+	if (value == 0)
+	{
+		num[len] = '0';
+		return (num);
+	}
+	while (value)
+	{
+		num[len--] = value % 10 + '0';
+		value /= 10;
+	}
+	return (num);
+}
 
 char	**get_splited(char **argv, int len)
 {

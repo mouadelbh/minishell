@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/09 00:05:07 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:49:56 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 	if (!checkspaces(str))
 		return (-1);
 	add_history(ex_data->arg);
-	if (!checkquotes(str))
+	if (!checkquotes(str, ex_data))
 	{
 		exit_status = 2;
 		return (-1);

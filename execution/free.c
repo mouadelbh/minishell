@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 00:47:57 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 06:51:09 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ void	free_all(t_data *data, int i)
 		free_arr(data->envp_arr);
 		data->envp_arr = NULL;
 	}
-	if (cmd->io_fds)
-		free_io(cmd);
+	// if (cmd->io_fds)
+	// 	free_io(cmd);
 	free_line(data->head);
 	free_cmd_struct(cmd);
 }

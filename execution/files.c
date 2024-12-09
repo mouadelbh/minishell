@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   files.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 00:22:58 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/09 06:35:57 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,6 @@ int	create_files(t_cmd *cmd, t_data *data)
 			cmd->file_error = init_append(cmd, data);
 		else if (cmd->type == HEREDOC)
 			cmd->file_error = init_heredoc(cmd, data);
-		// {
-		// 	id = fork();
-		// 	init_heredoc(cmd, data);
-		// 	waitpid(0, &data->status, 0);
-		// }
 		i = cmd->file_error;
 		cmd = cmd->next;
 	}

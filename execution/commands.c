@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 01:39:52 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 06:30:16 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,19 @@ int	handle_execute(t_data *data)
 	{
 		if (command_is_valid(data, cmd, builtin(cmd->argv[0])))
 		{
-			data->status = 0;
 			data->pid = fork();
 			if (data->pid != -1)
 				signal(SIGINT, handlehang);
 			if (data->pid == -1)
 				return (ft_putstr_fd("fork error\n", 2), 1);
 		}
-		else
-			data->status = 1;
 		if (data->pid == 0)
-			data->status = execute_command(data, cmd);
+			exit_status = execute_command(data, cmd);
 		cmd = cmd->next;
 	}
 	waitpid(0, &data->status, 0);
-	return (close_file(data), data->status);
+	data->status = WEXITSTATUS(exit_status);
+	return (close_file(data), exit_status);
 }
 
 int exec_cmd(char **command, char **envp, t_data *data)
@@ -65,9 +63,9 @@ int exec_cmd(char **command, char **envp, t_data *data)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(command[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
-		exit_status = 1;
+		exit_status = 127;
 		free(path);
-		exit(1);
+		exit(127);
 	}
 	return (0);
 }

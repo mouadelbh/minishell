@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 01:36:47 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 06:21:04 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,8 @@ int	new_exec(char **command, char **envp, t_data *data)
 		path = ft_strdup(command[0]);
 	else if (command[0][0] != '\0')
 		path = get_full_cmd(command[0], envp);
-	data->status = 0;
 	if (execve(path, command, envp) == -1)
-		return (free(path), 1);
+		return (free(path), 127);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 00:49:31 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 06:14:06 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,7 @@ int	exec_builtin(t_data *data, char **cmd)
 	else if (ft_strncmp(cmd[0], "env", 0) == 0)
 		res = ft_env(data, cmd, 0);
 	else if (ft_strncmp(cmd[0], "echo", 0) == 0)
-	{
-		// printf("Running echo\n");
 		res = ft_echo(data, cmd);
-	}
 	else if (ft_strncmp(cmd[0], "cd", 0) == 0)
 		res = ft_cd(data, cmd);
 	else if (ft_strncmp(cmd[0], "unset", 0) == 0)

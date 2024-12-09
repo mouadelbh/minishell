@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:34:19 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/04 15:35:21 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 06:28:12 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	valid_command(t_cmd *cmd, t_data *data)
 		ft_putstr_fd(cmd->argv[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		free(full_command);
-		data->status = 1;
+		exit_status = 127;
 		return (0);
 	}
 	free(full_command);
@@ -41,7 +41,7 @@ int	check_cmd(char *cmd, t_data *data)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd, 2);
 		ft_putstr_fd(": is a directory\n", 2);
-		data->status = 126;
+		exit_status = 126;
 		return (1);
 	}
 	return (0);
@@ -54,7 +54,7 @@ int	check_permission(char *path, t_data *data)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(data->cmd->argv[0], 2);
 		ft_putstr_fd(": Permission denied\n", 2);
-		data->status = 126;
+		exit_status = 126;
 		return (1);
 	}
 	return (0);

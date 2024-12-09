@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 01:16:19 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/09 22:11:35 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	char	*line;
 	int		temp_fd;
 	int		fork_id;
-
 	t_cmd	*current;
 
 	line = NULL;
@@ -84,12 +83,12 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 				line[0] = -1;
 				line = find_and_replace(line, data->envp, 0);
 			}
-			if (strcmp(line, cmd->argv[1]) == 0)
+			if (ft_strncmp(line, cmd->argv[1], 0) == 0)
 			{
 				free(line);
 				break;
 			}
-			write(temp_fd, line, strlen(line));
+			write(temp_fd, line, ft_strlen(line));
 			write(temp_fd, "\n", 1);
 			free(line);
 		}
@@ -112,6 +111,6 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	}
 	if (current && current->type == CMD)
 		current->io_fds->in_fd = temp_fd;
-	close(temp_fd);
+	// close(temp_fd);
 	return (1);
 }

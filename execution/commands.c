@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 01:18:25 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 01:39:52 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,15 @@ int exec_cmd(char **command, char **envp, t_data *data)
 	else if (command[0][0] != '\0')
 		path = get_full_cmd(command[0], envp);
 	if (!path)
-		return (ft_error(7, data), 1);
+		ft_error(7, data);
 	if (execve(path, command, envp) == -1)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(command[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
-		data->status = 1;
+		exit_status = 1;
 		free(path);
-		return (1);
+		exit(1);
 	}
 	return (0);
 }
@@ -101,9 +101,6 @@ int single_command(t_data *data, char *cmd)
 				data->status = exec_cmd(data->cmd->argv, data->envp_arr, data);
 			waitpid(data->pid, &data->status, 0);
 			data->status = WEXITSTATUS(data->status);
-			// printf("status: %d\n", data->status);
-			if (data->pid == 0)
-				exit(data->status);
 		}
 		free(path);
 		temp = temp->next;

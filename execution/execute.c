@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 00:02:11 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 01:36:47 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,7 @@ int	new_exec(char **command, char **envp, t_data *data)
 		path = get_full_cmd(command[0], envp);
 	data->status = 0;
 	if (execve(path, command, envp) == -1)
-	{
-		exit_status = 1;
-		free(path);
-		return (1);
-	}
+		return (free(path), 1);
 	return (0);
 }
 

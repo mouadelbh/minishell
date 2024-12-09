@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/09 00:05:24 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:50:51 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ int is_empty(char *str)
 void	reset_shell(t_data *data)
 {
 	ft_putstr_fd("exit\n", 1);
-	// free_env(&data->envp);
 	free_all(data, 1);
 	data->status = 1;
+	rl_clear_history();
 	exit(exit_status);
 }
 

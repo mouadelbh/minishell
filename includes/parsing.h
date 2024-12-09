@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/09 01:06:06 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:50:19 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,12 @@ void	handledoc(int sig);
 void	handlehang(int sig);
 int		parse(char *line, t_line **head, t_list *env,t_data *ex_data);
 int		check_token(int c);
-int		checkquotes(char *line);
+int		checkquotes(char *line, t_data *data);
 int		checkspaces(char *line);
 int		quotes_open(char *s, int i);
 int		is_space(int c);
 int		isredir(int i);
 int		checkspaces(char *line);
-int		checkquotes(char *line);
 int 	is_empty(char *str);
 int		count_words(const char *s, char c);
 char	*find_and_replace(char *line, t_list *data, int flag);

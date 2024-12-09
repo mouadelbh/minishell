@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:00 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/05 15:39:42 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:48:52 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,30 @@ int	checkspaces(char *line)
 	return (1);
 }
 
-int	checkquotes(char *line)
+int	checkquotes(char *line, t_data *data)
 {
 	int	i;
+	int	count;
 	int	hdoc;
 
 	i = 0;
 	hdoc = 0;
+	count = 0;
 	while (line[i])
 	{
 		if (line[i] == '<' && line[i + 1] == '<' && !quotes_open(line, i))
+		{
+			count++;
 			hdoc++;
+		}
 		if (line[i] == '$' && !check_dollar(line, i) && !hdoc)
 			line[i] = -1;
 		i++;
+	}
+	if (count >= 17)
+	{
+		perror("minishell: maximum here-document count exceeded\n");
+		reset_shell(data);
 	}
 	if (quotes_open(line, i) == 1)
 		return (ft_putstr_fd("minishell: syntax error near \

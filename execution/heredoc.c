@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 00:03:24 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 01:16:19 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,22 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	char	*line;
 	int		temp_fd;
 	int		fork_id;
+
 	t_cmd	*current;
 
-	temp_fd = open("/tmp/jc03fjkdc", O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (temp_fd == -1)
-	{
-		perror("heredoc temp file");
-		return (0);
-	}
 	line = NULL;
 	fork_id = fork();
-	// if (data->pid != -1)
-	// 	change_signal();
+	if (fork_id != 0)
+		signal(SIGINT, handlehang);
 	if (fork_id == 0)
 	{
 		signal(SIGINT, handledoc);
+		temp_fd = open("/tmp/jc03fjkdc", O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if (temp_fd == -1)
+		{
+			perror("heredoc temp file");
+			return (0);
+		}
 		while (1)
 		{
 			line = readline("> ");
@@ -73,7 +74,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 			{
 				perror("minishell: warning: here-document delimited by end-of-file\n");
 				unlink("/tmp/jc03fjkdc");
-				ft_putchar_fd(30 , temp_fd);
+				close(temp_fd);
 				free_all(data, 1);
 				exit(0);
 				break;
@@ -91,7 +92,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 			write(temp_fd, line, strlen(line));
 			write(temp_fd, "\n", 1);
 			free(line);
-		}	
+		}
 		close(temp_fd);
 		exit(0);
 	}
@@ -111,5 +112,6 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	}
 	if (current && current->type == CMD)
 		current->io_fds->in_fd = temp_fd;
+	close(temp_fd);
 	return (1);
 }

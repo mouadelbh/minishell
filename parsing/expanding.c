@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/12/09 01:08:00 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/09 01:18:42 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,58 +125,45 @@ int	alloc_exit(char *str, int exit)
 	int	size;
 	int	len;
 
-	len = 1;
+	len = 0;
+	if (exit <= 0)
+		len = 1;
 	while (exit)
 	{
 		len++;
 		exit /= 10;
 	}
-	size = ft_strlen(str) + len - 2;
+	size = ft_strlen(str) + len;
 	return (size);
-}
-
-void	fill_exit(char *new, int j, int exit)
-{
-	if (exit == 0)
-	{
-		new[j] = '0';
-		return ;
-	}
-	while (exit)
-	{
-		if (exit < 10)
-		{
-			new[j] = exit + '0';
-			break ;
-		}
-		new[j++] = exit % 10 + '0';
-		exit /= 10;
-	}
 }
 
 char	*expand_exit(char *str, int i, int exit)
 {
 	int		size;
 	int		j;
+	int		k;
+	char	*tmp;
 	char	*new;
 
-	size = alloc_exit(str, exit_status);
+	size = alloc_exit(str, exit);
 	new = malloc(size + 1);
 	if (!new)
 		return (NULL);
 	j = 0;
+	k = 0;
 	while (j < i)
 	{
 		new[j] = str[j];
 		j++;
 	}
-	fill_exit(new, j++, exit_status);
+	tmp = ft_itoa(exit);
+	while (tmp[k])
+		new[j++] = tmp[k++];
 	i += 2;
 	while (str[i])
 		new[j++] = str[i++];
 	new[j] = '\0';
-	free(str);
-	return (new);
+	return (free(str), free(tmp), new);
 }
 
 char	*find_and_replace(char *str, t_list *env, int flag)

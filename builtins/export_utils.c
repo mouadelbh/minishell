@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:34:12 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/04 13:47:51 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:37:18 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ int	append_env_value(char *key, char *env_value, char *cmd, t_list *envp)
 		{
 			temp = ft_strjoin(envp->content, env_value);
 			free(envp->content);
-			envp->content = temp;
-			return (1);
+			envp->content = ft_strdup(temp);
+			return (free(temp), 1);
 		}
 		envp = envp->next;
 	}

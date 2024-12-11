@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/09 21:49:56 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/10 02:02:48 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,33 @@ void	unflag_spaces(char **line)
 		}
 		i++;
 	}
+}
+
+void	update_env(t_cmd *cmd, t_data *data)
+{
+	char	*arg;
+	int		i;
+	t_cmd	*tmp;
+
+	tmp = cmd;
+	arg = NULL;
+	while (cmd->next)
+		cmd = cmd->next;
+	i = 0;
+	while (cmd->argv[i] && !(check_token(cmd->argv[i][0]) == 2 && \
+	cmd->argv[i + 1] && !cmd->argv[i + 2]))
+	{
+		arg = ft_strdup(cmd->argv[i]);
+		i++;
+	}
+	if (!arg)
+	{
+		arg = malloc(1);
+		arg[0] = '\0';
+	}
+	printf("arg: %s\n", arg);
+	modify_env_value("_", arg, data);
+	free(arg);
 }
 
 int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)

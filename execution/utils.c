@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 06:14:06 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/10 01:00:34 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char *ft_getenv(char *name, t_data *data)
 	i = 0;
 	while (temp)
 	{
-		if (ft_strncmp(temp->content, name, ft_strlen(name)) == 0)
+		if (ft_strncmp(temp->content, name, ft_strlen(name)) == 0) //check if you make surei the name is finished
 			return (ft_strdup(temp->content));
 		temp = temp->next;
 	}

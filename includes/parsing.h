@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/09 21:50:19 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/10 01:18:46 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	arange_arguments(t_line *head, t_line **final);
 void	reset_signal(void);
 void	handledoc(int sig);
 void	handlehang(int sig);
+void	update_env(t_cmd *cmd, t_data *data);
 int		parse(char *line, t_line **head, t_list *env,t_data *ex_data);
 int		check_token(int c);
 int		checkquotes(char *line, t_data *data);

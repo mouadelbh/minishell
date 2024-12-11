@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expanding.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/12/09 01:18:42 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/10 02:09:50 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,8 @@ char	*find_and_replace(char *str, t_list *env, int flag)
 	int		i;
 	int		size;
 	int		ca;
+	int		j;
+	int		c;
 	char	*tmp;
 
 	if (!str)
@@ -179,6 +181,8 @@ char	*find_and_replace(char *str, t_list *env, int flag)
 	i = 0;
 	while (str[i])
 	{
+		j = 0;
+		c = 0;
 		if (str[i] == -1 && str[i + 1] == '?')
 			tmp = expand_exit(tmp, i, exit_status);
 		else if (str[i] == -1)

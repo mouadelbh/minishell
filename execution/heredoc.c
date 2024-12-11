@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 01:16:19 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/10 00:39:05 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ void	handledoc(int sig)
 {
 	(void)sig;
 	exit_status = CTRL_C;
-	unlink("/tmp/jc03fjkdc");
 	close(0);
-	exit(0);
 }
 
 char	*expand_string(char *line, t_list *envp)
@@ -51,10 +49,12 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	char	*line;
 	int		temp_fd;
 	int		fork_id;
-
+	int		tmp;
 	t_cmd	*current;
 
 	line = NULL;
+	tmp = exit_status;
+	exit_status = -1;
 	fork_id = fork();
 	if (fork_id != 0)
 		signal(SIGINT, handlehang);
@@ -72,19 +72,19 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 			line = readline("> ");
 			if (!line)
 			{
-				perror("minishell: warning: here-document delimited by end-of-file\n");
+				if (exit_status == -1)
+					perror("minishell: warning: here-document delimited by end-of-file\n");
 				unlink("/tmp/jc03fjkdc");
 				close(temp_fd);
 				free_all(data, 1);
 				exit(0);
-				break;
 			}
 			if (ft_strchr(line, '$'))
 			{
 				line[0] = -1;
 				line = find_and_replace(line, data->envp, 0);
 			}
-			if (strcmp(line, cmd->argv[1]) == 0)
+			if (strcmp(line, cmd->argv[1]) != 0)
 			{
 				free(line);
 				break;
@@ -96,6 +96,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 		close(temp_fd);
 		exit(0);
 	}
+	exit_status = tmp;
 	waitpid(0, &data->status, 0);
 	temp_fd = open("/tmp/jc03fjkdc", O_RDONLY, 0644);
 	if (temp_fd == -1)
@@ -112,6 +113,5 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	}
 	if (current && current->type == CMD)
 		current->io_fds->in_fd = temp_fd;
-	close(temp_fd);
 	return (1);
 }

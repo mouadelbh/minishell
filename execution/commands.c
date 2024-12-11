@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/10 12:03:25 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/11 21:37:47 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,16 +69,6 @@ int exec_cmd(char **command, char **envp, t_data *data)
 	return (0);
 }
 
-void	modify_last_arg(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (data->cmd->argv[i])
-		i++;
-	modify_env_value("_", data->cmd->argv[i - 1], data);
-}
-
 int single_command(t_data *data, char *cmd)
 {
 	t_line *temp = data->head;
@@ -89,7 +79,7 @@ int single_command(t_data *data, char *cmd)
 		if (temp->next && temp->next->type == 7)
 			temp = temp->next;
 		if (builtin(data->cmd->argv[0]))
-		{	
+		{
 			data->status = exec_builtin(data, data->cmd->argv);
 		}
 		else
@@ -114,7 +104,7 @@ int single_command(t_data *data, char *cmd)
 		// free(path);
 		temp = temp->next;
 	}
-	modify_last_arg(data);
+	update_env(data->cmd, data);
 	return (data->status);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:45:30 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/10 12:42:06 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/11 21:49:56 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,12 @@ static void	print_env(t_list *envp)
 	while (envp)
 	{
 		if (!envp->empty_value)
-			printf("%s\n", (char *)envp->content);
+		{
+			if (!ft_strncmp(envp->content, "_=", 2))
+				printf("_=/usr/bin/env\n");
+			else
+				printf("%s\n", (char *)envp->content);
+		}
 		envp = envp->next;
 	}
 }

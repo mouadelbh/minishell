@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:47:56 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/07 14:00:09 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:41:50 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@ char	*find_value(char *name, t_list *envp)
 
 	temp = envp;
 	i = 0;
-	if (is_valid_env_name(name) == 0)
+	if (!is_valid_env_name(name))
 		return (NULL);
 	key = new_substr(name, '=');
+	if (!key)
+		return (NULL);
 	while (temp)
 	{
 		if (ft_strncmp(key, temp->content, ft_strlen(key)) == 0)
@@ -107,14 +109,19 @@ int	ft_export(t_data *data, char **cmd)
 		ft_putstr_fd("': not a valid identifier\n", 2);
 		return (1);
 	}
-	if (!ft_strchr(cmd[1], '=') && is_valid_env_name(cmd[1]))
-		create_env_value(data, cmd[1], 1);
+	if (!ft_strchr(cmd[1], '=') && is_valid_env_name(cmd[1])
+		&& !find_value(cmd[1], data->envp))
+		return (create_env_value(data, cmd[1], 1), 0);
+	if (find_value(cmd[1], data->envp) && (!ft_strchr(cmd[1], '=') || !(ft_strchr(cmd[1], '=') + 1)))
+		return (0);
 	key = get_key(cmd[1], data->envp, &env_value, &append);
 	if (append)
 	{
 		if (!append_env_value(key, env_value, cmd[1], data->envp))
 			modify_env_value(key, env_value, data);
 	}
+	else
+		create_env_value(data, cmd[1], 0);
 	free(key);
 	free(env_value);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/10 00:39:05 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/11 21:15:07 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 		signal(SIGINT, handledoc);
 		temp_fd = open("/tmp/jc03fjkdc", O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if (temp_fd == -1)
-		{
-			perror("heredoc temp file");
-			return (0);
-		}
+			return (perror("open"), 0);
 		while (1)
 		{
 			line = readline("> ");
@@ -84,12 +81,12 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 				line[0] = -1;
 				line = find_and_replace(line, data->envp, 0);
 			}
-			if (strcmp(line, cmd->argv[1]) != 0)
+			if (ft_strncmp(line, cmd->argv[1], 0) == 0)
 			{
 				free(line);
 				break;
 			}
-			write(temp_fd, line, strlen(line));
+			write(temp_fd, line, ft_strlen(line));
 			write(temp_fd, "\n", 1);
 			free(line);
 		}

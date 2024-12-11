@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/11 21:15:07 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/12 00:49:26 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 		exit(0);
 	}
 	exit_status = tmp;
-	waitpid(0, &data->status, 0);
+	waitpid(0, &exit_status, 0);
 	temp_fd = open("/tmp/jc03fjkdc", O_RDONLY, 0644);
 	if (temp_fd == -1)
 	{

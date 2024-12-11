@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/11 21:39:21 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/12 00:49:26 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	ft_error(int error, t_data *data)
 		ft_putstr_fd("Ambigius rediredirict\n", 2);
 	else if (error == 7)
 	{
-		data->status = 127;
+		exit_status = 127;
 		ft_putstr_fd(data->cmd->argv[0], STDERR_FILENO);
 		ft_putchar_fd(' ', 2);
 		ft_putstr_fd("command not found\n", STDERR_FILENO);

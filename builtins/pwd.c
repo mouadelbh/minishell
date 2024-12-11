@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:47:27 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/05 13:40:37 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/12 00:49:10 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	ft_pwd(t_data *data, char **cmd)
 	else
 	{
 		perror("getcwd");
-		data->status = 0;
+		exit_status = 1;
 	}
-	return (EXIT_SUCCESS);
+	return (exit_status);
 }

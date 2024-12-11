@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/11 21:37:47 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/12 00:50:14 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ int	handle_execute(t_data *data)
 			exit_status = execute_command(data, cmd);
 		cmd = cmd->next;
 	}
-	waitpid(0, &data->status, 0);
-	data->status = WEXITSTATUS(exit_status);
+	waitpid(0, &exit_status, 0);
+	exit_status = WEXITSTATUS(exit_status);
 	return (close_file(data), exit_status);
 }
 
@@ -80,7 +80,7 @@ int single_command(t_data *data, char *cmd)
 			temp = temp->next;
 		if (builtin(data->cmd->argv[0]))
 		{
-			data->status = exec_builtin(data, data->cmd->argv);
+			exit_status = exec_builtin(data, data->cmd->argv);
 		}
 		else
 		{
@@ -97,15 +97,14 @@ int single_command(t_data *data, char *cmd)
 			if (data->pid == -1)
 				return (ft_error(1, data));
 			if (data->pid == 0)
-				data->status = exec_cmd(data->cmd->argv, data->envp_arr, data);
-			waitpid(data->pid, &data->status, 0);
-			data->status = WEXITSTATUS(data->status);
+				exit_status = exec_cmd(data->cmd->argv, data->envp_arr, data);
+			waitpid(data->pid, &exit_status, 0);
+			exit_status = WEXITSTATUS(exit_status);
 		}
-		// free(path);
 		temp = temp->next;
 	}
 	update_env(data->cmd, data);
-	return (data->status);
+	return (exit_status);
 }
 
 int	complex_command(t_data *data)
@@ -116,10 +115,7 @@ int	complex_command(t_data *data)
 	if (data->cmd)
 	{
 		if (!create_files(data->cmd, data))
-		{
-			// free_cmd_list(&data->cmd);
 			return (1);
-		}
 		data->cmd = set_command_list(data->cmd);
 		ret = set_values(data);
 		return (handle_execute(data));

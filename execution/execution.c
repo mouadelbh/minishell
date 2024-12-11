@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/11 21:13:38 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/12 00:49:26 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,17 @@ int	minishell(t_data *data)
 			printf("CMD IS NULL\n");
 			continue;
 		}
-		// update_env(data->cmd, data);
+		update_env(data->cmd, data);
 		data->envp_arr = set_list_arra(data->envp);
 		if (!data->envp_arr || !*data->envp_arr)
 		{
 			free_line(data->head);
-			free_line(data->head);
 			continue;
 		}
-		data->status = handle_input(data);
-		exit_status = data->status;
+		exit_status = handle_input(data);
+		exit_status = exit_status;
 		reset_signal();
 		free_all(data, 0);
 	}
-	return (data->status);
+	return (exit_status);
 }

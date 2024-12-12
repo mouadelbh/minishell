@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:36:32 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/07 14:20:48 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/12 06:39:30 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	set_cmd_node(t_cmd *cmd, t_cmd *current, t_cmd *temp, t_cmd *new_list)
 {
 	if (cmd->type == CMD)
 	{
-		temp = init_new_cmd(cmd);
+		temp = init_new_cmd(cmd, cmd->next, cmd->prev);
 		if (!temp)
 		{
 			while (new_list)
@@ -34,36 +34,61 @@ int	set_cmd_node(t_cmd *cmd, t_cmd *current, t_cmd *temp, t_cmd *new_list)
 	return (0);
 }
 
-t_cmd	*set_command_list(t_cmd *cmd)
+t_cmd *set_command_list(t_cmd *cmd)
 {
-	t_cmd	*new_list;
-	t_cmd	*current;
-	t_cmd	*temp;
+    t_cmd *new_list;
+    t_cmd *current;
+    t_cmd *temp;
 
-	if (!cmd)
-		return (NULL);
-	while (cmd && cmd->type != CMD && cmd->next)
-	{
-		free_cmd_node(cmd);
-		cmd = cmd->next;
-	}
-	if (!cmd)
-		return (NULL);
-	new_list = init_new_cmd(cmd);
-	if (!new_list)
-		return (NULL);
-	current = new_list;
-	cmd = cmd->next;
-	while (cmd)
-	{
-		if (set_cmd_node(cmd, current, temp, new_list))
-			return (NULL);
-		cmd = cmd->next;
-	}
-	return (new_list);
+    if (!cmd)
+        return (NULL);
+
+    // Skip non-CMD type nodes at the start
+    while (cmd && (cmd->type != CMD))
+    {
+        free_cmd_node(cmd);
+        cmd = cmd->next;
+    }
+
+    if (!cmd)
+        return (NULL);
+
+    // Initialize the first node
+    new_list = init_new_cmd(cmd, cmd->next, cmd->prev);
+    if (!new_list)
+        return (NULL);
+
+    current = new_list;
+    cmd = cmd->next;
+
+    // Process remaining commands
+    while (cmd)
+    {
+        // Process CMD type nodes
+        if (cmd->type == CMD)
+        {
+            temp = init_new_cmd(cmd, cmd->next, current);
+            if (!temp)
+            {
+                // Free existing list on allocation failure
+                while (new_list)
+                {
+                    temp = new_list->next;
+                    free(new_list);
+                    new_list = temp;
+                }
+                return (NULL);
+            }
+            current->next = temp;
+            current = temp;
+        }
+        cmd = cmd->next;
+    }
+
+    return (new_list);
 }
 
-t_cmd	*init_new_cmd(t_cmd *src)
+t_cmd	*init_new_cmd(t_cmd *src, t_cmd *next, t_cmd *prev)
 {
 	t_cmd	*new;
 
@@ -76,7 +101,7 @@ t_cmd	*init_new_cmd(t_cmd *src)
 	new->pipe_fd = src->pipe_fd;
 	new->pipe_output = src->pipe_output;
 	new->io_fds = src->io_fds;
-	new->next = NULL;
-	new->prev = NULL;
+	new->next = next;
+	new->prev = prev;
 	return (new);
 }

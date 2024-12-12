@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/12 00:50:14 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/12 06:46:21 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ int	complex_command(t_data *data)
 {
 	t_line	*temp = data->head;
 	int		ret;
+	t_cmd	*cmd;
 
 	if (data->cmd)
 	{

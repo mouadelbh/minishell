@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/13 18:26:55 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/13 19:33:01 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	handle_execute(t_data *data)
 	temp = cmd;
 	while (cmd)
 	{
-		data->pid = fork();
+		if (cmd->type == CMD)
+			data->pid = fork();
 		if (data->pid != -1)
 			signal(SIGINT, handlehang);
 		if (data->pid == -1)
@@ -39,8 +40,7 @@ int	handle_execute(t_data *data)
 			exit_status = execute_command(data, cmd);
 		cmd = cmd->next;
 	}
-	exit_status = close_file(data, temp);
-	exit_status = WEXITSTATUS(exit_status);
+	exit_status = WEXITSTATUS(close_file(data, temp));
 	return (exit_status);
 }
 

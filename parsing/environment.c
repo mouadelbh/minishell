@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:07 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/09 00:04:38 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/13 21:32:39 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,29 @@ void	create_env(t_list **head)
 	env_lstadd_back(head, get_shlvl());
 }
 
+void	update_shlvl(t_list *env)
+{
+	char	*arg;
+	char	*tmp;
+	int		nb;
+
+	while (env && ft_strncmp(env->content, "SHLVL=", 5))
+		env = env->next;
+	if (!env)
+		return ;
+	tmp = ft_substr(env->content, 6, ft_strlen(env->content));
+	nb = ft_atoi(tmp);
+	free(tmp);
+	nb++;
+	if (nb == 1000)
+		nb = 1;
+	tmp = ft_itoa(++nb);
+	arg = ft_strjoin("SHLVL=", tmp);
+	free(env->content);
+	env->content = arg;
+	free(tmp);
+}
+
 void	init(t_list **data, char **env)
 {
 	exit_status = 0;
@@ -97,6 +120,7 @@ void	init(t_list **data, char **env)
 		create_env(data);
 	else
 		set_env(data, env);
+	update_shlvl(*data);
 	if (!data)
 		return ;
 }

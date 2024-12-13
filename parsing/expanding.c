@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/12/10 02:09:50 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/13 21:20:18 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	reset_expand(char *str)
 static int	check_case(char *str, int i)
 {
 	if (!str[i] || is_space(str[i]) || str[i] == '=' \
-	|| str[i] == '\'' || str[i] == '\"' || str[i] == '/')
+	|| str[i] == '\'' || str[i] == '\"' || str[i] == '/' || str[i] == '.')
 		return (1);
 	if (check_token(str[i]))
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 22:50:07 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/13 18:30:30 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,20 +47,22 @@ bool	check_infile_outfile(t_io_fds *io)
 	return (true);
 }
 
-int	close_file(t_data *data)
+int	close_file(t_data *data, t_cmd *cmd)
 {
 	pid_t	wpid;
 	int		status;
 	int		save_status;
 
-	close_fds(data->cmd, false);
+	close_fds(cmd, false);
 	save_status = 0;
 	wpid = 0;
 	while (wpid != -1 || errno != ECHILD)
 	{
-		wpid = waitpid(-1, &status, 0);
+		wpid = waitpid(data->pid, &status, 0);
 		if (wpid == data->pid)
+		{
 			save_status = status;
+		}
 		continue ;
 	}
 	return (status);

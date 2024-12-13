@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/12 06:46:21 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/13 18:26:55 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,26 +24,24 @@ int	handle_execute(t_data *data)
 {
 	t_cmd	*cmd;
 	t_cmd	*temp;
+	char	*full_cmd;
 
 	cmd = data->cmd;
 	temp = cmd;
 	while (cmd)
 	{
-		if (command_is_valid(data, cmd, builtin(cmd->argv[0])))
-		{
-			data->pid = fork();
-			if (data->pid != -1)
-				signal(SIGINT, handlehang);
-			if (data->pid == -1)
-				return (ft_putstr_fd("fork error\n", 2), 1);
-		}
+		data->pid = fork();
+		if (data->pid != -1)
+			signal(SIGINT, handlehang);
+		if (data->pid == -1)
+			return (ft_putstr_fd("fork error\n", 2), 1);
 		if (data->pid == 0)
 			exit_status = execute_command(data, cmd);
 		cmd = cmd->next;
 	}
-	waitpid(0, &exit_status, 0);
+	exit_status = close_file(data, temp);
 	exit_status = WEXITSTATUS(exit_status);
-	return (close_file(data), exit_status);
+	return (exit_status);
 }
 
 int exec_cmd(char **command, char **envp, t_data *data)
@@ -79,9 +77,7 @@ int single_command(t_data *data, char *cmd)
 		if (temp->next && temp->next->type == 7)
 			temp = temp->next;
 		if (builtin(data->cmd->argv[0]))
-		{
 			exit_status = exec_builtin(data, data->cmd->argv);
-		}
 		else
 		{
 			path = get_full_cmd(data->cmd->argv[0], data->envp_arr);

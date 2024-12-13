@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:47:56 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/10 12:41:50 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/12 00:43:56 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,10 @@ int	ft_export(t_data *data, char **cmd)
 		if (!append_env_value(key, env_value, cmd[1], data->envp))
 			modify_env_value(key, env_value, data);
 	}
-	else
+	else if (!find_value(key, data->envp))
 		create_env_value(data, cmd[1], 0);
+	else
+		modify_env_value(key, env_value, data);
 	free(key);
 	free(env_value);
 	return (0);

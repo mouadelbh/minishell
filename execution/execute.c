@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 22:53:38 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/13 18:32:13 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,21 @@ int	set_values(t_data *data)
 	return (127);
 }
 
-int	new_exec(char **command, char **envp, t_data *data)
+int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 {
 	char	*path;
 
-	if (command[0][0] == '/')
-		path = ft_strdup(command[0]);
-	else if (command[0][0] != '\0')
-		path = get_full_cmd(command[0], envp);
-	if (execve(path, command, envp) == -1)
+	if (!command_is_valid(data, cmd, builtin(cmd->argv[0])))
+		exit(exit_status);
+	if (cmd->argv[0][0] == '/')
+		path = ft_strdup(cmd->argv[0]);
+	else if (cmd->argv[0][0] != '\0')
+		path = get_full_cmd(cmd->argv[0], envp);
+	if (execve(path, cmd->argv, envp) == -1)
+	{
+		ft_putstr_fd("execve failed\n", 2);
 		return (free(path), 127);
+	}
 	return (0);
 }
 
@@ -53,7 +58,7 @@ int	execute_command(t_data *data, t_cmd *cmd)
 	int	ret;
 
 	if (cmd->type != CMD)
-		return (1);
+		exit(0);
 	if (!set_pipe_fds(data->cmd, cmd) || !redirect_io(cmd->io_fds))
 		return (1);
 	close_fds(data->cmd, false);
@@ -61,6 +66,6 @@ int	execute_command(t_data *data, t_cmd *cmd)
 	if (ret != 127)
 		exit(0);
 	if (ret == 127)
-		return (new_exec(cmd->argv, data->envp_arr, data));
+		return (new_exec(cmd, data->envp_arr, data));
 	return (ret);
 }

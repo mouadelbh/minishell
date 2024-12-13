@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/09 00:05:47 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/13 18:25:52 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,12 +120,11 @@ void 	show_io_fds(t_io_fds *io_fds);
 void 	set_cmd_strings(t_cmd *cmd);
 int		create_files(t_cmd *cmd, t_data *data);
 int		init_command(t_cmd *cmd, t_data *data);
-t_cmd	*init_new_cmd(t_cmd *src);
+t_cmd	*init_new_cmd(t_cmd *src, t_cmd *next, t_cmd *prev);
 t_cmd	*set_command_list(t_cmd *cmd);
 int		command_is_valid(t_data *data, t_cmd *cmd, int is_builtin);
 int		check_cmd(char *cmd, t_data *data);
 int		check_permission(char *path, t_data *data);
-t_cmd	*init_new_cmd(t_cmd *src);
 t_cmd	*set_command_list(t_cmd *cmd);
 int		command_is_valid(t_data *data, t_cmd *cmd, int is_builtin);
 int		check_cmd(char *cmd, t_data *data);
@@ -139,7 +138,7 @@ int		should_pipe(t_cmd *cmd);
 int		should_pipe(t_cmd *cmd);
 int		set_values(t_data *data);
 int		execute_command(t_data *data, t_cmd *cmd);
-int		close_file(t_data *data);
+int		close_file(t_data *data, t_cmd *cmd);
 void	init_cmd(t_cmd *cmd);
 void	init_io(t_io_fds **io_fds);
 int		init_write_to(t_cmd *cmd, t_data *data);

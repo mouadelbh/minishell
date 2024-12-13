@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:07 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/13 21:32:39 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/13 21:38:21 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	update_shlvl(t_list *env)
 	nb++;
 	if (nb == 1000)
 		nb = 1;
-	tmp = ft_itoa(++nb);
+	tmp = ft_itoa(nb);
 	arg = ft_strjoin("SHLVL=", tmp);
 	free(env->content);
 	env->content = arg;

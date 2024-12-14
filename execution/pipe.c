@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:17:37 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/02 23:54:32 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/14 20:49:43 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ void	close_pipe_fds(t_cmd *cmds, t_cmd *skip_cmd)
 {
 	while (cmds && cmds->pipe_output)
 	{
-		if (cmds->pipe_fd[0] != -1)
+		if (cmds->pipe_fd && cmds->pipe_fd[0] != -1)
 			close(cmds->pipe_fd[0]);
-		if (cmds->pipe_fd[1] != -1)
+		if (cmds->pipe_fd && cmds->pipe_fd[1] != -1)
 			close(cmds->pipe_fd[1]);
 		cmds = cmds->next;
 	}

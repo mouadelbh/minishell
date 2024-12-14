@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:34:19 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/13 17:03:12 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/14 20:12:57 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	check_cmd(char *cmd, t_data *data)
 {
 	struct stat	buf;
 
+	if (!ft_strchr(cmd, '/'))
+		return (0);
 	if (stat(cmd, &buf) == -1)
 		return (0);
 	if (S_ISDIR(buf.st_mode))

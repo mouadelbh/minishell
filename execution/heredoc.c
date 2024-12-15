@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/12 00:49:26 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/15 22:44:46 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	if (fork_id == 0)
 	{
 		signal(SIGINT, handledoc);
+		unlink("/tmp/jc03fjkdc");
 		temp_fd = open("/tmp/jc03fjkdc", O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if (temp_fd == -1)
 			return (perror("open"), 0);
@@ -97,10 +98,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	waitpid(0, &exit_status, 0);
 	temp_fd = open("/tmp/jc03fjkdc", O_RDONLY, 0644);
 	if (temp_fd == -1)
-	{
-		// perror("heredoc temp file");
 		return (0);
-	}
 	cmd->io_fds->in_fd = temp_fd;
 	current = cmd->prev;
 	while (current && current->type != CMD)

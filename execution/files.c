@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/13 18:30:30 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/15 22:35:46 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,7 @@ int	close_file(t_data *data, t_cmd *cmd)
 	{
 		wpid = waitpid(data->pid, &status, 0);
 		if (wpid == data->pid)
-		{
 			save_status = status;
-		}
 		continue ;
 	}
 	return (status);

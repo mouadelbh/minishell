@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/14 21:59:03 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/15 22:36:00 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	handle_execute(t_data *data)
 		if (data->pid == -1)
 			return (ft_putstr_fd("fork error\n", 2), 1);
 		if (data->pid == 0)
-			exit_status = execute_command(data, cmd);
+			execute_command(data, cmd);
 		cmd = cmd->next;
 	}
 	exit_status = WEXITSTATUS(close_file(data, temp));

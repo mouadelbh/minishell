@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/11 21:38:01 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/15 06:17:12 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,11 +129,12 @@ void	unflag_spaces(char **line)
 void	update_env(t_cmd *cmd, t_data *data)
 {
 	char	*arg;
+	char	*prev;
 	int		i;
 	t_cmd	*tmp;
 
-	tmp = cmd;
 	arg = NULL;
+	prev = NULL;
 	while (cmd->next)
 		cmd = cmd->next;
 	i = 0;
@@ -141,6 +142,9 @@ void	update_env(t_cmd *cmd, t_data *data)
 	cmd->argv[i + 1] && !cmd->argv[i + 2]))
 	{
 		arg = ft_strdup(cmd->argv[i]);
+		if (prev)
+			free(prev);
+		prev = arg;
 		i++;
 	}
 	if (!arg)

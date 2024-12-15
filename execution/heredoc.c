@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/15 22:44:46 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/16 00:27:13 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,28 @@ void	handledoc(int sig)
 	(void)sig;
 	exit_status = CTRL_C;
 	close(0);
+}
+
+char	*random_file_name(void)
+{
+	char	*name;
+	int		i;
+	int		fd;
+	int		k;
+	const char charset[] = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+	name = malloc(13);
+	ft_strlcpy(name, "/tmp/", 6);
+	k = 0;
+	while (k < 8)
+	{
+		fd = open("/dev/urandom", O_RDONLY);
+		read(fd, &i, 1);
+		name[k + 5] = charset[i % 36];
+		close(fd);
+		k++;
+	}
+	return (name);
 }
 
 char	*expand_string(char *line, t_list *envp)
@@ -47,6 +69,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 {
 	char	*temp;
 	char	*line;
+	char	*temp_file;
 	int		temp_fd;
 	int		fork_id;
 	int		tmp;
@@ -55,14 +78,14 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	line = NULL;
 	tmp = exit_status;
 	exit_status = -1;
+	temp_file = random_file_name();
 	fork_id = fork();
 	if (fork_id != 0)
 		signal(SIGINT, handlehang);
 	if (fork_id == 0)
 	{
 		signal(SIGINT, handledoc);
-		unlink("/tmp/jc03fjkdc");
-		temp_fd = open("/tmp/jc03fjkdc", O_CREAT | O_RDWR | O_TRUNC, 0644);
+		temp_fd = open(temp_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if (temp_fd == -1)
 			return (perror("open"), 0);
 		while (1)
@@ -72,7 +95,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 			{
 				if (exit_status == -1)
 					perror("minishell: warning: here-document delimited by end-of-file\n");
-				unlink("/tmp/jc03fjkdc");
+				unlink(temp_file);
 				close(temp_fd);
 				free_all(data, 1);
 				exit(0);
@@ -96,9 +119,12 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	}
 	exit_status = tmp;
 	waitpid(0, &exit_status, 0);
-	temp_fd = open("/tmp/jc03fjkdc", O_RDONLY, 0644);
+	temp_fd = open(temp_file, O_RDONLY, 0644);
 	if (temp_fd == -1)
+	{
+		perror("open");
 		return (0);
+	}
 	cmd->io_fds->in_fd = temp_fd;
 	current = cmd->prev;
 	while (current && current->type != CMD)

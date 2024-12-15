@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/13 17:09:55 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/14 21:54:43 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,11 @@ int	ft_error(int error, t_data *data)
 		ft_putstr_fd("syntax error: cannot find a closing quote\n",
 			STDERR_FILENO);
 	else if (error == 1)
-		ft_putstr_fd("error when forking\n",
-			STDERR_FILENO);
+		ft_putstr_fd("fork error\n", STDERR_FILENO);
 	else if (error == 2)
-		ft_putstr_fd("error finding command\n", STDERR_FILENO);
+		ft_putstr_fd("command error\n", STDERR_FILENO);
 	else if (error == 3)
-		ft_putstr_fd("Could not find corresponding path\n", STDERR_FILENO);
+		ft_putstr_fd("path error\n", STDERR_FILENO);
 	else if (error == 4)
 		ft_putstr_fd("Ambigius rediredirict\n", 2);
 	else if (error == 7)

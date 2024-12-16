@@ -15,7 +15,7 @@
 
 void	close_fds(t_cmd *cmds, bool close_backups)
 {
-	if (cmds->io_fds)
+	if (cmds && cmds->io_fds)
 	{
 		if (cmds->io_fds->in_fd != -1)
 			close(cmds->io_fds->in_fd);

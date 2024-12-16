@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/16 00:27:13 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/16 23:12:29 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ char	*random_file_name(void)
 	int		k;
 	const char charset[] = "abcdefghijklmnopqrstuvwxyz0123456789";
 
-	name = malloc(13);
+	name = malloc(21);
 	ft_strlcpy(name, "/tmp/", 6);
 	k = 0;
-	while (k < 8)
+	while (k < 15)
 	{
 		fd = open("/dev/urandom", O_RDONLY);
 		read(fd, &i, 1);
@@ -38,6 +38,7 @@ char	*random_file_name(void)
 		close(fd);
 		k++;
 	}
+	name[k + 5] = '\0';
 	return (name);
 }
 

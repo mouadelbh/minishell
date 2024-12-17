@@ -18,21 +18,11 @@ void	close_fds(t_cmd *cmds, bool close_backups)
 	if (cmds && cmds->io_fds)
 	{
 		if (cmds->io_fds->in_fd != -1)
-		{
-			ft_putstr_fd("closing in_fd: ", 2);
-			ft_putnbr_fd(cmds->io_fds->in_fd, 2);
-			ft_putchar_fd('\n', 2);
 			close(cmds->io_fds->in_fd);
-		}
 		if (cmds->io_fds->out_fd != -1)
-		{
-			ft_putstr_fd("closing in_fd: ", 2);
-			ft_putnbr_fd(cmds->io_fds->out_fd, 2);
-			ft_putchar_fd('\n', 2);
 			close(cmds->io_fds->out_fd);
-		}
-		// if (close_backups)
-		// 	restore_io(cmds->io_fds);
+		if (close_backups)
+			restore_io(cmds->io_fds);
 	}
 	close_pipe_fds(cmds, NULL);
 }
@@ -56,18 +46,12 @@ bool	redirect_io(t_io_fds *io)
 		ft_putstr_fd("stdout backup error\n", 2);
 		ret = 1;
 	}
-	// ft_putstr_fd("in_fd: ", 2);
-	// ft_putnbr_fd(io->in_fd, 2);
-	// ft_putchar_fd('\n', 2);
 	if (io->in_fd != -1)
 	{
 		if (dup2(io->in_fd, STDIN_FILENO) == -1)
 			ft_putstr_fd("dup2 error\n", 2);
 		close(io->in_fd);
 	}
-	// ft_putstr_fd("out_fd: ", 2);
-	// ft_putnbr_fd(io->out_fd, 2);
-	// ft_putchar_fd('\n', 2);
 	if (io->out_fd != -1)
 	{
 		if (dup2(io->out_fd, STDOUT_FILENO) == -1)

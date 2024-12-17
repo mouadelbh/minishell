@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/17 03:35:42 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/17 08:47:18 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	create_files(t_cmd *cmd, t_data *data)
 			cmd->file_error = init_append(cmd, data);
 		else if (cmd->type == HEREDOC)
 			cmd->file_error = init_heredoc(cmd, data);
+		else if (cmd->type == PIPE)
+			cmd->file_error = 1;
 		i = cmd->file_error;
 		cmd = cmd->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/17 02:45:43 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/17 05:54:54 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	set_values(t_data *data)
 			ft_putstr_fd("Error in the fds\n", 2);
 			return (EXIT_FAILURE);
 		}
-		ft_putstr_fd("No cd\n",2 );
+		ft_putstr_fd("No command\n",2 );
 		return (EXIT_SUCCESS);
 	}
 	if (!create_pipes(data))
@@ -58,6 +58,45 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 	return (0);
 }
 
+void	print_ios(t_cmd *cmd)
+{
+	int fd = open(ft_itoa(getpid()), O_RDWR | O_APPEND | O_CREAT, 0644);
+	ft_putstr_fd("cmd: ", fd);
+	ft_putstr_fd(cmd->cmd, fd);
+	ft_putchar_fd('\n', fd);
+	if (cmd->io_fds)
+	{
+		ft_putstr_fd("in_fd: ", fd);
+		ft_putnbr_fd(cmd->io_fds->in_fd, fd);
+		ft_putstr_fd(" infile: ", fd);
+		ft_putstr_fd(cmd->io_fds->infile, fd);
+		ft_putchar_fd('\n', fd);
+		ft_putstr_fd("out_fd: ", fd);
+		ft_putnbr_fd(cmd->io_fds->out_fd, fd);
+		ft_putstr_fd(" outfile: ", fd);
+		ft_putstr_fd(cmd->io_fds->outfile, fd);
+		ft_putchar_fd('\n', fd);
+	}
+	if (cmd->pipe_fd)
+	{
+		ft_putstr_fd("pipe_fd[0]: ", 2);
+		ft_putnbr_fd(cmd->pipe_fd[0], 2);
+		ft_putchar_fd('\n', 2);
+		ft_putstr_fd("pipe_fd[1]: ", 2);
+		ft_putnbr_fd(cmd->pipe_fd[1], 2);
+		ft_putchar_fd('\n', 2);
+	}
+		// while (cmd)
+	// {
+	// 	ft_putstr_fd("Current command: ", 2);
+	// 	ft_putstr_fd(cmd->cmd, 2);
+	// 	ft_putchar_fd('\n', 2);
+	// 	cmd = cmd->next;
+	// }
+	// cmd = temp;
+	close(fd);
+}
+
 int	execute_command(t_data *data, t_cmd *cmd)
 {
 	int	ret;
@@ -66,6 +105,7 @@ int	execute_command(t_data *data, t_cmd *cmd)
 		exit(0);
 	if (!set_pipe_fds(data->cmd, cmd) || !redirect_io(cmd->io_fds))
 		return (1);
+	// print_ios(cmd);
 	close_fds(data->cmd, false);
 	ret = exec_builtin(data, cmd->argv);
 	if (ret != 127)

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/17 01:58:38 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/17 03:35:42 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ int	close_file(t_data *data, t_cmd *cmd)
 		wpid = waitpid(-1, &status, 0);
 		if (wpid == data->pid)
 			exit_status = WEXITSTATUS(status);
-		// continue ;
 	}
 	// return (status);
 }
@@ -69,10 +68,7 @@ bool	remove_old_file_ref(t_io_fds *io, bool infile)
 	if (infile == true && io->infile)
 	{
 		if (io->in_fd == -1 || (io->outfile && io->out_fd == -1))
-		{
-			// ft_putstr_fd("error in remove_old_ref: 74", 2);
 			return (false);
-		}
 		if (io->heredoc_name != NULL)
 		{
 			free(io->heredoc_name);

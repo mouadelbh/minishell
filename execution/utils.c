@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/14 21:54:43 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/17 03:28:40 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,6 +321,7 @@ void set_cmd_strings(t_cmd *cmd)
 			free(temp);
 			i++;
 		}
+		current->file_error = 1;
 		current = current->next;
 	}
 }

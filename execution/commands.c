@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/17 02:45:11 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/17 06:18:05 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,39 @@ int	handle_execute(t_data *data)
 
 	cmd = data->cmd;
 	temp = cmd;
+	// while (cmd)
+	// {
+	// 	ft_putstr_fd("Current command: ", 2);
+	// 	ft_putstr_fd(cmd->cmd, 2);
+	// 	ft_putchar_fd('\n', 2);
+	// 	if (cmd->pipe_fd)
+	// 	{
+	// 		ft_putstr_fd("pipe_fd[0]: ", 2);
+	// 		ft_putnbr_fd(cmd->pipe_fd[0], 2);
+	// 		ft_putchar_fd('\n', 2);
+	// 		ft_putstr_fd("pipe_fd[1]: ", 2);
+	// 		ft_putnbr_fd(cmd->pipe_fd[1], 2);
+	// 		ft_putchar_fd('\n', 2);
+	// 	}
+	// 	cmd = cmd->next;
+	// }
+	// cmd = temp;
 	while (cmd)
 	{
-		// if (cmd->type == CMD)
+		printf("Current command: %s\n", cmd->cmd);
 		data->pid = fork();
 		if (data->pid != -1)
 			signal(SIGINT, handlehang);
 		if (data->pid == -1)
 			return (ft_putstr_fd("fork error\n", 2), 1);
 		if (data->pid == 0)
+		{
 			execute_command(data, cmd);
+		}
 		cmd = cmd->next;
 	}
-	close_file(data, temp);
+	cmd = temp;
+	close_file(data, cmd);
 	return (exit_status);
 }
 
@@ -114,8 +134,8 @@ int	complex_command(t_data *data)
 			return (1);
 		data->cmd = set_command_list(data->cmd);
 		ret = set_values(data);
-		if (ret == EXIT_FAILURE)
-			return (close_pipe_fds(data->cmd, NULL), ret);
+		// if (ret == EXIT_FAILURE)
+		// 	return (close_pipe_fds(data->cmd, NULL), ret);
 		return (handle_execute(data));
 	}
 	else

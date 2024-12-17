@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/15 22:35:46 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/17 01:58:38 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,17 @@ int	close_file(t_data *data, t_cmd *cmd)
 {
 	pid_t	wpid;
 	int		status;
-	int		save_status;
 
 	close_fds(cmd, false);
-	save_status = 0;
 	wpid = 0;
 	while (wpid != -1 || errno != ECHILD)
 	{
-		wpid = waitpid(data->pid, &status, 0);
+		wpid = waitpid(-1, &status, 0);
 		if (wpid == data->pid)
-			save_status = status;
-		continue ;
+			exit_status = WEXITSTATUS(status);
+		// continue ;
 	}
-	return (status);
+	// return (status);
 }
 
 bool	remove_old_file_ref(t_io_fds *io, bool infile)

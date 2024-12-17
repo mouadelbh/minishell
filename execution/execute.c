@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/14 20:42:05 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/17 01:57:35 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,11 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 		path = ft_strdup(cmd->argv[0]);
 	else if (cmd->argv[0][0] != '\0')
 		path = get_full_cmd(cmd->argv[0], envp);
+	if (cmd->next && cmd->next->file_error == 1)
+	{
+		free(path);
+		exit(126);
+	}
 	if (execve(path, cmd->argv, envp) == -1)
 	{
 		ft_putstr_fd("execve failed\n", 2);

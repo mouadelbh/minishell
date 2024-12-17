@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/16 23:47:15 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/17 01:58:09 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,9 @@ int	handle_execute(t_data *data)
 			execute_command(data, cmd);
 		cmd = cmd->next;
 	}
-	close_fds(temp, true);
-	while (temp)
-	{
-		if (data->pid == wait(&exit_status))
-			break ;
-		temp = temp->next;
-	}
-	exit_status = WEXITSTATUS(exit_status);
+	// close_fds(temp, true);
+	close_file(data, temp);
+	// exit_status = WEXITSTATUS(exit_status);
 	return (exit_status);
 }
 

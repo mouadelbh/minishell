@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/15 22:50:58 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 05:27:00 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int init_append(t_cmd *cmd, t_data *data)
 {
 	t_cmd	*current;
 
-	if (!remove_old_file_ref(cmd->io_fds, false))
+	if (!remove_old_file_ref(cmd->io_fds, false) || cmd->file_error == 0)
 		return (0);
 	cmd->io_fds->outfile = ft_strdup(cmd->argv[1]);
 	if (cmd->io_fds->outfile[0] == '\0'
@@ -75,7 +75,7 @@ int init_append(t_cmd *cmd, t_data *data)
 		return (0);
 	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
-		return (perror("open"), 0);
+		return (perror(cmd->argv[1]), 0);
 	current = cmd->prev;
 	while (current && current->type != CMD)
 	{
@@ -95,7 +95,7 @@ int init_write_to(t_cmd *cmd, t_data *data)
 {
 	t_cmd	*current;
 
-	if (!remove_old_file_ref(cmd->io_fds, false))
+	if (!remove_old_file_ref(cmd->io_fds, false) || cmd->file_error == 0)
 		return (0);
 	cmd->io_fds->outfile = ft_strdup(cmd->argv[1]);
 	if (cmd->io_fds->outfile[0] == '\0'
@@ -131,7 +131,7 @@ int	init_read_from(t_cmd *cmd, t_data *data)
 	t_cmd	*current;
 
 	cmd->io_fds->infile = ft_strdup(cmd->argv[1]);
-	if (cmd->prev && cmd->prev->file_error != 1)
+	if (cmd->prev && cmd->prev->file_error != 1 || cmd->file_error == 0)
 		return (0);
 	cmd->io_fds->in_fd = open(cmd->io_fds->infile, O_RDONLY);
 	if (access(cmd->io_fds->infile, F_OK) == 0

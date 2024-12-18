@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:34:19 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/14 20:12:57 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 05:23:49 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int	check_cmd(char *cmd, t_data *data)
 
 int	check_permission(char *path, t_data *data)
 {
+	if (path[0] != '.' || path[1] != '/')
+		return (0);
 	if (access(path, X_OK) != 0 && access(path, F_OK) == 0)
 	{
 		ft_putstr_fd("minishell: ", 2);

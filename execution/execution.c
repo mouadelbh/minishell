@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/17 06:04:56 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 05:24:07 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int	minishell(t_data *data)
 		if (!data->cmd)
 		{
 			free_line(data->head);
-			printf("CMD IS NULL\n");
 			continue;
 		}
 		update_env(data->cmd, data);

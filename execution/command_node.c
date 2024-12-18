@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:36:32 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/16 23:40:55 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 04:57:40 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ t_cmd	*init_new_cmd(t_cmd *src, t_cmd *next, t_cmd *prev)
 	new->pipe_fd = src->pipe_fd;
 	new->pipe_output = src->pipe_output;
 	new->io_fds = src->io_fds;
+	new->file_error = src->file_error;
 	new->next = next;
 	new->prev = prev;
 	return (new);

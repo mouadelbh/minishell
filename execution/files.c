@@ -6,11 +6,54 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/17 08:47:18 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 05:28:05 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	is_redirection(int type)
+{
+	if (type == REDIR_IN || type == REDIR_OUT || type == APPEND)
+		return (1);
+	return (0);
+}
+
+void	handle_read_from(t_cmd *cmd, t_data *data)
+{
+	if (!init_read_from(cmd, data))
+	{
+		while (cmd->prev && is_redirection(cmd->type))
+		{
+			cmd->file_error = 0;
+			cmd = cmd->prev;
+		}
+		cmd->file_error = 0;
+	}
+}
+
+void	handle_write_to(t_cmd *cmd, t_data *data)
+{
+	if (!init_write_to(cmd, data))
+	{
+		while (cmd->next && is_redirection(cmd->type))
+		{
+			cmd->file_error = 0;
+			cmd = cmd->next;
+		}	
+		cmd->file_error = 0;
+	}
+}
+
+void	handle_append(t_cmd *cmd, t_data *data)
+{
+	if (!init_append(cmd, data))
+	{
+		while (cmd->next && is_redirection(cmd->type))
+			cmd = cmd->next;
+		cmd->file_error = 0;
+	}
+}
 
 int	create_files(t_cmd *cmd, t_data *data)
 {
@@ -24,15 +67,15 @@ int	create_files(t_cmd *cmd, t_data *data)
 		if (cmd->type == CMD)
 			cmd->file_error = init_command(cmd, data);
 		else if (cmd->type == REDIR_OUT)
-			cmd->file_error = init_write_to(cmd, data);
+			handle_write_to(cmd, data);
+			// cmd->file_error = init_write_to(cmd, data);
 		else if (cmd->type == REDIR_IN)
-			cmd->file_error = init_read_from(cmd, data);
+			handle_read_from(cmd, data);
 		else if (cmd->type == APPEND)
-			cmd->file_error = init_append(cmd, data);
+			handle_append(cmd, data);
+			// cmd->file_error = init_append(cmd, data);
 		else if (cmd->type == HEREDOC)
 			cmd->file_error = init_heredoc(cmd, data);
-		else if (cmd->type == PIPE)
-			cmd->file_error = 1;
 		i = cmd->file_error;
 		cmd = cmd->next;
 	}
@@ -62,7 +105,6 @@ int	close_file(t_data *data, t_cmd *cmd)
 		if (wpid == data->pid)
 			exit_status = WEXITSTATUS(status);
 	}
-	// return (status);
 }
 
 bool	remove_old_file_ref(t_io_fds *io, bool infile)

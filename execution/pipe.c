@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:17:37 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/17 05:38:38 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 11:19:31 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ bool	create_pipes(t_data *data)
 	t_cmd		*tmp;
 
 	tmp = data->cmd;
+	printf("node->pipe_output = %p\n", &tmp->pipe_output);
 	while (tmp)
 	{
 		if (tmp->pipe_output)
@@ -37,19 +38,9 @@ void	close_pipe_fds(t_cmd *cmds, t_cmd *skip_cmd)
 	while (cmds && cmds->pipe_output)
 	{
 		if (cmds->pipe_fd && cmds->pipe_fd[0] != -1)
-		{
-			// ft_putstr_fd("closing pipe_fd[0]: ", 2);
-			// ft_putnbr_fd(cmds->pipe_fd[0], 2);
-			// ft_putchar_fd('\n', 2);
 			close(cmds->pipe_fd[0]);
-		}
 		if (cmds->pipe_fd && cmds->pipe_fd[1] != -1)
-		{
-			// ft_putstr_fd("closing pipe_fd[1]: ", 2);
-			// ft_putnbr_fd(cmds->pipe_fd[1], 2);
-			// ft_putchar_fd('\n', 2);
 			close(cmds->pipe_fd[1]);
-		}
 		cmds = cmds->next;
 	}
 }
@@ -59,13 +50,9 @@ bool	set_pipe_fds(t_cmd *cmds, t_cmd *c)
 	if (!c)
 		return (false);
 	if (c->prev && c->prev->pipe_output)
-	{
 		dup2(c->prev->pipe_fd[0], STDIN_FILENO);
-	}
 	if (c->pipe_output)
-	{
 		dup2(c->pipe_fd[1], STDOUT_FILENO);
-	}
 	close_pipe_fds(cmds, c);
 	return (true);
 }

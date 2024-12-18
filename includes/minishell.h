@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/17 06:04:43 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 11:15:33 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_data
 	int			cmd_count;
 }				t_data;
 
+void	free_io(t_cmd *cmd);
 void	show_command_ios(t_cmd *cmd);
 void	free_arr(char **arr);
 int		minishell(t_data *data);
@@ -102,7 +103,7 @@ void	create_env_value(t_data *data, char *key, int empty_value);
 void	set_list_var(t_data *data, char *name, char *new_value);
 void 	debug(void);
 void	printa(char *str, char **arr);
-void 	reset_shell(t_data *data);
+void 	reset_shell(t_data *data, int i);
 void	free_env(t_list **envp);
 void	free_env(t_list **envp);
 int		builtin(char *cmd);
@@ -121,11 +122,10 @@ void 	set_cmd_strings(t_cmd *cmd);
 int		create_files(t_cmd *cmd, t_data *data);
 int		init_command(t_cmd *cmd, t_data *data);
 t_cmd	*init_new_cmd(t_cmd *src, t_cmd *next, t_cmd *prev);
-t_cmd	*set_command_list(t_cmd *cmd);
+void	set_command_list(t_cmd **cmd, t_cmd **new);
 int		command_is_valid(t_data *data, t_cmd *cmd, int is_builtin);
 int		check_cmd(char *cmd, t_data *data);
 int		check_permission(char *path, t_data *data);
-t_cmd	*set_command_list(t_cmd *cmd);
 int		command_is_valid(t_data *data, t_cmd *cmd, int is_builtin);
 int		check_cmd(char *cmd, t_data *data);
 int		check_permission(char *path, t_data *data);

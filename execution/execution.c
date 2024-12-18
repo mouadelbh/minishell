@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/18 05:24:07 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 08:36:07 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,9 @@ int	minishell(t_data *data)
 			free_line(data->head);
 			continue;
 		}
-		update_env(data->cmd, data);
+		// update_env(data->cmd, data);
 		data->envp_arr = set_list_arra(data->envp);
+		// show_env(data->envp_arr, data->envp);
 		if (!data->envp_arr || !*data->envp_arr)
 		{
 			free_line(data->head);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/13 21:36:49 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/18 09:07:32 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,13 @@ int is_empty(char *str)
 	return (0);
 }
 
-void	reset_shell(t_data *data)
+void	reset_shell(t_data *data, int i)
 {
-	ft_putstr_fd("exit\n", 1);
+	if (i == 1)
+		ft_putstr_fd("exit\n", 1);
 	free_all(data, 1);
 	rl_clear_history();
+	printf("=%i\n", exit_status);
 	exit(exit_status);
 }
 

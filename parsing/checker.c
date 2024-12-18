@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:00 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/09 21:48:52 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/18 08:22:31 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	checkquotes(char *line, t_data *data)
 	if (count >= 17)
 	{
 		perror("minishell: maximum here-document count exceeded\n");
-		reset_shell(data);
+		reset_shell(data, 1);
 	}
 	if (quotes_open(line, i) == 1)
 		return (ft_putstr_fd("minishell: syntax error near \

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:34:19 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/18 05:23:49 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 08:48:16 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int should_pipe(t_cmd *cmd)
 	temp = cmd;
 	while (temp)
 	{
-		if (temp->type == CMD)
+		if (temp->type == PIPE)
 			pipe_count++;
 		temp = temp->next;
 	}

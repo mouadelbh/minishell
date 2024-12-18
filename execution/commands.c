@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/18 05:35:31 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 11:18:07 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,26 @@ int exec_cmd(char **command, char **envp, t_data *data)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(command[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
+		if (ft_strchr(command[0], '/'))
+			ft_putstr_fd(": No such file or directory\n", 2);
+		else
+			ft_putstr_fd(": command not found\n", 2);
 		exit_status = 127;
 		free(path);
-		exit(127);
+		free_all(data, 1);
+		exit(exit_status);
 	}
 	return (0);
 }
 
 int single_command(t_data *data, char *cmd)
 {
-	t_line *temp = data->head;
+	t_line *temp;
 	char	*path;
 
-	if (temp->next && temp->next->type == 7)
-		temp = temp->next;
+	temp = data->head;
+	// if (temp->next && temp->next->type == 7)
+	// 	temp = temp->next;
 	if (builtin(data->cmd->argv[0]))
 		exit_status = exec_builtin(data, data->cmd->argv);
 	else
@@ -84,6 +89,7 @@ int single_command(t_data *data, char *cmd)
 			exit_status = 126;
 			return (126);
 		}
+		free(path);
 		data->pid = fork();
 		if (data->pid != -1)
 			signal(SIGINT, handlehang);
@@ -100,18 +106,22 @@ int single_command(t_data *data, char *cmd)
 
 int	complex_command(t_data *data)
 {
-	t_line	*temp = data->head;
 	int		ret;
+	t_cmd	*new;
 
+	new = NULL;
 	if (data->cmd)
 	{
 		if (!create_files(data->cmd, data))
 			return (1);
-		data->cmd = set_command_list(data->cmd);
+		// data->cmd = set_command_list(data->cmd);
+		set_command_list(&data->cmd, &new);
+		data->cmd = new;
+		// printf("cmd = %p\n", data->cmd);
+		debug();
 		ret = set_values(data);
-		// show_file_error(data->cmd);
-		// if (ret == EXIT_FAILURE)
-		// 	return (close_pipe_fds(data->cmd, NULL), ret);
+		if (ret == EXIT_FAILURE)
+			return (close_pipe_fds(data->cmd, NULL), ret);
 		return (handle_execute(data));
 	}
 	else

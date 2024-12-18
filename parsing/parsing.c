@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/15 06:17:12 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/18 08:22:43 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 	int		i;
 
 	if (ex_data->arg == NULL)
-		reset_shell(ex_data);
+		reset_shell(ex_data, 1);
 	if (!checkspaces(str))
 		return (-1);
 	add_history(ex_data->arg);

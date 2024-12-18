@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/17 03:28:40 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 08:29:57 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ char	*get_full_cmd(char *av, char **env)
 	{
 		tmp = ft_strjoin(path[i], "/");
 		if (!tmp)
-			return (free_arr(path), NULL);
+			return (free_arr(path),NULL);
 		full_cmd = ft_strjoin(tmp, av);
 		free(tmp);
 		if (!full_cmd)
@@ -344,9 +344,7 @@ char	**set_list_arra(t_list *env)
 		if (!result[i])
 		{
 			while (i > 0)
-			{
 				free(result[--i]);
-			}
 			free(result);
 			return NULL;
 		}

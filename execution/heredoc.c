@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/16 23:12:29 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 09:11:02 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ char	*random_file_name(void)
 	name = malloc(21);
 	ft_strlcpy(name, "/tmp/", 6);
 	k = 0;
+	i = 0;
 	while (k < 15)
 	{
 		fd = open("/dev/urandom", O_RDONLY);
@@ -95,17 +96,17 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 			if (!line)
 			{
 				if (exit_status == -1)
+				{
 					perror("minishell: warning: here-document delimited by end-of-file\n");
+					exit_status = 0;
+				}
 				unlink(temp_file);
 				close(temp_fd);
-				free_all(data, 1);
-				exit(0);
+				printf("= %i\n", exit_status);
+				reset_shell(data, 0);
 			}
-			if (ft_strchr(line, '$'))
-			{
-				line[0] = -1;
-				line = find_and_replace(line, data->envp, 0);
-			}
+			if (ft_strchr(line, '$') && !ft_strchr(line, '\'') && !ft_strchr(line, '\"'))
+				line = expand_string(line, data->envp);
 			if (ft_strncmp(line, cmd->argv[1], 0) == 0)
 			{
 				free(line);
@@ -116,16 +117,15 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 			free(line);
 		}
 		close(temp_fd);
-		exit(0);
+		exit_status = 0;
+		reset_shell(data, 0);
 	}
-	exit_status = tmp;
-	waitpid(0, &exit_status, 0);
+	// close_file(data, cmd);
+	wait(&exit_status);
+	exit_status = WEXITSTATUS(exit_status);
 	temp_fd = open(temp_file, O_RDONLY, 0644);
 	if (temp_fd == -1)
-	{
-		perror("open");
 		return (0);
-	}
 	cmd->io_fds->in_fd = temp_fd;
 	current = cmd->prev;
 	while (current && current->type != CMD)

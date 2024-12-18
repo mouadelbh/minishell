@@ -6,33 +6,38 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/17 03:53:06 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 11:15:21 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	free_io(t_cmd *cmd)
+void	free_io(t_cmd *cmd)
 {
-	while (cmd)
+	if (cmd->io_fds)
 	{
-		if (cmd->io_fds)
+		if (cmd->io_fds->infile)
 		{
-			if (cmd->io_fds && cmd->io_fds->infile)
-				free(cmd->io_fds->infile);
-			if (cmd->io_fds->outfile)
-				free(cmd->io_fds->outfile);
-			if (cmd->io_fds->heredoc_name)
-				free(cmd->io_fds->heredoc_name);
-			if (cmd->pipe_output)
-			{
-				free(cmd->pipe_fd);
-				cmd->pipe_fd = NULL;
-			}
-			free(cmd->io_fds);
-			cmd->io_fds = NULL;
+			free(cmd->io_fds->infile);
+			cmd->io_fds->infile = NULL;	
 		}
-		cmd = cmd->next;
+		if (cmd->io_fds->outfile)
+		{
+			free(cmd->io_fds->outfile);
+			cmd->io_fds->outfile = NULL;
+		}
+		if (cmd->io_fds->heredoc_name)
+		{
+			free(cmd->io_fds->heredoc_name);
+			cmd->io_fds->heredoc_name = NULL;
+		}
+		if (cmd->pipe_output)
+		{
+			free(cmd->pipe_fd);
+			cmd->pipe_fd = NULL;
+		}
+		free(cmd->io_fds);
+		cmd->io_fds = NULL;
 	}
 }
 
@@ -45,7 +50,9 @@ static void	free_cmd_struct(t_cmd *cmd)
 		tmp = cmd->next;
 		if (cmd->argv)
 			free_arr(cmd->argv);
+		free_io(cmd);
 		free(cmd);
+		// free_cmd_node(cmd);
 		cmd = tmp;
 	}
 }
@@ -75,14 +82,6 @@ void	free_all(t_data *data, int i)
 		free_arr(data->envp_arr);
 		data->envp_arr = NULL;
 	}
-	// if (cmd->io_fds)
-	// 	free_io(cmd);
 	free_line(data->head);
 	free_cmd_struct(cmd);
-}
-
-
-void	free_data(t_data *data, int exit_code)
-{
-	free_all(data, 1);
 }

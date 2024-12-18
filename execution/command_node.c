@@ -6,95 +6,102 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:36:32 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/18 04:57:40 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 11:19:40 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	set_cmd_node(t_cmd *cmd, t_cmd *current, t_cmd *temp, t_cmd *new_list)
+static void	lstadd_cmd(t_cmd **head, t_cmd *new)
 {
-	if (cmd->type == CMD)
+	t_cmd	*tmp;
+
+	if (!*head)
 	{
-		temp = init_new_cmd(cmd, cmd->next, cmd->prev);
-		if (!temp)
-		{
-			while (new_list)
-			{
-				temp = new_list->next;
-				free(new_list);
-				new_list = temp;
-			}
-			return (1);
-		}
-		current->next = temp;
-		temp->prev = current;
-		current = temp;
+		*head = new;
+		return ;
 	}
-	return (0);
+	tmp = *head;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+	new->prev = tmp;
 }
 
-t_cmd *set_command_list(t_cmd *cmd)
-{
-	t_cmd *new_list;
-	t_cmd *current;
-	t_cmd *temp;
-
-	if (!cmd)
-		return (NULL);
-	while (cmd && (cmd->type != CMD))
-	{
-		t_cmd *next_cmd = cmd->next;
-		free_cmd_node(cmd);
-		cmd = next_cmd;
-		if (!cmd)
-			return (NULL);
-	}
-	if (!cmd)
-		return (NULL);
-	new_list = init_new_cmd(cmd, cmd->next, cmd->prev);
-	if (!new_list)
-		return (NULL);
-	current = new_list;
-	cmd = cmd->next;
-	while (cmd)
-	{
-		if (cmd->type == CMD)
-		{
-			temp = init_new_cmd(cmd, cmd->next, current);
-			if (!temp)
-			{
-				while (new_list)
-				{
-					temp = new_list->next;
-					free(new_list);
-					new_list = temp;
-				}
-				return (NULL);
-			}
-			current->next = temp;
-			current = temp;
-		}
-		cmd = cmd->next;
-	}
-	return (new_list);
-}
-
-t_cmd	*init_new_cmd(t_cmd *src, t_cmd *next, t_cmd *prev)
+static t_cmd	*copy_node(t_cmd *node)
 {
 	t_cmd	*new;
+	int		i;
 
-	new = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!new)
-		return (NULL);
-	new->argv = src->argv;
-	new->cmd = src->cmd;
-	new->type = src->type;
-	new->pipe_fd = src->pipe_fd;
-	new->pipe_output = src->pipe_output;
-	new->io_fds = src->io_fds;
-	new->file_error = src->file_error;
-	new->next = next;
-	new->prev = prev;
+	i = 0;
+	new = malloc(sizeof(t_cmd));
+	while (node->argv[i])
+		i++;
+	new->argv = malloc(sizeof(char *) * (i + 1));
+	i = 0;
+	while (node->argv[i])
+	{
+		new->argv[i] = ft_strdup(node->argv[i]);
+		i++;
+	}
+	new->argv[i] = NULL;
+	new->cmd = ft_strdup(node->cmd);
+	new->io_fds = malloc(sizeof(t_io_fds));
+	new->io_fds->in_fd = node->io_fds->in_fd;
+	new->io_fds->out_fd = node->io_fds->out_fd;
+	new->io_fds->infile = ft_strdup(node->io_fds->infile);
+	new->io_fds->outfile = ft_strdup(node->io_fds->outfile);
+	new->io_fds->heredoc_name = ft_strdup(node->io_fds->heredoc_name);
+	new->io_fds->stdin_backup = node->io_fds->stdin_backup;
+	new->io_fds->stdout_backup = node->io_fds->stdout_backup;
+	new->pipe_fd = NULL;
+	new->pipe_output = node->pipe_output;
+	printf("node->pipe_output = %p\n", &node->pipe_output);
+	printf("node->pipe_output = %d\n", node->pipe_output);
+	new->file_error = node->file_error;
+	new->type = node->type;
+	new->next = NULL;
+	new->prev = NULL;
 	return (new);
+}
+
+void	set_command_list(t_cmd **cmd, t_cmd **new)
+{
+	// t_cmd	*new_list;
+	// t_cmd	*current;
+	t_cmd	*temp;
+	t_cmd	*next_cmd;
+	// t_cmd	*prev_cmd;
+
+	
+	temp = *cmd;
+	while (temp)
+	{
+		// printf("this is a node\n");
+		// printf("-------------\n");
+		// for (int i = 0; temp->argv[i]; i++)
+		// 	printf("temp = %s\n", temp->argv[i]);
+		temp = temp->next;
+	}
+	temp = *cmd;
+	while (temp)
+	{
+		if (temp->type == CMD)
+			lstadd_cmd(new, copy_node(temp));
+		temp = temp->next;
+	}
+	temp = *new;
+	printf("new == %p\n", *new);
+	while (temp)
+	{
+		// printf("this is a node\n");
+		// printf("-------------\n");
+		// for (int i = 0; temp->argv[i]; i++)
+		// 	printf("temp = %s\n", temp->argv[i]);
+		next_cmd = temp->next;
+		free_cmd_node(temp);
+		temp = next_cmd;
+	}
+	// printf("new not segv\n");
+	temp = *cmd;
 }

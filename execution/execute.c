@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/18 05:15:26 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/18 11:11:33 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,18 @@ int	set_values(t_data *data)
 {
 	if (!data || !data->cmd)
 		return (EXIT_SUCCESS);
-	if (!data->cmd->cmd)
-	{
-		if (data->cmd->io_fds
-			&& !check_infile_outfile(data->cmd->io_fds))
-		{
-			ft_putstr_fd("Error in the fds\n", 2);
-			return (EXIT_FAILURE);
-		}
-		ft_putstr_fd("No command\n",2 );
-		return (EXIT_SUCCESS);
-	}
+		printf("cmd = %p\n", data->cmd);
+	// if (!data->cmd->cmd)
+	// {
+	// 	if (data->cmd->io_fds
+	// 		&& !check_infile_outfile(data->cmd->io_fds))
+	// 	{
+	// 		ft_putstr_fd("Error in the fds\n", 2);
+	// 		return (EXIT_FAILURE);
+	// 	}
+	// 	ft_putstr_fd("No command\n",2 );
+	// 	return (EXIT_SUCCESS);
+	// }
 	if (!create_pipes(data))
 	{
 		ft_putstr_fd("Failed to create pipes\n", 2);
@@ -64,7 +65,7 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 	if (cmd->file_error == 0)
 	{
 		free(path);
-		exit(1);
+		exit(exit_status);
 	}
 	if (execve(path, cmd->argv, envp) == -1)
 	{

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 16:43:22 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 00:57:30 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 09:45:16 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,5 @@ int	ft_cd(t_data *data, char **arg)
 		return (perror("getcwd"), 1);
 	modify_env_value("PWD", new_pwd, data);
 	modify_env_value("OLDPWD", old_pwd, data);
-	free(new_pwd);
-	free(old_pwd);
-	return (0);
+	return (free(old_pwd), free(new_pwd), 0);
 }

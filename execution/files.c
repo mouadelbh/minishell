@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/18 05:28:05 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 09:28:21 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ int	close_file(t_data *data, t_cmd *cmd)
 		if (wpid == data->pid)
 			exit_status = WEXITSTATUS(status);
 	}
+	return (0);
 }
 
 bool	remove_old_file_ref(t_io_fds *io, bool infile)

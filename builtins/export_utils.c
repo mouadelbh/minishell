@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:34:12 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/10 12:37:18 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 09:49:05 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*find_occurance(char *str, char *oc)
 
 	if (!str || !oc)
 		return (NULL);
-	result = malloc(strlen(str) + 1);
+	result = malloc(ft_strlen(str) + 1);
 	if (!result)
 		return (perror("Failed to allocate memory"), NULL);
 	i = 0;

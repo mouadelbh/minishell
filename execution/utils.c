@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/17 03:28:40 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 09:51:00 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,16 +230,16 @@ char *ft_strcat(char *s1, char *s2)
 	if (!s1 && !s2)
 		return (NULL);
 	if (!s1)
-		return (strdup(s2));
+		return (ft_strdup(s2));
 	if (!s2)
-		return (strdup(s1));
-	len1 = strlen(s1);
-	len2 = strlen(s2);
+		return (ft_strdup(s1));
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
 	dest = malloc(len1 + len2 + 1);
 	if (!dest)
 		return (NULL);
-	memcpy(dest, s1, len1);
-	memcpy(dest + len1, s2, len2);
+	ft_memcpy(dest, s1, len1);
+	ft_memcpy(dest + len1, s2, len2);
 	dest[len1 + len2] = '\0';
 	return (dest);
 }
@@ -292,11 +292,12 @@ char	*new_strjoin(char *s1, char *s2)
 
 void set_cmd_strings(t_cmd *cmd)
 {
-	t_cmd	*current = cmd;
+	t_cmd	*current;
 	int		i;
 	char	*temp;
 	char	*new_cmd;
 
+	current = cmd;
 	new_cmd = NULL;
 	while (current != NULL)
 	{
@@ -329,9 +330,10 @@ void set_cmd_strings(t_cmd *cmd)
 char	**set_list_arra(t_list *env)
 {
 	char	**result;
-	t_list	*temp = env;
+	t_list	*temp;
 	int		i;
 
+	temp = env;
 	i = ft_lstsize(env);
 	result = malloc(sizeof(char *) * (i + 1));
 	if (!result)
@@ -344,11 +346,9 @@ char	**set_list_arra(t_list *env)
 		if (!result[i])
 		{
 			while (i > 0)
-			{
 				free(result[--i]);
-			}
 			free(result);
-			return NULL;
+			return (NULL);
 		}
 		temp = temp->next;
 		i++;

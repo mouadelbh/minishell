@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:36:32 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/18 04:57:40 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:01:12 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ int	set_cmd_node(t_cmd *cmd, t_cmd *current, t_cmd *temp, t_cmd *new_list)
 
 t_cmd *set_command_list(t_cmd *cmd)
 {
-	t_cmd *new_list;
-	t_cmd *current;
-	t_cmd *temp;
+	t_cmd	*new_list;
+	t_cmd	*current;
+	t_cmd	*temp;
+	t_cmd	*next_cmd;
 
 	if (!cmd)
 		return (NULL);

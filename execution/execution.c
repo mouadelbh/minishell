@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/19 09:27:26 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:45:24 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int	minishell(t_data *data)
 			continue;
 		}
 		get_final_list(&data->head, &data->cmd);
+		data->cmd->cmd = NULL;
+		data->cmd->io_fds = NULL;
 		if (!data->cmd)
 		{
 			free_line(data->head);

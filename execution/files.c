@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/19 09:28:21 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:09:11 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,10 @@ int	create_files(t_cmd *cmd, t_data *data)
 			cmd->file_error = init_command(cmd, data);
 		else if (cmd->type == REDIR_OUT)
 			handle_write_to(cmd, data);
-			// cmd->file_error = init_write_to(cmd, data);
 		else if (cmd->type == REDIR_IN)
 			handle_read_from(cmd, data);
 		else if (cmd->type == APPEND)
 			handle_append(cmd, data);
-			// cmd->file_error = init_append(cmd, data);
 		else if (cmd->type == HEREDOC)
 			cmd->file_error = init_heredoc(cmd, data);
 		i = cmd->file_error;
@@ -120,7 +118,11 @@ bool	remove_old_file_ref(t_io_fds *io, bool infile)
 			io->heredoc_name = NULL;
 			unlink(io->infile);
 		}
-		free(io->infile);
+		if (io->infile)
+		{
+			printf("Freeing infile %s\n", io->infile);	
+			free(io->infile);
+		}
 		if (io->in_fd != -1)
 			close(io->in_fd);
 	}
@@ -128,7 +130,12 @@ bool	remove_old_file_ref(t_io_fds *io, bool infile)
 	{
 		if (io->out_fd == -1 || (io->infile && io->in_fd == -1))
 			return (false);
-		free(io->outfile);
+		if (io->outfile)
+		{
+			printf("Freeing outfile %s\n", io->outfile);
+			free(io->outfile);
+			io->outfile = NULL;
+		}
 		if (io->out_fd != -1)
 			close(io->out_fd);
 	}

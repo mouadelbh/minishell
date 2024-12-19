@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/18 05:27:00 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:24:50 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ int init_write_to(t_cmd *cmd, t_data *data)
 
 	if (!remove_old_file_ref(cmd->io_fds, false) || cmd->file_error == 0)
 		return (0);
+	if (cmd->io_fds->outfile)
+		free(cmd->io_fds->outfile);
 	cmd->io_fds->outfile = ft_strdup(cmd->argv[1]);
 	if (cmd->io_fds->outfile[0] == '\0'
 		|| (cmd->io_fds->outfile[0] == 36
@@ -114,13 +116,23 @@ int init_write_to(t_cmd *cmd, t_data *data)
 		return (0);
 	while (current && current->type != CMD)
 	{
-		current->io_fds->outfile = cmd->io_fds->outfile;
+		// if (current->io_fds->outfile)
+		// {
+		// 	current->io_fds->outfile = NULL;
+		// }
+		free(current->io_fds->outfile);
+		current->io_fds->outfile = ft_strdup(cmd->io_fds->outfile);
 		current->io_fds->out_fd = cmd->io_fds->out_fd;
 		current = current->prev;
 	}
 	if (current && current->type != REDIR_OUT)
 	{
-		current->io_fds->outfile = cmd->io_fds->outfile;
+		// if (current->io_fds && current->io_fds->outfile)
+		// {
+		// 	current->io_fds->outfile = NULL;
+		// }
+		free(current->io_fds->outfile);
+		current->io_fds->outfile = ft_strdup(cmd->io_fds->outfile);
 		current->io_fds->out_fd = cmd->io_fds->out_fd;
 	}
 	return (1);

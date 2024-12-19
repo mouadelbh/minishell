@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/19 09:58:08 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:04:41 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,38 +293,39 @@ char	*new_strjoin(char *s1, char *s2)
 
 void set_cmd_strings(t_cmd *cmd)
 {
-	t_cmd	*current;
 	int		i;
 	char	*temp;
 	char	*new_cmd;
 
-	current = cmd;
 	new_cmd = NULL;
-	while (current != NULL)
+	while (cmd != NULL)
 	{
 		i = 0;
-		current->cmd = NULL;
-		while (current->argv[i] != NULL)
+		cmd->cmd = NULL;
+		while (cmd->argv[i] != NULL)
 		{
-			temp = ft_strjoin(current->cmd, current->argv[i]);
+			temp = ft_strjoin(cmd->cmd, cmd->argv[i]);
 			if (temp == NULL)
 			{
 				perror("Failed to allocate memory");
 				exit(EXIT_FAILURE);
 			}
-			if (current->argv[i + 1] != NULL)
-				current->cmd = ft_strjoin(temp, " ");
+			if (cmd->argv[i + 1] != NULL)
+				cmd->cmd = ft_strjoin(temp, " ");
 			else
 			{
-				if (current->cmd)
-					free(current->cmd);
-				current->cmd = ft_strdup(temp);
+				if (cmd->cmd)
+				{
+					free(cmd->cmd);
+					cmd->cmd = NULL;
+				}
+				cmd->cmd = ft_strdup(temp);
 			}
 			free(temp);
 			i++;
 		}
-		current->file_error = 1;
-		current = current->next;
+		cmd->file_error = 1;
+		cmd = cmd->next;
 	}
 }
 

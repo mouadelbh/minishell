@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/17 06:04:43 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:11:44 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef struct s_data
 }				t_data;
 
 void	show_command_ios(t_cmd *cmd);
+void	free_io(t_cmd *cmd);
 void	free_arr(char **arr);
 int		minishell(t_data *data);
 int		ft_pwd(t_data *data, char **cmd);

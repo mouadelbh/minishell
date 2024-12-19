@@ -6,31 +6,29 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:37:02 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/14 21:56:43 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:11:22 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_cmd_node(t_cmd *cmd)
+void free_cmd_node(t_cmd *cmd)
 {
-	if (cmd->argv)
-		free_arr(cmd->argv);
-	if (cmd->cmd)
+	if (cmd)
 	{
-		free(cmd->cmd);
-		cmd->cmd = NULL;
+		if (cmd->argv)
+		{
+			for (int i = 0; cmd->argv[i]; i++)
+				free(cmd->argv[i]);
+			free(cmd->argv);
+		}
+		if (cmd->cmd)
+			free(cmd->cmd);
+		if (cmd->pipe_fd)
+			free(cmd->pipe_fd);
+		if (cmd->io_fds)
+			free(cmd->io_fds);
+		free_io(cmd);
+		free(cmd);
 	}
-	if (cmd->io_fds)
-	{
-		if (cmd->io_fds->infile)
-			free(cmd->io_fds->infile);
-		if (cmd->io_fds->outfile)
-			free(cmd->io_fds->outfile);
-		if (cmd->io_fds->heredoc_name)
-			free(cmd->io_fds->heredoc_name);
-		free(cmd->io_fds);
-	}
-	free(cmd);
-	cmd = NULL;
 }

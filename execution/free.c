@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/19 12:24:41 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:28:12 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static void	free_cmd_struct(t_cmd *cmd)
 
 	while (cmd)
 	{
+		printf("Freeing cmd: %s\n", cmd->cmd);
 		tmp = cmd->next;
 		if (cmd->argv)
 			free_arr(cmd->argv);
@@ -80,7 +81,10 @@ void	free_all(t_data *data, int i)
 		data->envp_arr = NULL;
 	}
 	if (cmd->io_fds)
+	{
+		printf("Freeing io_fds\n");
 		free_io(cmd);
+	}
 	free_line(data->head);
 	free_cmd_struct(cmd);
 }

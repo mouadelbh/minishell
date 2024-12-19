@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/19 09:51:00 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 09:58:08 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ void set_list_var(t_data *data, char *name, char *new_value)
 			current->content = NULL;
 			temp = ft_strjoin(name, "=");
 			current->content = ft_strjoin(temp, new_value);
+			current->empty_value = 0;
 			if (!current->content)
 			{
 				free(temp);

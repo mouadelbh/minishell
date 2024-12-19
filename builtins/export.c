@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:47:56 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/19 09:44:11 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/19 10:05:27 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ int	add_entry(char *cmd, char *value, t_data *data)
 static int	handle_append(char *key, char *env_value, char **cmd, t_data *data)
 {
 	if (!append_env_value(key, env_value, cmd[1], data->envp))
+	{
+		printf("Reached here\n");	
 		modify_env_value(key, env_value, data);
+	}
 	return (0);
 }
 
@@ -64,7 +67,7 @@ int	ft_export(t_data *data, char **cmd)
 		return (export_error(cmd[1]));
 	value = find_value(cmd[1], data->envp);
 	if (!add_entry(cmd[1], value, data))
-		return (0);
+		return (free(value), 0);
 	free(value);
 	key = get_key(cmd[1], data->envp, &env_value, &append);
 	if (append)

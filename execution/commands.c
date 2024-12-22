@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/19 12:25:46 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/20 21:22:14 by prizmo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,12 @@ int exec_cmd(char **command, char **envp, t_data *data)
 	return (0);
 }
 
-int single_command(t_data *data, char *cmd)
+int single_command(t_data *data)
 {
-	t_line *temp = data->head;
+	t_line *temp;
 	char	*path;
 
+	temp = data->head;
 	if (temp->next && temp->next->type == 7)
 		temp = temp->next;
 	if (builtin(data->cmd->argv[0]))
@@ -111,7 +112,6 @@ int	complex_command(t_data *data)
 		// return (0);
 		data->cmd = set_command_list(data->cmd);
 		ret = set_values(data);
-		// show_file_error(data->cmd);
 		if (ret == EXIT_FAILURE)
 			return (close_pipe_fds(data->cmd, NULL), ret);
 		return (handle_execute(data));

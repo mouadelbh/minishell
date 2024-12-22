@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_node.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:36:32 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/19 11:01:12 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/21 16:15:53 by prizmo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ t_cmd *set_command_list(t_cmd *cmd)
 	while (cmd && (cmd->type != CMD))
 	{
 		t_cmd *next_cmd = cmd->next;
+		if (cmd->io_fds)
+			free_io(cmd);
 		free_cmd_node(cmd);
 		cmd = next_cmd;
 		if (!cmd)

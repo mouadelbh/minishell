@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/19 11:11:44 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/20 21:21:35 by prizmo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ int		check_permission(char *path, t_data *data);
 int		handle_input(t_data *data);
 int		handle_execute(t_data *data);
 int		exec_cmd(char **command, char **envp, t_data *data);
-int		single_command(t_data *data, char *cmd);
+int		single_command(t_data *data);
 int		complex_command(t_data *data);
 int		should_pipe(t_cmd *cmd);
 int		should_pipe(t_cmd *cmd);

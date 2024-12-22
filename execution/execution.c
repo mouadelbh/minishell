@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/19 11:45:24 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/21 23:58:43 by prizmo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,11 @@
 
 int	handle_input(t_data *data)
 {
-	t_line	*temp = data->head;
-	char	*cmd;
-	int		i;
-
 	data->sym_count = count_symbols(data);
 	if (data->sym_count == 0 && data->head->type == CMD)
 	{
-		cmd = NULL;
-		// init_io(&data->cmd->io_fds);
 		data->cmd->io_fds = NULL;
-		return (single_command(data, cmd));
+		return (single_command(data));
 	}
 	else
 	{
@@ -32,6 +26,15 @@ int	handle_input(t_data *data)
 		return (complex_command(data));
 	}
 	return (0);
+}
+
+static void	print_remaining_nodes(t_data *data)
+{
+	t_cmd *cmd;
+
+	cmd = data->cmd;
+	if (cmd)
+		show_command_info(cmd);
 }
 
 int	minishell(t_data *data)
@@ -57,6 +60,7 @@ int	minishell(t_data *data)
 		get_final_list(&data->head, &data->cmd);
 		data->cmd->cmd = NULL;
 		data->cmd->io_fds = NULL;
+		data->cmd->pipe_fd = NULL;
 		if (!data->cmd)
 		{
 			free_line(data->head);
@@ -73,6 +77,7 @@ int	minishell(t_data *data)
 		exit_status = exit_status;
 		reset_signal();
 		free_all(data, 0);
+		print_remaining_nodes(data);
 	}
 	return (exit_status);
 }

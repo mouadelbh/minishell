@@ -116,10 +116,6 @@ int init_write_to(t_cmd *cmd, t_data *data)
 		return (0);
 	while (current && current->type != CMD)
 	{
-		// if (current->io_fds->outfile)
-		// {
-		// 	current->io_fds->outfile = NULL;
-		// }
 		free(current->io_fds->outfile);
 		current->io_fds->outfile = ft_strdup(cmd->io_fds->outfile);
 		current->io_fds->out_fd = cmd->io_fds->out_fd;
@@ -127,10 +123,6 @@ int init_write_to(t_cmd *cmd, t_data *data)
 	}
 	if (current && current->type != REDIR_OUT)
 	{
-		// if (current->io_fds && current->io_fds->outfile)
-		// {
-		// 	current->io_fds->outfile = NULL;
-		// }
 		free(current->io_fds->outfile);
 		current->io_fds->outfile = ft_strdup(cmd->io_fds->outfile);
 		current->io_fds->out_fd = cmd->io_fds->out_fd;

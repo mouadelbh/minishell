@@ -50,7 +50,10 @@ void	handle_append(t_cmd *cmd, t_data *data)
 	if (!init_append(cmd, data))
 	{
 		while (cmd->next && is_redirection(cmd->type))
+		{
+			cmd->file_error = 0;
 			cmd = cmd->next;
+		}
 		cmd->file_error = 0;
 	}
 }
@@ -58,7 +61,6 @@ void	handle_append(t_cmd *cmd, t_data *data)
 int	create_files(t_cmd *cmd, t_data *data)
 {
 	int	i;
-	int	id;
 
 	i = 1;
 	while (cmd)
@@ -108,6 +110,8 @@ int	close_file(t_data *data, t_cmd *cmd)
 
 bool	remove_old_file_ref(t_io_fds *io, bool infile)
 {
+	if (!io)
+		return (false);
 	if (infile == true && io->infile)
 	{
 		if (io->in_fd == -1 || (io->outfile && io->out_fd == -1))
@@ -120,13 +124,13 @@ bool	remove_old_file_ref(t_io_fds *io, bool infile)
 		}
 		if (io->infile)
 		{
-			printf("Freeing infile %s\n", io->infile);	
 			free(io->infile);
+			io->infile = NULL;
 		}
 		if (io->in_fd != -1)
 			close(io->in_fd);
 	}
-	else if (infile == false && (io && io->outfile))
+	else if (infile == false && io->outfile)
 	{
 		if (io->out_fd == -1 || (io->infile && io->in_fd == -1))
 			return (false);

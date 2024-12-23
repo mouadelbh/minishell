@@ -16,10 +16,7 @@ int	handle_input(t_data *data)
 {
 	data->sym_count = count_symbols(data);
 	if (data->sym_count == 0 && data->head->type == CMD)
-	{
-		data->cmd->io_fds = NULL;
 		return (single_command(data));
-	}
 	else
 	{
 		set_cmd_strings(data->cmd);
@@ -58,12 +55,12 @@ int	minishell(t_data *data)
 			continue;
 		}
 		get_final_list(&data->head, &data->cmd);
-		data->cmd->io_fds = NULL;
 		if (!data->cmd)
 		{
 			free_line(data->head);
 			continue;
 		}
+		data->cmd->io_fds = NULL;
 		update_env(data->cmd, data);
 		data->envp_arr = set_list_arra(data->envp);
 		if (!data->envp_arr || !*data->envp_arr)
@@ -72,10 +69,8 @@ int	minishell(t_data *data)
 			continue;
 		}
 		exit_status = handle_input(data);
-		exit_status = exit_status;
 		reset_signal();
 		free_all(data, 0);
-		// print_remaining_nodes(data);
 	}
 	return (exit_status);
 }

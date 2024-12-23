@@ -19,6 +19,7 @@ void	free_io(t_cmd *cmd)
 		if (cmd->io_fds->infile)
 		{
 			free(cmd->io_fds->infile);
+			cmd->io_fds->infile = NULL;
 			close(cmd->io_fds->in_fd);
 		}
 		if (cmd->io_fds->outfile)
@@ -37,17 +38,18 @@ void	free_io(t_cmd *cmd)
 
 void	free_cmd_node(t_cmd *cmd)
 {
-	// if (cmd->argv)
-	// 	free_arr(cmd->argv);
-	// if (cmd->cmd)
-	// {
-	// 	free(cmd->cmd);
-	// 	cmd->cmd = NULL;
-	// }
+	if (cmd->argv)
+		free_arr(cmd->argv);
+	if (cmd->cmd)
+	{
+		free(cmd->cmd);
+		cmd->cmd = NULL;
+	}
 	free(cmd);
+	cmd = NULL;
 }
 
-static void	free_cmd_struct(t_cmd *cmd)
+void	free_cmd_struct(t_cmd *cmd)
 {
 	t_cmd	*tmp;
 

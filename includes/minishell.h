@@ -87,6 +87,7 @@ typedef struct s_data
 void	show_command_ios(t_cmd *cmd);
 void	free_io(t_cmd *cmd);
 void	free_arr(char **arr);
+void	free_cmd_struct(t_cmd *cmd);
 int		minishell(t_data *data);
 int		ft_pwd(t_data *data, char **cmd);
 int		ft_env(t_data *data, char **cmd, int export);

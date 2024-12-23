@@ -49,8 +49,8 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 	}
 	if (execve(path, cmd->argv, envp) == -1)
 	{
-		dprintf(2, "The path is: %s\n", path);
-		dprintf(2, "Command: %s\n", cmd->cmd);
+		// for (int i = 0; cmd->argv[i]; i++)
+		// 	dprintf(2, "The cmd->argv[%d]: %s\n", i, cmd->argv[i]);
 		perror("execve");
 		return (free(path), 127);
 	}
@@ -64,14 +64,8 @@ int	execute_command(t_data *data, t_cmd *cmd)
 	set_pipe_fds(data->cmd, cmd);
 	redirect_io(cmd->io_fds);
 	close_fds(data->cmd, false);
-	if (cmd->pipe_output)
-		dprintf(2, "Writing to :%d\n", cmd->pipe_fd[1]);
-	if (cmd->prev && cmd->prev->pipe_output)
-		dprintf(2, "Reading from :%d\n", cmd->prev->pipe_fd[0]);
 	ret = exec_builtin(data, cmd->argv);
 	if (ret != 127)
 		exit(0);
-	if (ret == 127)
-		return (new_exec(cmd, data->envp_arr, data));
-	return (ret);
+	return (new_exec(cmd, data->envp_arr, data));
 }

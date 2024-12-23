@@ -68,12 +68,9 @@ int exec_cmd(char **command, char **envp, t_data *data)
 
 int single_command(t_data *data)
 {
-	t_line *temp;
 	char	*path;
 
-	temp = data->head;
-	if (temp->next && temp->next->type == 7)
-		temp = temp->next;
+	data->cmd->cmd = NULL;
 	if (builtin(data->cmd->argv[0]))
 		exit_status = exec_builtin(data, data->cmd->argv);
 	else
@@ -120,8 +117,6 @@ t_io_fds	*dup_io(t_io_fds *io)
 {
 	t_io_fds	*new;
 
-	if (!io)
-		return (NULL);
 	new = (t_io_fds *)malloc(sizeof(t_io_fds));
 	if (!new)
         return (NULL);
@@ -151,8 +146,8 @@ t_cmd	*copy_node(t_cmd *src)
 		new->argv[i] = ft_strdup(src->argv[i]);
 		i++;
 	}
+	new->argv[i] = NULL;
 	new->cmd = ft_strdup(src->cmd);
-	// printf("The command is: %s\n", new->cmd);
 	new->type = src->type;
 	new->pipe_fd[0] = src->pipe_fd[0];
 	new->pipe_fd[1] = src->pipe_fd[1];
@@ -167,25 +162,26 @@ t_cmd	*copy_node(t_cmd *src)
 void	set_cmd_list(t_cmd **cmd, t_cmd **new)
 {
 	t_cmd	*tmp;
+	t_cmd	*current;
 
 	tmp = *cmd;
 	while (tmp)
 	{
+		current = tmp->next;
 		if (tmp->type == CMD)
 			lstadd_cmd(new, copy_node(tmp));
-		tmp = tmp->next;
+		free_cmd_node(tmp);
+		tmp = current;
 	}
 }
 
 int	complex_command(t_data *data)
 {
-	t_line	*temp;
 	t_cmd	*new;
 	t_cmd	*cmd;
 
 	cmd = data->cmd;
 	new = NULL;
-	temp = data->head;
 	if (data->cmd)
 	{
 		if (!create_files(data->cmd, data))
@@ -193,6 +189,7 @@ int	complex_command(t_data *data)
 		if (!create_pipes(data))
 		{
 			ft_putstr_fd("Failed to create pipes\n", 2);
+			close_pipe_fds(data->cmd, NULL);
 			return (EXIT_FAILURE);
 		}
 		if (set_values(data) == 1)

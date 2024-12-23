@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/20 21:22:14 by prizmo           ###   ########.fr       */
+/*   Updated: 2024/12/23 11:40:34 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ int	complex_command(t_data *data)
 	{
 		if (!create_files(data->cmd, data))
 			return (1);
-		// return (0);
 		data->cmd = set_command_list(data->cmd);
 		ret = set_values(data);
 		if (ret == EXIT_FAILURE)

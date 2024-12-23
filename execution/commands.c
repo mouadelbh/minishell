@@ -6,11 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2024/12/23 11:40:34 by zelbassa         ###   ########.fr       */
-=======
-/*   Updated: 2024/12/23 11:35:52 by zelbassa         ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2024/12/23 13:54:36 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +116,23 @@ static void	lstadd_cmd(t_cmd **head, t_cmd *new)
 	new->prev = tmp;
 }
 
+t_io_fds	*dup_io(t_io_fds *io)
+{
+	t_io_fds	*new;
+
+	if (!io)
+		return (NULL);
+	new = (t_io_fds *)malloc(sizeof(t_io_fds));
+	if (!new)
+        return (NULL);
+	new->in_fd = io->in_fd;
+	new->out_fd = io->out_fd;
+	new->heredoc_name = ft_strdup(io->heredoc_name);
+	new->infile = ft_strdup(io->infile);
+	new->outfile = ft_strdup(io->outfile);
+	return (new);
+}
+
 t_cmd	*copy_node(t_cmd *src)
 {
 	t_cmd	*new;
@@ -144,7 +157,7 @@ t_cmd	*copy_node(t_cmd *src)
 	new->pipe_fd[0] = src->pipe_fd[0];
 	new->pipe_fd[1] = src->pipe_fd[1];
 	new->pipe_output = src->pipe_output;
-	new->io_fds = src->io_fds;
+	new->io_fds = dup_io(src->io_fds);
 	new->file_error = src->file_error;
 	new->next = NULL;
 	new->prev = NULL;
@@ -169,7 +182,6 @@ int	complex_command(t_data *data)
 	t_line	*temp;
 	t_cmd	*new;
 	t_cmd	*cmd;
-	int		ret;
 
 	cmd = data->cmd;
 	new = NULL;
@@ -178,25 +190,15 @@ int	complex_command(t_data *data)
 	{
 		if (!create_files(data->cmd, data))
 			return (1);
-<<<<<<< Updated upstream
-		data->cmd = set_command_list(data->cmd);
-		ret = set_values(data);
-		if (ret == EXIT_FAILURE)
-			return (close_pipe_fds(data->cmd, NULL), ret);
-=======
 		if (!create_pipes(data))
 		{
 			ft_putstr_fd("Failed to create pipes\n", 2);
 			return (EXIT_FAILURE);
 		}
-		// ret = set_values(data);
-		// if (ret == EXIT_FAILURE)
-		// 	return (close_pipe_fds(data->cmd, NULL), ret);
+		if (set_values(data) == 1)
+			return (close_pipe_fds(data->cmd, NULL), 1);
 		set_cmd_list(&data->cmd, &new);
-		// data->cmd = set_command_list(cmd);
-		data->cmd = new;
-		// show_command_info(data->cmd);
->>>>>>> Stashed changes
+		data->cmd = new;;
 		return (handle_execute(data));
 	}
 	else

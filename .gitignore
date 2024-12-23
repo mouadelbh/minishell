@@ -21,3 +21,4 @@ denied
 *.tldr
 
 s_Makefile
+ft_printf/

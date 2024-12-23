@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/23 11:24:38 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/23 14:01:38 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,6 @@ int	set_values(t_data *data)
 		ft_putstr_fd("No command\n",2 );
 		return (EXIT_SUCCESS);
 	}
-	if (!create_pipes(data))
-	{
-		ft_putstr_fd("Failed to create pipes\n", 2);
-		return (EXIT_FAILURE);
-	}
 	return (127);
 }
 
@@ -39,6 +34,8 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 {
 	char	*path;
 
+	path = NULL;
+	usleep(100);
 	if (!command_is_valid(data, cmd, builtin(cmd->argv[0])))
 		exit(exit_status);
 	if (cmd->argv[0][0] == '/')
@@ -52,6 +49,8 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 	}
 	if (execve(path, cmd->argv, envp) == -1)
 	{
+		dprintf(2, "The path is: %s\n", path);
+		dprintf(2, "Command: %s\n", cmd->cmd);
 		perror("execve");
 		return (free(path), 127);
 	}
@@ -65,6 +64,10 @@ int	execute_command(t_data *data, t_cmd *cmd)
 	set_pipe_fds(data->cmd, cmd);
 	redirect_io(cmd->io_fds);
 	close_fds(data->cmd, false);
+	if (cmd->pipe_output)
+		dprintf(2, "Writing to :%d\n", cmd->pipe_fd[1]);
+	if (cmd->prev && cmd->prev->pipe_output)
+		dprintf(2, "Reading from :%d\n", cmd->prev->pipe_fd[0]);
 	ret = exec_builtin(data, cmd->argv);
 	if (ret != 127)
 		exit(0);

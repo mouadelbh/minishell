@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 21:28:33 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/05 13:36:49 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/23 11:14:35 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,36 @@ void	show_command_info(t_cmd *command)
 		ft_putstr_fd("Command: ", 2);
 		ft_putstr_fd(cmd->cmd?cmd->cmd:"NULL", 2);
 		ft_putchar_fd('\n', 2);
-		ft_putstr_fd("The fd in is: ", 2);
-		ft_putnbr_fd(cmd->io_fds->in_fd, 2);
-		ft_putchar_fd('\n', 2);
-		ft_putstr_fd("The file to read from: ", 2);
-		ft_putstr_fd(cmd->io_fds->infile?cmd->io_fds->infile:"NULL", 2);
-		ft_putchar_fd('\n', 2);
-		ft_putstr_fd("The file to write to: ", 2);
-		ft_putstr_fd(cmd->io_fds->outfile?cmd->io_fds->outfile:"NULL", 2);
-		ft_putchar_fd('\n', 2);
-		ft_putstr_fd("The fd out is: ", 2);
-		ft_putnbr_fd(cmd->io_fds->out_fd, 2);
-		ft_putchar_fd('\n', 2);
+		if (cmd->io_fds)
+		{
+			ft_putstr_fd("The fd in is: ", 2);
+			ft_putnbr_fd(cmd->io_fds->in_fd, 2);
+			ft_putchar_fd('\n', 2);
+			ft_putstr_fd("The file to read from: ", 2);
+			ft_putstr_fd(cmd->io_fds->infile?cmd->io_fds->infile:"NULL", 2);
+			ft_putchar_fd('\n', 2);
+			ft_putstr_fd("The file to write to: ", 2);
+			ft_putstr_fd(cmd->io_fds->outfile?cmd->io_fds->outfile:"NULL", 2);
+			ft_putchar_fd('\n', 2);
+			ft_putstr_fd("The fd out is: ", 2);
+			ft_putnbr_fd(cmd->io_fds->out_fd, 2);
+			ft_putchar_fd('\n', 2);
+		}
 		ft_putstr_fd("Type: ", 2);
 		ft_putnbr_fd(cmd->type, 2);
 		ft_putchar_fd('\n', 2);
 		ft_putstr_fd("Is piped? ", 2);
 		ft_putstr_fd(cmd->pipe_output?"Yes":"No", 2);
 		ft_putchar_fd('\n', 2);
+		if (cmd->pipe_output)
+		{
+			ft_putstr_fd("The pipe fd[0] is: ", 2);
+			ft_putnbr_fd(cmd->pipe_fd[0], 2);
+			ft_putchar_fd('\n', 2);
+			ft_putstr_fd("The pipe fd[1] is: ", 2);
+			ft_putnbr_fd(cmd->pipe_fd[1], 2);
+			ft_putchar_fd('\n', 2);
+		}
 		cmd = cmd->next;
 	}
 }
@@ -83,10 +95,12 @@ void	printa(char *message, char **str)
 		return ;
 	if (!*str)
 		return ;
-	printf("%s: ", message);
+	// printf("%s: ", message);
+	ft_putstr_fd(message, 2);
 	while (str[i])
 	{
-		printf("%s\n", str[i]);
+		// printf("%s\n", str[i]);
+		ft_putstr_fd(str[i], 2);
 		i++;
 	}
 }

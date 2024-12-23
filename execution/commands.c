@@ -6,7 +6,11 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2024/12/23 11:40:34 by zelbassa         ###   ########.fr       */
+=======
+/*   Updated: 2024/12/23 11:35:52 by zelbassa         ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,19 +104,99 @@ int single_command(t_data *data)
 	return (exit_status);
 }
 
+static void	lstadd_cmd(t_cmd **head, t_cmd *new)
+{
+	t_cmd	*tmp;
+
+	if (!*head)
+	{
+		*head = new;
+		return ;
+	}
+	tmp = *head;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+	new->prev = tmp;
+}
+
+t_cmd	*copy_node(t_cmd *src)
+{
+	t_cmd	*new;
+	int		i;
+
+	i = 0;
+	new = (t_cmd *)malloc(sizeof(t_cmd));
+	if (!new)
+		return (NULL);
+	while (src->argv[i])
+		i++;
+	new->argv = malloc(sizeof(char *) * (i + 1));
+	i = 0;
+	while (src->argv[i])
+	{
+		new->argv[i] = ft_strdup(src->argv[i]);
+		i++;
+	}
+	new->cmd = ft_strdup(src->cmd);
+	// printf("The command is: %s\n", new->cmd);
+	new->type = src->type;
+	new->pipe_fd[0] = src->pipe_fd[0];
+	new->pipe_fd[1] = src->pipe_fd[1];
+	new->pipe_output = src->pipe_output;
+	new->io_fds = src->io_fds;
+	new->file_error = src->file_error;
+	new->next = NULL;
+	new->prev = NULL;
+	return (new);
+}
+
+void	set_cmd_list(t_cmd **cmd, t_cmd **new)
+{
+	t_cmd	*tmp;
+
+	tmp = *cmd;
+	while (tmp)
+	{
+		if (tmp->type == CMD)
+			lstadd_cmd(new, copy_node(tmp));
+		tmp = tmp->next;
+	}
+}
+
 int	complex_command(t_data *data)
 {
-	t_line	*temp = data->head;
+	t_line	*temp;
+	t_cmd	*new;
+	t_cmd	*cmd;
 	int		ret;
 
+	cmd = data->cmd;
+	new = NULL;
+	temp = data->head;
 	if (data->cmd)
 	{
 		if (!create_files(data->cmd, data))
 			return (1);
+<<<<<<< Updated upstream
 		data->cmd = set_command_list(data->cmd);
 		ret = set_values(data);
 		if (ret == EXIT_FAILURE)
 			return (close_pipe_fds(data->cmd, NULL), ret);
+=======
+		if (!create_pipes(data))
+		{
+			ft_putstr_fd("Failed to create pipes\n", 2);
+			return (EXIT_FAILURE);
+		}
+		// ret = set_values(data);
+		// if (ret == EXIT_FAILURE)
+		// 	return (close_pipe_fds(data->cmd, NULL), ret);
+		set_cmd_list(&data->cmd, &new);
+		// data->cmd = set_command_list(cmd);
+		data->cmd = new;
+		// show_command_info(data->cmd);
+>>>>>>> Stashed changes
 		return (handle_execute(data));
 	}
 	else

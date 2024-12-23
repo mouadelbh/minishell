@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/21 23:59:26 by prizmo           ###   ########.fr       */
+/*   Updated: 2024/12/23 10:27:58 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	free_io(t_cmd *cmd)
 		}
 		if (cmd->io_fds->heredoc_name)
 			free(cmd->io_fds->heredoc_name);
-		if (cmd->pipe_output)
-			free(cmd->pipe_fd);
 		free(cmd->io_fds);
 		cmd = cmd->next;
 	}
@@ -39,13 +37,13 @@ void	free_io(t_cmd *cmd)
 
 void	free_cmd_node(t_cmd *cmd)
 {
-	if (cmd->argv)
-		free_arr(cmd->argv);
-	if (cmd->cmd)
-	{
-		free(cmd->cmd);
-		cmd->cmd = NULL;
-	}
+	// if (cmd->argv)
+	// 	free_arr(cmd->argv);
+	// if (cmd->cmd)
+	// {
+	// 	free(cmd->cmd);
+	// 	cmd->cmd = NULL;
+	// }
 	free(cmd);
 }
 
@@ -53,11 +51,10 @@ static void	free_cmd_struct(t_cmd *cmd)
 {
 	t_cmd	*tmp;
 
-	if (cmd->io_fds)
+	if (cmd && cmd->io_fds)
 		free_io(cmd);
 	while (cmd)
 	{
-		printf("Freeing node: %s\n", cmd->cmd);
 		tmp = cmd->next;
 		free_cmd_node(cmd);
 		cmd = tmp;

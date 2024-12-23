@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/20 21:21:35 by prizmo           ###   ########.fr       */
+/*   Updated: 2024/12/23 09:39:55 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_cmd {
 	char			*cmd;
 	int				file_error;
 	int				type;
-	int				*pipe_fd;
+	int				pipe_fd[2];
 	int				pipe_output;
 	t_io_fds		*io_fds;
 	struct s_cmd	*next;

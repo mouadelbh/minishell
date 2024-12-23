@@ -13,7 +13,11 @@ a.out
 test.sh
 outputFile.txt
 _board.tldr
+s_minishell
 minishell
 /minishell_tester
 *.txt
 denied
+*.tldr
+
+s_Makefile

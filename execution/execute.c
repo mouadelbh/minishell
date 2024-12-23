@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/18 05:15:26 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/23 11:24:38 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,22 +35,6 @@ int	set_values(t_data *data)
 	return (127);
 }
 
-// int	should_run(t_cmd *current)
-// {
-// 	t_cmd	*cmd;
-
-// 	cmd = current->next;
-// 	if (!cmd)
-// 		return (1);
-// 	if (cmd->type == APPEND || cmd->type == REDIR_OUT
-// 		|| cmd->type == REDIR_IN || cmd->type == HEREDOC)
-// 	{
-// 		// ft_putstr_fd("Reached here\n", 2);
-// 		return (cmd->file_error);
-// 	}
-// 	return (1);
-// }
-
 int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 {
 	char	*path;
@@ -68,7 +52,7 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 	}
 	if (execve(path, cmd->argv, envp) == -1)
 	{
-		ft_putstr_fd("execve failed\n", 2);
+		perror("execve");
 		return (free(path), 127);
 	}
 	return (0);
@@ -78,8 +62,6 @@ int	execute_command(t_data *data, t_cmd *cmd)
 {
 	int	ret;
 
-	if (cmd->type != CMD)
-		exit(exit_status);
 	set_pipe_fds(data->cmd, cmd);
 	redirect_io(cmd->io_fds);
 	close_fds(data->cmd, false);

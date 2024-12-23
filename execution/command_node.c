@@ -6,7 +6,11 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:36:32 by zelbassa          #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2024/12/23 11:48:53 by zelbassa         ###   ########.fr       */
+=======
+/*   Updated: 2024/12/23 09:43:58 by zelbassa         ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +49,12 @@ t_cmd *set_command_list(t_cmd *cmd)
 		return (NULL);
 	while (cmd && (cmd->type != CMD))
 	{
+<<<<<<< Updated upstream
 		next_cmd = cmd->next;
+=======
+		t_cmd *next_cmd = cmd->next;
+		show_command_info(cmd);
+>>>>>>> Stashed changes
 		if (cmd->io_fds)
 			free_io(cmd);
 		free_cmd_node(cmd);
@@ -131,19 +140,33 @@ t_cmd	*init_new_cmd(t_cmd *src, t_cmd *next, t_cmd *prev)
 	new = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!new)
 		return (NULL);
+<<<<<<< Updated upstream
 	new->argv = (char **)malloc(sizeof(char *) * (ft_arrlen(src->argv) + 1));
+=======
+	while (src->argv[i])
+		i++;
+	new->argv = malloc(sizeof(char *) * (i + 1));
+	i = 0;
+>>>>>>> Stashed changes
 	while (src->argv[i])
 	{
 		new->argv[i] = ft_strdup(src->argv[i]);
 		i++;
 	}
+<<<<<<< Updated upstream
 	new->cmd = ft_strdup(src->cmd);
 	new->type = src->type;
 	new->pipe_fd = dupfd(src->pipe_fd);
+=======
+	// new->argv = src->argv;
+	new->cmd = ft_strdup(src->cmd);
+	new->type = src->type;
+	// new->pipe_fd = src->pipe_fd;
+>>>>>>> Stashed changes
 	new->pipe_output = src->pipe_output;
 	new->io_fds = dup_io(src->io_fds);
 	new->file_error = src->file_error;
-	new->next = next;
-	new->prev = prev;
+	new->next = NULL;
+	new->prev = NULL;
 	return (new);
 }

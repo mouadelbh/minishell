@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/20 21:16:43 by prizmo           ###   ########.fr       */
+/*   Updated: 2024/12/23 09:04:35 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,7 +311,10 @@ void set_cmd_strings(t_cmd *cmd)
 				exit(EXIT_FAILURE);
 			}
 			if (cmd->argv[i + 1] != NULL)
+			{
+				free(cmd->cmd);
 				cmd->cmd = ft_strjoin(temp, " ");
+			}
 			else
 			{
 				if (cmd->cmd)

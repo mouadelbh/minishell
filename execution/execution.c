@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prizmo <prizmo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/21 23:58:43 by prizmo           ###   ########.fr       */
+/*   Updated: 2024/12/23 09:42:41 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,7 @@ int	minishell(t_data *data)
 			continue;
 		}
 		get_final_list(&data->head, &data->cmd);
-		data->cmd->cmd = NULL;
 		data->cmd->io_fds = NULL;
-		data->cmd->pipe_fd = NULL;
 		if (!data->cmd)
 		{
 			free_line(data->head);
@@ -77,7 +75,7 @@ int	minishell(t_data *data)
 		exit_status = exit_status;
 		reset_signal();
 		free_all(data, 0);
-		print_remaining_nodes(data);
+		// print_remaining_nodes(data);
 	}
 	return (exit_status);
 }

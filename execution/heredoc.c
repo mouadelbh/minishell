@@ -97,6 +97,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 				if (exit_status == -1)
 					perror("minishell: warning: here-document delimited by end-of-file\n");
 				unlink(temp_file);
+				free(temp_file);
 				close(temp_fd);
 				free_all(data, 1);
 				exit(0);
@@ -121,6 +122,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	exit_status = tmp;
 	waitpid(0, &exit_status, 0);
 	temp_fd = open(temp_file, O_RDONLY, 0644);
+	free(temp_file);
 	if (temp_fd == -1)
 	{
 		perror("open");

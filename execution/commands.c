@@ -52,8 +52,6 @@ int exec_cmd(char **command, char **envp, t_data *data)
 		path = ft_strdup(command[0]);
 	else if (command[0][0] != '\0')
 		path = get_full_cmd(command[0], envp);
-	if (!path)
-		ft_error(7, data);
 	if (execve(path, command, envp) == -1)
 	{
 		ft_putstr_fd("minishell: ", 2);
@@ -88,7 +86,7 @@ int single_command(t_data *data)
 		if (data->pid != -1)
 			signal(SIGINT, handlehang);
 		if (data->pid == -1)
-			return (ft_error(1, data));
+			return (ft_putstr_fd("fork error\n", 2), 1);
 		if (data->pid == 0)
 			exit_status = exec_cmd(data->cmd->argv, data->envp_arr, data);
 		waitpid(data->pid, &exit_status, 0);

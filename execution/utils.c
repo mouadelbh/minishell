@@ -96,30 +96,6 @@ int	exec_builtin(t_data *data, char **cmd)
 	return (res);
 }
 
-int	ft_error(int error, t_data *data)
-{
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	if (error == 0)
-		ft_putstr_fd("syntax error: cannot find a closing quote\n",
-			STDERR_FILENO);
-	else if (error == 1)
-		ft_putstr_fd("fork error\n", STDERR_FILENO);
-	else if (error == 2)
-		ft_putstr_fd("command error\n", STDERR_FILENO);
-	else if (error == 3)
-		ft_putstr_fd("path error\n", STDERR_FILENO);
-	else if (error == 4)
-		ft_putstr_fd("Ambigius rediredirict\n", 2);
-	else if (error == 7)
-	{
-		exit_status = 127;
-		ft_putstr_fd(data->cmd->argv[0], STDERR_FILENO);
-		ft_putchar_fd(' ', 2);
-		ft_putstr_fd("command not found\n", STDERR_FILENO);
-	}
-	return (EXIT_FAILURE);
-}
-
 void set_list_var(t_data *data, char *name, char *new_value)
 {
 	int 	len;
@@ -188,7 +164,7 @@ char	*get_full_cmd(char *av, char **env)
 		return (NULL);
 	path = ft_split(env_path, ':');
 	if (!path)
-		ft_error(3, NULL);
+		return (NULL);
 	while (path[i])
 	{
 		tmp = ft_strjoin(path[i], "/");

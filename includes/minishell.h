@@ -109,7 +109,6 @@ void	free_env(t_list **envp);
 void	free_env(t_list **envp);
 int		builtin(char *cmd);
 int 	exec_builtin(t_data *data, char **cmd);
-int 	ft_error(int error, t_data *data);
 int 	count_pipes(t_data *data);
 int		count_symbols(t_data *data);
 char	*ft_strcat(char *dest, char *src);

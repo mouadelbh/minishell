@@ -18,7 +18,8 @@ void	free_io(t_cmd *cmd)
 	{
 		if (cmd->io_fds->infile)
 		{
-			free(cmd->io_fds->infile);
+			if (cmd->io_fds->infile)
+				free(cmd->io_fds->infile);
 			cmd->io_fds->infile = NULL;
 			close(cmd->io_fds->in_fd);
 		}
@@ -88,8 +89,8 @@ void	free_all(t_data *data, int i)
 		free_arr(data->envp_arr);
 		data->envp_arr = NULL;
 	}
-	free_line(data->head);
 	free_cmd_struct(cmd);
+	free_line(data->head);
 }
 
 void	free_data(t_data *data, int exit_code)

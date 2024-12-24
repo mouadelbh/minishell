@@ -41,7 +41,7 @@ void	init_cmd(t_cmd *cmd)
 	cmd->prev = NULL;
 }
 
-void	init_io(t_io_fds **io_fds)
+void	init_io(t_io_fds **io_fds, char *current)
 {
 	*io_fds = (t_io_fds *)malloc(sizeof(t_io_fds));
 	if (!(*io_fds))
@@ -79,13 +79,15 @@ int init_append(t_cmd *cmd, t_data *data)
 	current = cmd->prev;
 	while (current && current->type != CMD)
 	{
-		current->io_fds->outfile = cmd->io_fds->outfile;
+		free(current->io_fds->outfile);
+		current->io_fds->outfile = ft_strdup(cmd->io_fds->outfile);
 		current->io_fds->out_fd = cmd->io_fds->out_fd;
 		current = current->prev;
 	}
 	if (current && current->type != APPEND)
 	{
-		current->io_fds->outfile = cmd->io_fds->outfile;
+		free(current->io_fds->outfile);
+		current->io_fds->outfile = ft_strdup(cmd->io_fds->outfile);
 		current->io_fds->out_fd = cmd->io_fds->out_fd;
 	}
 	return (1);
@@ -150,13 +152,15 @@ int	init_read_from(t_cmd *cmd, t_data *data)
 	current = cmd->prev;
 	while (current && current->type != CMD)
 	{
-		current->io_fds->infile = cmd->io_fds->infile;
+		free(current->io_fds->infile);
+		current->io_fds->infile = ft_strdup(cmd->io_fds->infile);
 		current->io_fds->in_fd = cmd->io_fds->in_fd;
 		current = current->prev;
 	}
 	if (current && current->type != REDIR_IN)
 	{
-		current->io_fds->infile = cmd->io_fds->infile;
+		free(current->io_fds->infile);
+		current->io_fds->infile = ft_strdup(cmd->io_fds->infile);
 		current->io_fds->in_fd = cmd->io_fds->in_fd;
 	}
 	return (1);

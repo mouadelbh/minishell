@@ -71,6 +71,7 @@ int single_command(t_data *data)
 	char	*path;
 
 	data->cmd->cmd = NULL;
+	data->cmd->io_fds = NULL;
 	if (builtin(data->cmd->argv[0]))
 		exit_status = exec_builtin(data, data->cmd->argv);
 	else
@@ -159,6 +160,26 @@ t_cmd	*copy_node(t_cmd *src)
 	return (new);
 }
 
+void	free_tmp_io(t_io_fds *io)
+{
+	if (io->infile)
+    {
+        free(io->infile);
+        io->infile = NULL;
+    }
+	if (io->outfile)
+	{
+		free(io->outfile);
+		io->outfile = NULL;
+	}
+	if (io->heredoc_name)
+    {
+        free(io->heredoc_name);
+        io->heredoc_name = NULL;
+    }
+	free(io);
+}
+
 void	set_cmd_list(t_cmd **cmd, t_cmd **new)
 {
 	t_cmd	*tmp;
@@ -170,6 +191,8 @@ void	set_cmd_list(t_cmd **cmd, t_cmd **new)
 		current = tmp->next;
 		if (tmp->type == CMD)
 			lstadd_cmd(new, copy_node(tmp));
+		if (tmp->io_fds)
+			free_tmp_io(tmp->io_fds);
 		free_cmd_node(tmp);
 		tmp = current;
 	}

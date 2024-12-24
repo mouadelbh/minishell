@@ -65,7 +65,7 @@ int	create_files(t_cmd *cmd, t_data *data)
 	i = 1;
 	while (cmd)
 	{
-		init_io(&cmd->io_fds);
+		init_io(&cmd->io_fds, cmd->cmd);
 		if (cmd->type == CMD)
 			cmd->file_error = init_command(cmd, data);
 		else if (cmd->type == REDIR_OUT)

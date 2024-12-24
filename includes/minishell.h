@@ -142,7 +142,7 @@ int		set_values(t_data *data);
 int		execute_command(t_data *data, t_cmd *cmd);
 int		close_file(t_data *data, t_cmd *cmd);
 void	init_cmd(t_cmd *cmd);
-void	init_io(t_io_fds **io_fds);
+void	init_io(t_io_fds **io_fds, char *current);
 int		init_write_to(t_cmd *cmd, t_data *data);
 int		init_read_from(t_cmd *cmd, t_data *data);
 int		init_append(t_cmd *cmd, t_data *data);

@@ -31,7 +31,10 @@ void	free_io(t_cmd *cmd)
 			close(cmd->io_fds->out_fd);
 		}
 		if (cmd->io_fds->heredoc_name)
+		{
+			unlink(cmd->io_fds->heredoc_name);
 			free(cmd->io_fds->heredoc_name);
+		}
 		free(cmd->io_fds);
 		cmd = cmd->next;
 	}

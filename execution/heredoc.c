@@ -122,7 +122,6 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	exit_status = tmp;
 	waitpid(0, &exit_status, 0);
 	temp_fd = open(temp_file, O_RDONLY, 0644);
-	free(temp_file);
 	if (temp_fd == -1)
 	{
 		perror("open");
@@ -137,5 +136,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	}
 	if (current && current->type == CMD)
 		current->io_fds->in_fd = temp_fd;
+	unlink(temp_file);
+	free(temp_file);
 	return (1);
 }

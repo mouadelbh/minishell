@@ -33,9 +33,9 @@ void	close_pipe_fds(t_cmd *cmds, t_cmd *skip_cmd)
 {
 	while (cmds && cmds->pipe_output)
 	{
-		if (cmds->pipe_fd && cmds->pipe_fd[0] != -1)
+		if (cmds->pipe_fd[0] != -1)
 			close(cmds->pipe_fd[0]);
-		if (cmds->pipe_fd && cmds->pipe_fd[1] != -1)
+		if (cmds->pipe_fd[1] != -1)
 			close(cmds->pipe_fd[1]);
 		cmds = cmds->next;
 	}

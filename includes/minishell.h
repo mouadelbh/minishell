@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/23 09:39:55 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/25 14:52:19 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 #endif
 
 # define PROMPT "\001\e[45m\002>>> \001\e[0m\e[33m\002 Minishell>$ \001\e[0m\002"
-extern int	exit_status;
+extern int	g_exit_status;
 
 typedef struct s_token t_line;
 
@@ -90,9 +90,9 @@ void	free_arr(char **arr);
 void	free_cmd_struct(t_cmd *cmd);
 int		minishell(t_data *data);
 void	handle_child_term(int status);
-int		ft_pwd(t_data *data, char **cmd);
+int		ft_pwd(char **cmd);
 int		ft_env(t_data *data, char **cmd, int export);
-int		ft_echo(t_data *data, char **cmd);
+int		ft_echo(char **cmd);
 int		ft_cd(t_data *data, char **cmd);
 int		ft_exit(t_data *data, char **cmd);
 int		ft_export(t_data *data, char **cmd);

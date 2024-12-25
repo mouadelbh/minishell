@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 09:35:10 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/23 09:42:41 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/25 16:21:51 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ int	minishell(t_data *data)
 			free_line(data->head);
 			continue;
 		}
-		exit_status = handle_input(data);
-		reset_signal();
+		g_exit_status = handle_input(data);
+		signal(SIGINT, handlesig);
 		free_all(data, 0);
 	}
-	return (exit_status);
+	return (g_exit_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/16 23:12:29 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/25 14:52:19 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	handledoc(int sig)
 {
 	(void)sig;
-	exit_status = CTRL_C;
+	g_exit_status = CTRL_C;
 	close(0);
 }
 
@@ -78,8 +78,8 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	t_cmd	*current;
 
 	line = NULL;
-	tmp = exit_status;
-	exit_status = -1;
+	tmp = g_exit_status;
+	g_exit_status = -1;
 	temp_file = random_file_name();
 	fork_id = fork();
 	if (fork_id != 0)
@@ -95,10 +95,10 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 			line = readline("> ");
 			if (!line)
 			{
-				if (exit_status == -1)
+				if (g_exit_status == -1)
 				{
 					perror("minishell: warning: here-document delimited by end-of-file\n");
-					exit_status = 0;
+					g_exit_status = 0;
 				}
 				unlink(temp_file);
 				free(temp_file);
@@ -128,8 +128,8 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 		close(temp_fd);
 		reset_shell(data, 0);
 	}
-	waitpid(0, &exit_status, 0);
-	handle_child_term(exit_status);
+	waitpid(0, &g_exit_status, 0);
+	handle_child_term(g_exit_status);
 	temp_fd = open(temp_file, O_RDONLY, 0644);
 	if (temp_fd == -1)
 	{

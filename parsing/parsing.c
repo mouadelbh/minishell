@@ -6,24 +6,11 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/15 06:17:12 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/25 16:37:13 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
-
-int	exit_status;
-
-int	print_error(char *str)
-{
-	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
-	ft_putstr_fd("'", 2);
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd("'", 2);
-	ft_putstr_fd("\n", 2);
-	exit_status = 2;
-	return (-1);
-}
 
 int	redir_error(t_line *head)
 {
@@ -92,76 +79,12 @@ void	expanding(t_line **head, t_list *env)
 	}
 }
 
-void	flag_spaces(char *line)
+int	parse(char *str, t_line **head, t_list *env, t_data *ex_data)
 {
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (is_space(line[i]) && quotes_open(line, i))
-			line[i] = 31;
-		i++;
-	}
-}
-
-void	unflag_spaces(char **line)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	if (!line)
-		return ;
-	while (line[i])
-	{
-		j = 0;
-		while (line[i][j])
-		{
-			if (line[i][j] == 31)
-				line[i][j] = ' ';
-			j++;
-		}
-		i++;
-	}
-}
-
-void	update_env(t_cmd *cmd, t_data *data)
-{
-	char	*arg;
-	char	*prev;
-	int		i;
-	t_cmd	*tmp;
-
-	arg = NULL;
-	prev = NULL;
-	while (cmd->next)
-		cmd = cmd->next;
-	i = 0;
-	while (cmd->argv[i] && !(check_token(cmd->argv[i][0]) == 2 && \
-	cmd->argv[i + 1] && !cmd->argv[i + 2]))
-	{
-		arg = ft_strdup(cmd->argv[i]);
-		if (prev)
-			free(prev);
-		prev = arg;
-		i++;
-	}
-	if (!arg)
-	{
-		arg = malloc(1);
-		arg[0] = '\0';
-	}
-	modify_env_value("_", arg, data);
-	free(arg);
-}
-
-int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
-{
-	char	**arg;
-	t_line *tmp;
-	char	*line;
+	t_line	*tmp;
 	t_line	*new;
+	char	**arg;
+	char	*line;
 	int		i;
 
 	if (ex_data->arg == NULL)
@@ -170,20 +93,14 @@ int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 		return (-1);
 	add_history(ex_data->arg);
 	if (!checkquotes(str, ex_data))
-	{
-		exit_status = 2;
-		return (-1);
-	}
+		return (set_exit_status(2));
 	line = spacing(str);
 	flag_spaces(line);
 	arg = ft_split(line, ' ');
 	free(line);
 	unflag_spaces(arg);
 	if (!arg)
-	{
-		exit_status = 139;
-		return (-1);
-	}
+		return (set_exit_status(1));
 	lexer(arg, head);
 	expanding(head, env);
 	triming_quotes(*head);

@@ -19,6 +19,7 @@ minishell
 *.txt
 denied
 *.tldr
-
+tmp
+*.supp
 s_Makefile
 ft_printf/

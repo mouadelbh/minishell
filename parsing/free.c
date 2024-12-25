@@ -6,11 +6,31 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:25 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/29 17:34:01 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/25 16:23:03 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
+
+void	free_arr(char **arr)
+{
+	int	i;
+
+	i = 0;
+	if (!arr && !*arr)
+		return ;
+	while (arr[i])
+	{
+		if (arr[i])
+		{
+			free(arr[i]);
+			arr[i] = NULL;
+		}
+		i++;
+	}
+	free(arr);
+	arr = NULL;
+}
 
 void	ft_free(char **arg)
 {

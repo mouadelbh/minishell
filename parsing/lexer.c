@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:49 by prizmo            #+#    #+#             */
-/*   Updated: 2024/11/25 14:42:32 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/25 14:50:49 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,15 @@ int	is_command(char **arg, int i, int *flag)
 		return (0);
 }
 
+void	init_node(t_line **tmp)
+{
+	*tmp = malloc(sizeof(t_line));
+	if (!*tmp)
+		return ;
+	(*tmp)->next = NULL;
+	(*tmp)->prev = NULL;
+}
+
 void	lexer(char **arg, t_line **head)
 {
 	t_line	*tmp;
@@ -71,18 +80,16 @@ void	lexer(char **arg, t_line **head)
 	flag = 0;
 	while (arg[i])
 	{
-		tmp = malloc(sizeof(t_line));
-		tmp->next = NULL;
-		tmp->prev = NULL;
+		init_node(&tmp);
 		lstadd_line(head, tmp);
 		if (!tmp)
 			return ;
 		if (is_command(arg, i, &flag) && !check_token(arg[i][0]))
 			tokenize_cmd(arg[i++], tmp);
 		else if (ft_strchr(arg[i], '\"'))
-			tokenize_quotarg(arg, &i, tmp, '\"');
+			tokenize_quotarg(arg, &i, tmp);
 		else if (ft_strchr(arg[i], '\''))
-			tokenize_quotarg(arg, &i, tmp, '\'');
+			tokenize_quotarg(arg, &i, tmp);
 		else if (get_token(arg[i]) != NONE)
 			tokenize(arg[i++], tmp);
 		else

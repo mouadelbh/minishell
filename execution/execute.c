@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/23 14:01:38 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/25 14:52:19 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 	if (cmd->file_error == 0)
 	{
 		free(path);
-		exit_status = 1;
+		g_exit_status = 1;
 		reset_shell(data, 0);
 	}
 	if (execve(path, cmd->argv, envp) == -1)

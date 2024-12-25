@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:54 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/13 21:36:49 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/25 16:24:43 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,60 +42,13 @@ int	isredir(int i)
 	return (0);
 }
 
-void	handlehang(int sig)
-{
-	(void)sig;
-	ft_putstr_fd("\n", 1);
-	dprintf(2, "Setting exit status to 130\n");
-	exit_status = CTRL_C;
-}
-
-void	change_signal(void)
-{
-	signal(SIGINT, handlehang);
-}
-
-void	handlesig(int sig)
-{
-	(void)sig;
-	ft_putstr_fd("\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	exit_status = CTRL_C;
-}
-
-void	reset_signal(void)
-{
-	signal(SIGINT, handlesig);
-}
-
-int is_empty(char *str)
-{
-	int i;
-
-	i = 0;
-	if (!str)
-		return (1);
-	while (str[i] && is_space(str[i]))
-		i++;
-	if (!str[i])
-		return (1);
-	return (0);
-}
-
 void	reset_shell(t_data *data, int i)
 {
 	if (i)
 		ft_putstr_fd("exit\n", 1);
 	free_all(data, 1);
 	rl_clear_history();
-	exit(exit_status);
-}
-
-int	is_space(int c)
-{
-	return (c == ' ' || (c >= 9 && c <= 13));
+	exit(g_exit_status);
 }
 
 int	quotes_open(char *s, int i)

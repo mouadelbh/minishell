@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/23 13:54:36 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/25 14:52:19 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	handle_execute(t_data *data)
 	}
 	cmd = temp;
 	close_file(data, cmd);
-	return (exit_status);
+	return (g_exit_status);
 }
 
 int exec_cmd(char **command, char **envp, t_data *data)
@@ -58,7 +58,7 @@ int exec_cmd(char **command, char **envp, t_data *data)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(command[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
-		exit_status = 127;
+		g_exit_status = 127;
 		free(path);
 		reset_shell(data, 0);
 	}
@@ -72,14 +72,14 @@ int single_command(t_data *data)
 	data->cmd->cmd = NULL;
 	data->cmd->io_fds = NULL;
 	if (builtin(data->cmd->argv[0]))
-		exit_status = exec_builtin(data, data->cmd->argv);
+		g_exit_status = exec_builtin(data, data->cmd->argv);
 	else
 	{
 		path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
 		if (check_cmd(path, data) == 1 || check_permission(path, data) == 1)
 		{
 			free(path);
-			exit_status = 126;
+			g_exit_status = 126;
 			return (126);
 		}
 		free(path);
@@ -89,12 +89,12 @@ int single_command(t_data *data)
 		if (data->pid == -1)
 			return (ft_putstr_fd("fork error\n", 2), 1);
 		if (data->pid == 0)
-			exit_status = exec_cmd(data->cmd->argv, data->envp_arr, data);
-		waitpid(data->pid, &exit_status, 0);
-		handle_child_term(exit_status);
+			g_exit_status = exec_cmd(data->cmd->argv, data->envp_arr, data);
+		waitpid(data->pid, &g_exit_status, 0);
+		handle_child_term(g_exit_status);
 	}
 	update_env(data->cmd, data);
-	return (exit_status);
+	return (g_exit_status);
 }
 
 static void	lstadd_cmd(t_cmd **head, t_cmd *new)

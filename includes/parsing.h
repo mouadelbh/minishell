@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/10 01:18:46 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/25 16:37:33 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,14 @@ typedef struct s_data t_data;
 
 #define BUFFER_SIZE	4098
 
+typedef struct	s_expand
+{
+	int		i;
+	int		size;
+	int		ca;
+	char	*tmp;
+}	t_expand;
+
 typedef struct	s_token
 {
 	char 			**str;
@@ -64,7 +72,7 @@ void	lexer(char **arg, t_line **head);
 void	tokenize_cmd(char *str, t_line *tmp);
 void	tokenize(char *arg, t_line *tmp);
 void	tokenize_arg(char **arg, int *i, t_line *tmp, int *flag);
-void	tokenize_quotarg(char **arg, int *i, t_line *tmp, char c);
+void	tokenize_quotarg(char **arg, int *i, t_line *tmp);
 void	init(t_list **data, char **env);
 void	triming_quotes(t_line *head);
 void	get_final_list(t_line **head, t_cmd **cmd);
@@ -76,6 +84,14 @@ void	reset_signal(void);
 void	handledoc(int sig);
 void	handlehang(int sig);
 void	update_env(t_cmd *cmd, t_data *data);
+void	reset_expand(char *str);
+void	expanding(t_line **head, t_list *env);
+void	unflag_spaces(char **line);
+void	flag_spaces(char *line);
+void	fill_arguments(char **arg, int *i, t_line *tmp, int *flag);
+int		set_exit_status(int status);
+int		count_arguments(char **arg, int *i, t_line *tmp);
+int		print_error(char *str);
 int		parse(char *line, t_line **head, t_list *env,t_data *ex_data);
 int		check_token(int c);
 int		checkquotes(char *line, t_data *data);
@@ -86,9 +102,22 @@ int		isredir(int i);
 int		checkspaces(char *line);
 int 	is_empty(char *str);
 int		count_words(const char *s, char c);
+int		get_env_length(t_list *env, int ca);
+int		alloc_exit(char *str, int exit);
+int		empty_node(t_line *node);
+int		handle_empty_node(t_line **node);
+int		handle_redir(t_line **node, t_cmd **new);
+int		handle_pipe(t_line **node, t_cmd **new);
+int		find(char *tmp, int i, t_list *env, int *size);
+int		check_case(char *str, int i);
 char	*find_and_replace(char *line, t_list *data, int flag);
 char	*spacing(char *line);
 char	*ft_itoa(int value);
+char	*delete(char *tmp, int size);
+char	*expand_exit(char *str, int i, int exit);
+t_list	*get_shlvl(void);
+t_list	*get_pwd(void);
+t_line	*copy_line_node(t_line *node);
 t_token	get_token(char *str);
 
 #endif

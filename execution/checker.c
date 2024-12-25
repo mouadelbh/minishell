@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:34:19 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/18 05:23:49 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/25 14:52:19 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	valid_command(t_cmd *cmd, t_data *data)
 		ft_putstr_fd(cmd->argv[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		free(full_command);
-		exit_status = 127;
+		g_exit_status = 127;
 		return (0);
 	}
 	free(full_command);
@@ -43,7 +43,7 @@ int	check_cmd(char *cmd, t_data *data)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd, 2);
 		ft_putstr_fd(": is a directory\n", 2);
-		exit_status = 126;
+		g_exit_status = 126;
 		return (1);
 	}
 	return (0);
@@ -60,7 +60,7 @@ int	check_permission(char *path, t_data *data)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(data->cmd->argv[0], 2);
 		ft_putstr_fd(": Permission denied\n", 2);
-		exit_status = 126;
+		g_exit_status = 126;
 		return (1);
 	}
 	return (0);
@@ -84,7 +84,7 @@ int	command_is_valid(t_data *data, t_cmd *cmd, int is_builtin)
 int should_pipe(t_cmd *cmd)
 {
 	t_cmd	*temp;
-	
+
 	int		pipe_count;
 
 	pipe_count = 0;

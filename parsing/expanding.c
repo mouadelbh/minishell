@@ -5,31 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/12/13 21:20:18 by mel-bouh         ###   ########.fr       */
+/*   Created: 2024/12/25 16:26:16 by mel-bouh          #+#    #+#             */
+/*   Updated: 2024/12/25 16:26:33 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../includes/parsing.h"
 
-void	reset_expand(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == -1)
-		{
-			str[i] = '$';
-			break ;
-		}
-		i++;
-	}
-}
-
-static int	check_case(char *str, int i)
+static int	check_cse(char *str, int i)
 {
 	if (!str[i] || is_space(str[i]) || !ft_isalpha(str[i]))
 		return (1);
@@ -45,7 +28,7 @@ int	find(char *tmp, int i, t_list *env, int *size)
 	j = 0;
 	*size = 0;
 	i++;
-	while (!check_case(tmp, i + *size))
+	while (!check_cse(tmp, i + *size))
 		*size += 1;
 	tmp += i;
 	while (env)
@@ -183,7 +166,7 @@ char	*find_and_replace(char *str, t_list *env, int flag)
 		j = 0;
 		c = 0;
 		if (str[i] == -1 && str[i + 1] == '?')
-			tmp = expand_exit(tmp, i, exit_status);
+			tmp = expand_exit(tmp, i, g_exit_status);
 		else if (str[i] == -1)
 		{
 			ca = find(str, i, env, &size);

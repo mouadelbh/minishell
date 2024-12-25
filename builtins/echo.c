@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:29:00 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/04 13:39:11 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/25 13:52:31 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	print_arguments(char **str)
 	}
 }
 
-int	ft_echo(t_data *data, char **str)
+int	ft_echo(char **str)
 {
 	int	new_line;
 

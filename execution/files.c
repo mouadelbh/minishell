@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   files.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/19 12:09:11 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/25 14:52:19 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	handle_write_to(t_cmd *cmd, t_data *data)
 		{
 			cmd->file_error = 0;
 			cmd = cmd->next;
-		}	
+		}
 		cmd->file_error = 0;
 	}
 }
@@ -103,10 +103,10 @@ void	handle_child_term(int status)
 			else
 				ft_putstr_fd("Quit\n", STDERR_FILENO);
 		}
-		exit_status = 128 + WTERMSIG(status);
+		g_exit_status = 128 + WTERMSIG(status);
 	}
 	else
-		exit_status = WEXITSTATUS(status);
+		g_exit_status = WEXITSTATUS(status);
 }
 
 int	close_file(t_data *data, t_cmd *cmd)
@@ -123,7 +123,7 @@ int	close_file(t_data *data, t_cmd *cmd)
 		if (wpid == data->pid)
 			handle_child_term(status);
 	}
-	return (exit_status);
+	return (g_exit_status);
 }
 
 bool	remove_old_file_ref(t_io_fds *io, bool infile)

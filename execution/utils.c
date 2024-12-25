@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/23 09:04:35 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/25 13:56:20 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,11 @@ int	exec_builtin(t_data *data, char **cmd)
 
 	res = 127;
 	if (ft_strncmp(cmd[0], "pwd", 0) == 0)
-		res = ft_pwd(data, cmd);
+		res = ft_pwd(cmd);
 	else if (ft_strncmp(cmd[0], "env", 0) == 0)
 		res = ft_env(data, cmd, 0);
 	else if (ft_strncmp(cmd[0], "echo", 0) == 0)
-		res = ft_echo(data, cmd);
+		res = ft_echo(cmd);
 	else if (ft_strncmp(cmd[0], "cd", 0) == 0)
 		res = ft_cd(data, cmd);
 	else if (ft_strncmp(cmd[0], "unset", 0) == 0)

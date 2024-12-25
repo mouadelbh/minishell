@@ -3,33 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:18:31 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/19 11:28:30 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/25 16:22:56 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
-void	free_arr(char **arr)
-{
-	int	i;
+int	g_exit_status = 0;
 
-	i = 0;
-	if (!arr && !*arr)
-		return ;
-	while (arr[i])
-	{
-		if (arr[i])
-		{
-			free(arr[i]);
-			arr[i] = NULL;
-		}
-		i++;
-	}
-	free(arr);
-	arr = NULL;
+void	handlehang(int sig)
+{
+	(void)sig;
+	ft_putstr_fd("\n", 1);
+	g_exit_status = CTRL_C;
+}
+
+void	handlesig(int sig)
+{
+	(void)sig;
+	ft_putstr_fd("\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	g_exit_status = CTRL_C;
 }
 
 int	main(int ac, char **av, char **env)
@@ -45,5 +44,5 @@ int	main(int ac, char **av, char **env)
 	program.exit = 0;
 	minishell(&program);
 	free_env(&program.envp);
-	return (exit_status);
+	return (g_exit_status);
 }

@@ -67,7 +67,7 @@ int	checkquotes(char *line, t_data *data)
 	if (count >= 17)
 	{
 		perror("minishell: maximum here-document count exceeded\n");
-		reset_shell(data);
+		reset_shell(data, 0);
 	}
 	if (quotes_open(line, i) == 1)
 		return (ft_putstr_fd("minishell: syntax error near \

@@ -72,10 +72,8 @@ static int	arg_count(char *arg1, char *arg2)
 
 int	ft_exit(t_data *data, char **cmd)
 {
-	int	exit_code;
 	int	error;
 
-	exit_code = 0;
 	if (!cmd[1])
 		printf("exit\n");
 	if (!arg_count(cmd[1], cmd[2]))
@@ -86,15 +84,17 @@ int	ft_exit(t_data *data, char **cmd)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(cmd[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
-		exit_code = 255;
+		exit_status = 255;
+		reset_shell(data, 0);
 	}
 	if (is_num(cmd[1]))
-		exit_code = get_code(cmd[1], &error);
+		exit_status = get_code(cmd[1], &error);
 	else if (!cmd[1])
-		exit_code = 0;
+		exit_status = 0;
 	else
-		exit_code = 2;
-	free_data(data, exit_code);
-	exit(exit_code);
+		exit_status = 2;
+	free_all(data, 1);
+	rl_clear_history();
+	exit(exit_status);
 	return (0);
 }

@@ -165,7 +165,7 @@ int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
 	int		i;
 
 	if (ex_data->arg == NULL)
-		reset_shell(ex_data);
+		reset_shell(ex_data, 1);
 	if (!checkspaces(str))
 		return (-1);
 	add_history(ex_data->arg);

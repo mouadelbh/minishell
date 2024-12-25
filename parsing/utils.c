@@ -46,6 +46,7 @@ void	handlehang(int sig)
 {
 	(void)sig;
 	ft_putstr_fd("\n", 1);
+	dprintf(2, "Setting exit status to 130\n");
 	exit_status = CTRL_C;
 }
 
@@ -83,9 +84,10 @@ int is_empty(char *str)
 	return (0);
 }
 
-void	reset_shell(t_data *data)
+void	reset_shell(t_data *data, int i)
 {
-	ft_putstr_fd("exit\n", 1);
+	if (i)
+		ft_putstr_fd("exit\n", 1);
 	free_all(data, 1);
 	rl_clear_history();
 	exit(exit_status);

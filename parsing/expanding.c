@@ -31,8 +31,7 @@ void	reset_expand(char *str)
 
 static int	check_case(char *str, int i)
 {
-	if (!str[i] || is_space(str[i]) || str[i] == '=' \
-	|| str[i] == '\'' || str[i] == '\"' || str[i] == '/' || str[i] == '.')
+	if (!str[i] || is_space(str[i]) || !ft_isalpha(str[i]))
 		return (1);
 	if (check_token(str[i]))
 		return (1);

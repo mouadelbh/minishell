@@ -282,10 +282,7 @@ void set_cmd_strings(t_cmd *cmd)
 		{
 			temp = ft_strjoin(cmd->cmd, cmd->argv[i]);
 			if (temp == NULL)
-			{
 				perror("Failed to allocate memory");
-				exit(EXIT_FAILURE);
-			}
 			if (cmd->argv[i + 1] != NULL)
 			{
 				free(cmd->cmd);

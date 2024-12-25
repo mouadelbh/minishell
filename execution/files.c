@@ -92,6 +92,23 @@ bool	check_infile_outfile(t_io_fds *io)
 	return (true);
 }
 
+void	handle_child_term(int status)
+{
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGQUIT)
+		{
+			if (WCOREDUMP(status))
+				ft_putstr_fd("Quit: core dumped\n", STDERR_FILENO);
+			else
+				ft_putstr_fd("Quit\n", STDERR_FILENO);
+		}
+		exit_status = 128 + WTERMSIG(status);
+	}
+	else
+		exit_status = WEXITSTATUS(status);
+}
+
 int	close_file(t_data *data, t_cmd *cmd)
 {
 	pid_t	wpid;
@@ -99,13 +116,14 @@ int	close_file(t_data *data, t_cmd *cmd)
 
 	close_fds(cmd, false);
 	wpid = 0;
+	status = 0;
 	while (wpid != -1 || errno != ECHILD)
 	{
 		wpid = waitpid(-1, &status, 0);
 		if (wpid == data->pid)
-			exit_status = WEXITSTATUS(status);
+			handle_child_term(status);
 	}
-	return (0);
+	return (exit_status);
 }
 
 bool	remove_old_file_ref(t_io_fds *io, bool infile)

@@ -12,11 +12,11 @@
 
 #include "../includes/minishell.h"
 
-char	*find_occurance(char *str, char *oc)
+char* find_occurance(char* str, char* oc)
 {
-	int		i;
-	int		j;
-	char	*result;
+	int i;
+	int j;
+	char* result;
 
 	if (!str || !oc)
 		return (NULL);
@@ -40,11 +40,11 @@ char	*find_occurance(char *str, char *oc)
 	return (free(result), NULL);
 }
 
-char	*new_substr(const char *str, int c)
+char* new_substr(const char* str, int c)
 {
-	int		i;
-	int		j;
-	char	*result;
+	int i;
+	int j;
+	char* result;
 
 	j = 0;
 	i = 0;
@@ -62,10 +62,10 @@ char	*new_substr(const char *str, int c)
 	return (result);
 }
 
-char	*get_key(char *value, t_list *envp, char **env_value, int *append)
+char* get_key(char* value, t_list* envp, char** env_value, int* append)
 {
-	char	*key;
-	int		i;
+	char* key;
+	int i;
 
 	i = is_valid_env_name(value);
 	if (i == 1)
@@ -84,11 +84,11 @@ char	*get_key(char *value, t_list *envp, char **env_value, int *append)
 	return (key);
 }
 
-int	append_env_value(char *key, char *env_value, char *cmd, t_list *envp)
+int append_env_value(char* key, char* env_value, char* cmd, t_list* envp)
 {
-	int		i;
-	char	*temp;
-	char	*temp2;
+	int i;
+	char* temp;
+	char* temp2;
 
 	while (envp)
 	{

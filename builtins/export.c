@@ -74,6 +74,8 @@ int	ft_export(t_data *data, char **cmd)
 		handle_append(key, env_value, cmd, data);
 	else
 		handle_export(key, env_value, cmd, data);
+	if (cmd[2])
+		ft_export(data, cmd + 1);
 	free(key);
 	free(env_value);
 	return (0);

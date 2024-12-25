@@ -48,6 +48,7 @@ int exec_cmd(char **command, char **envp, t_data *data)
 	char	*path;
 
 	path = NULL;
+	signal(SIGQUIT, SIG_DFL);
 	if (command[0][0] == '/')
 		path = ft_strdup(command[0]);
 	else if (command[0][0] != '\0')
@@ -59,7 +60,7 @@ int exec_cmd(char **command, char **envp, t_data *data)
 		ft_putstr_fd(": command not found\n", 2);
 		exit_status = 127;
 		free(path);
-		exit(127);
+		reset_shell(data, 0);
 	}
 	return (0);
 }
@@ -90,7 +91,7 @@ int single_command(t_data *data)
 		if (data->pid == 0)
 			exit_status = exec_cmd(data->cmd->argv, data->envp_arr, data);
 		waitpid(data->pid, &exit_status, 0);
-		exit_status = WEXITSTATUS(exit_status);
+		handle_child_term(exit_status);
 	}
 	update_env(data->cmd, data);
 	return (exit_status);
@@ -218,7 +219,7 @@ int	complex_command(t_data *data)
 		if (set_values(data) == 1)
 			return (close_pipe_fds(data->cmd, NULL), 1);
 		set_cmd_list(&data->cmd, &new);
-		data->cmd = new;;
+		data->cmd = new;
 		return (handle_execute(data));
 	}
 	else

@@ -37,7 +37,7 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 	path = NULL;
 	usleep(100);
 	if (!command_is_valid(data, cmd, builtin(cmd->argv[0])))
-		exit(exit_status);
+		reset_shell(data, 0);
 	if (cmd->argv[0][0] == '/')
 		path = ft_strdup(cmd->argv[0]);
 	else if (cmd->argv[0][0] != '\0')
@@ -45,27 +45,24 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 	if (cmd->file_error == 0)
 	{
 		free(path);
-		exit(1);
+		exit_status = 1;
+		reset_shell(data, 0);
 	}
 	if (execve(path, cmd->argv, envp) == -1)
-	{
-		// for (int i = 0; cmd->argv[i]; i++)
-		// 	dprintf(2, "The cmd->argv[%d]: %s\n", i, cmd->argv[i]);
 		perror("execve");
-		return (free(path), 127);
-	}
-	return (0);
+	reset_shell(data, 0);
 }
 
 int	execute_command(t_data *data, t_cmd *cmd)
 {
 	int	ret;
 
+	signal(SIGQUIT, SIG_DFL);
 	set_pipe_fds(data->cmd, cmd);
 	redirect_io(cmd->io_fds);
 	close_fds(data->cmd, false);
 	ret = exec_builtin(data, cmd->argv);
 	if (ret != 127)
-		exit(0);
+		reset_shell(data, 0);
 	return (new_exec(cmd, data->envp_arr, data));
 }

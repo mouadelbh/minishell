@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/26 18:28:31 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 18:29:58 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,6 @@ void		close_pipe_fds(t_cmd *cmds);
 int			init_heredoc(t_cmd *cmd, t_data *data);
 void		free_all(t_data *data, int i);
 void		free_all(t_data *data, int i);
-void		free_data(t_data *data, int exit_code);
 int			is_valid_env_name(char *var);
 void		handle_write_to(t_cmd *cmd);
 void		handle_read_from(t_cmd *cmd);

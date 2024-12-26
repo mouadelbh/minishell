@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/23 10:27:58 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 18:30:01 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,4 @@ void	free_all(t_data *data, int i)
 	}
 	free_cmd_struct(cmd);
 	free_line(data->head);
-}
-
-void	free_data(t_data *data, int exit_code)
-{
-	(void)exit_code;
-	free_all(data, 1);
 }

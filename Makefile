@@ -13,11 +13,12 @@ EXEC_F	=	minishell.c builtins/echo.c builtins/cd.c \
 			execution/execute.c execution/files.c execution/ios.c \
 			execution/utils.c execution/init.c execution/heredoc.c \
 			execution/debug.c execution/free.c builtins/export_utils.c \
-			execution/checker.c execution/free_utils.c builtins/export_utils_2.c
+			execution/checker.c execution/free_utils.c builtins/export_utils_2.c \
+			execution/utils2.c execution/utils3.c execution/heredoc_utils.c
 FILES	=	$(PARS_F) $(EXEC_F)
 OBJS	=	$(FILES:.c=.o)
 LIBFT	=	libft/libft.a
-FLAGS	=	-g -Wall -Wextra -Werror -fsanitize=address
+FLAGS	=	-g -Wall -Wextra -Werror #-fsanitize=address
 
 all: $(NAME)
 

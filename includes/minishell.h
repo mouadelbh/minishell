@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/26 14:09:02 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:45:21 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ int		count_symbols(t_data *data);
 char	*ft_strcat(char *dest, char *src);
 char 	*get_full_cmd(char *av, char **env);
 char 	*to_str(char **arr);
-char 	*new_strjoin(char *s1, char *s2);
 char 	**set_list_arra(t_list *envp);
 void 	show_command_info(t_cmd *cmd_list);
 void 	show_io_fds(t_io_fds *io_fds);

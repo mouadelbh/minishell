@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/25 14:52:19 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 18:01:45 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	set_values(t_data *data)
 			ft_putstr_fd("Error in the fds\n", 2);
 			return (EXIT_FAILURE);
 		}
-		ft_putstr_fd("No command\n",2 );
+		ft_putstr_fd("No command\n", 2);
 		return (EXIT_SUCCESS);
 	}
 	return (127);

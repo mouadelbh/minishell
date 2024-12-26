@@ -3,64 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/26 15:44:50 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 18:01:28 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	modify_env_value(char *name, char *new_value, t_data *data)
-{
-	char	*str;
-	char	*temp;
-	char	*temp2;
-
-	str = ft_getenv(name, data);
-	if (!str)
-	{
-		temp = ft_strjoin(name, "=");
-		temp2 = ft_strjoin(temp, new_value);
-		create_env_value(data, temp2, 0);
-		free(temp);
-		free(temp2);
-	}
-	else
-		set_list_var(data, name, new_value);
-	free(str);
-	return (1);
-}
-
-void	set_list_var(t_data *data, char *name, char *new_value)
-{
-	int		len;
-	t_list	*current;
-	char	*temp;
-
-	len = ft_strlen(name);
-	current = data->envp;
-	while (current)
-	{
-		if (ft_strncmp(current->content, name, len) == 0)
-		{
-			free(current->content);
-			current->content = NULL;
-			temp = ft_strjoin(name, "=");
-			current->content = ft_strjoin(temp, new_value);
-			current->empty_value = 0;
-			free(temp);
-			if (!current->content)
-			{
-				ft_putstr_fd("Error: Memory allocation failed\n", 2);
-				return ;
-			}
-			break ;
-		}
-		current = current->next;
-	}
-}
 
 int	count_pipes(t_data *data)
 {
@@ -84,15 +34,31 @@ int	count_pipes(t_data *data)
 	return (k);
 }
 
+static char	*construct_full_cmd(char *path, char *av)
+{
+	char	*tmp;
+	char	*full_cmd;
+
+	tmp = ft_strjoin(path, "/");
+	if (!tmp)
+		return (NULL);
+	full_cmd = ft_strjoin(tmp, av);
+	free(tmp);
+	if (!full_cmd)
+		return (NULL);
+	if (access(full_cmd, X_OK | F_OK) == 0)
+		return (full_cmd);
+	free(full_cmd);
+	return (NULL);
+}
+
 char	*get_full_cmd(char *av, char **env)
 {
 	int		i;
-	char	*tmp;
-	char	*full_cmd;
 	char	**path;
 	char	*env_path;
+	char	*full_cmd;
 
-	i = 0;
 	(void)env;
 	env_path = getenv("PATH");
 	if (!env_path || av[0] == '\0')
@@ -100,53 +66,55 @@ char	*get_full_cmd(char *av, char **env)
 	path = ft_split(env_path, ':');
 	if (!path)
 		return (NULL);
+	i = 0;
 	while (path[i])
 	{
-		tmp = ft_strjoin(path[i], "/");
-		if (!tmp)
-			return (free_arr(path), NULL);
-		full_cmd = ft_strjoin(tmp, av);
-		free(tmp);
-		if (!full_cmd)
-			return (free_arr(path), NULL);
-		if (access(full_cmd, X_OK | F_OK) == 0)
+		full_cmd = construct_full_cmd(path[i], av);
+		if (full_cmd)
 			return (free_arr(path), full_cmd);
-		free(full_cmd);
 		i++;
 	}
 	return (free_arr(path), ft_strdup(av));
 }
 
-void	set_cmd_strings(t_cmd *cmd)
+static char	*concat_cmd_strings(char **argv)
 {
 	int		i;
+	char	*cmd;
 	char	*temp;
 
+	i = 0;
+	cmd = NULL;
+	while (argv[i] != NULL)
+	{
+		temp = ft_strjoin(cmd, argv[i]);
+		if (temp == NULL)
+			return (perror("Failed to allocate memory"), NULL);
+		if (argv[i + 1] != NULL)
+		{
+			free(cmd);
+			cmd = ft_strjoin(temp, " ");
+		}
+		else
+		{
+			free(cmd);
+			cmd = ft_strdup(temp);
+		}
+		free(temp);
+		i++;
+	}
+	return (cmd);
+}
+
+void	set_cmd_strings(t_cmd *cmd)
+{
 	while (cmd != NULL)
 	{
-		i = 0;
-		cmd->cmd = NULL;
-		while (cmd->argv[i] != NULL)
+		cmd->cmd = concat_cmd_strings(cmd->argv);
+		if (cmd->cmd == NULL)
 		{
-			temp = ft_strjoin(cmd->cmd, cmd->argv[i]);
-			if (temp == NULL)
-				perror("Failed to allocate memory");
-			if (cmd->argv[i + 1] != NULL)
-			{
-				free(cmd->cmd);
-				cmd->cmd = ft_strjoin(temp, " ");
-			}
-			else
-			{
-				if (cmd->cmd)
-				{
-					free(cmd->cmd);
-					cmd->cmd = NULL;
-				}
-				cmd->cmd = ft_strdup(temp);
-			}
-			free(temp);
-			i++;
+			perror("Failed to allocate memory");
+			return ;
 		}
 		cmd->file_error = 1;
 		cmd = cmd->next;

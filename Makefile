@@ -12,9 +12,11 @@ EXEC_F	=	minishell.c builtins/echo.c builtins/cd.c \
 			execution/pipe.c execution/commands.c \
 			execution/execute.c execution/files.c execution/ios.c \
 			execution/utils.c execution/init.c execution/heredoc.c \
-			execution/debug.c execution/free.c builtins/export_utils.c \
+			execution/free.c builtins/export_utils.c \
 			execution/checker.c execution/free_utils.c builtins/export_utils_2.c \
-			execution/utils2.c execution/utils3.c execution/heredoc_utils.c
+			execution/utils2.c execution/utils3.c execution/heredoc_utils.c \
+			execution/init_utils.c execution/files_utils.c execution/commands_utils.c \
+			execution/commands_utils_2.c
 FILES	=	$(PARS_F) $(EXEC_F)
 OBJS	=	$(FILES:.c=.o)
 LIBFT	=	libft/libft.a

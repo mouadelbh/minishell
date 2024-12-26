@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/26 15:45:21 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 18:28:31 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,78 +84,81 @@ typedef struct s_data
 	int			cmd_count;
 }				t_data;
 
-void	show_command_ios(t_cmd *cmd);
-void	free_io(t_cmd *cmd);
-void	free_arr(char **arr);
-void	free_cmd_struct(t_cmd *cmd);
-int		minishell(t_data *data);
-void	handle_child_term(int status);
-int		ft_pwd(char **cmd);
-int		ft_env(t_data *data, char **cmd, int export);
-int		ft_echo(char **cmd);
-int		ft_cd(t_data *data, char **cmd);
-int		ft_exit(t_data *data, char **cmd);
-int		ft_export(t_data *data, char **cmd);
-int		ft_unset(t_data *data, char **cmd);
-int		modify_env_value(char *name, char *new_value, t_data *data);
-char	*ft_getenv(char *name, t_data *data);
-char	*find_value(char *name, t_list *envp);
-char	*new_substr(const char *str, int c);
-void	create_env_value(t_data *data, char *key, int empty_value);
-void	set_list_var(t_data *data, char *name, char *new_value);
-void 	debug(void);
-void	printa(char *str, char **arr);
-void 	reset_shell(t_data *data, int i);
-void	free_env(t_list **envp);
-void	free_env(t_list **envp);
-int		builtin(char *cmd);
-int 	exec_builtin(t_data *data, char **cmd);
-int 	count_pipes(t_data *data);
-int		count_symbols(t_data *data);
-char	*ft_strcat(char *dest, char *src);
-char 	*get_full_cmd(char *av, char **env);
-char 	*to_str(char **arr);
-char 	**set_list_arra(t_list *envp);
-void 	show_command_info(t_cmd *cmd_list);
-void 	show_io_fds(t_io_fds *io_fds);
-void 	set_cmd_strings(t_cmd *cmd);
-int		create_files(t_cmd *cmd, t_data *data);
-int		init_command(t_cmd *cmd, t_data *data);
-int		command_is_valid(t_data *data, t_cmd *cmd, int is_builtin);
-int		check_permission(char *path, t_data *data);
-int		command_is_valid(t_data *data, t_cmd *cmd, int is_builtin);
-int		check_cmd(char *cmd);
-int		check_permission(char *path, t_data *data);
-int		handle_input(t_data *data);
-int		handle_execute(t_data *data);
-int		exec_cmd(char **command, char **envp, t_data *data);
-int		single_command(t_data *data);
-int		complex_command(t_data *data);
-int		should_pipe(t_cmd *cmd);
-int		should_pipe(t_cmd *cmd);
-int		set_values(t_data *data);
-int		execute_command(t_data *data, t_cmd *cmd);
-int		close_file(t_data *data, t_cmd *cmd);
-void	init_cmd(t_cmd *cmd);
-void	init_io(t_io_fds **io_fds);
-int		init_write_to(t_cmd *cmd);
-int		init_read_from(t_cmd *cmd);
-int		init_append(t_cmd *cmd);
-void	close_fds(t_cmd *cmds, bool close_backups);
-bool	check_infile_outfile(t_io_fds *io);
-bool	remove_old_file_ref(t_io_fds *io, bool infile);
-bool	redirect_io(t_io_fds *io);
-bool	create_pipes(t_data *data);
-bool	set_pipe_fds(t_cmd *cmds, t_cmd *c);
-bool	restore_io(t_io_fds *io);
-void	close_pipe_fds(t_cmd *cmds);
-int		init_heredoc(t_cmd *cmd, t_data *data);
-void	free_all(t_data *data, int i);
-void	free_all(t_data *data, int i);
-void	free_data(t_data *data, int exit_code);
-int		is_valid_env_name(char *var);
-char	*get_key(char *value, char **env_value);
-int		append_env_value(char *key, char *env_value, t_list *envp);
-void	free_cmd_node(t_cmd *cmd);
+void		free_io(t_cmd *cmd);
+void		free_arr(char **arr);
+void		free_cmd_struct(t_cmd *cmd);
+int			minishell(t_data *data);
+void		handle_child_term(int status);
+int			ft_pwd(char **cmd);
+int			ft_env(t_data *data, char **cmd, int export);
+int			ft_echo(char **cmd);
+int			ft_cd(t_data *data, char **cmd);
+int			ft_exit(t_data *data, char **cmd);
+int			ft_export(t_data *data, char **cmd);
+int			ft_unset(t_data *data, char **cmd);
+int			modify_env_value(char *name, char *new_value, t_data *data);
+char		*ft_getenv(char *name, t_data *data);
+char		*find_value(char *name, t_list *envp);
+char		*new_substr(const char *str, int c);
+void		create_env_value(t_data *data, char *key, int empty_value);
+void		set_list_var(t_data *data, char *name, char *new_value);
+void 		reset_shell(t_data *data, int i);
+void		free_env(t_list **envp);
+void		free_env(t_list **envp);
+int			builtin(char *cmd);
+int 		exec_builtin(t_data *data, char **cmd);
+int 		count_pipes(t_data *data);
+int			count_symbols(t_data *data);
+char		*ft_strcat(char *dest, char *src);
+char 		*get_full_cmd(char *av, char **env);
+char 		*to_str(char **arr);
+char 		**set_list_arra(t_list *envp);
+void 		set_cmd_strings(t_cmd *cmd);
+int			create_files(t_cmd *cmd, t_data *data);
+int			init_command(t_cmd *cmd, t_data *data);
+int			command_is_valid(t_data *data, t_cmd *cmd, int is_builtin);
+int			check_permission(char *path, t_data *data);
+int			command_is_valid(t_data *data, t_cmd *cmd, int is_builtin);
+int			check_cmd(char *cmd);
+int			check_permission(char *path, t_data *data);
+int			handle_input(t_data *data);
+int			handle_execute(t_data *data);
+int			exec_cmd(char **command, char **envp, t_data *data);
+int			single_command(t_data *data);
+int			complex_command(t_data *data);
+int			should_pipe(t_cmd *cmd);
+int			should_pipe(t_cmd *cmd);
+int			set_values(t_data *data);
+int			execute_command(t_data *data, t_cmd *cmd);
+int			close_file(t_data *data, t_cmd *cmd);
+void		init_cmd(t_cmd *cmd);
+void		init_io(t_io_fds **io_fds);
+int			init_write_to(t_cmd *cmd);
+int			init_read_from(t_cmd *cmd);
+int			init_append(t_cmd *cmd);
+int			check_file_refs(t_cmd *cmd);
+void		file_error(t_cmd *cmd, char *str);
+void		close_fds(t_cmd *cmds, bool close_backups);
+bool		check_infile_outfile(t_io_fds *io);
+bool		remove_old_file_ref(t_io_fds *io, bool infile);
+bool		redirect_io(t_io_fds *io);
+bool		create_pipes(t_data *data);
+void		lstadd_cmd(t_cmd **head, t_cmd *new);
+int			fork_and_exec(t_data *data);
+t_io_fds	*dup_io(t_io_fds *io);
+bool		set_pipe_fds(t_cmd *cmds, t_cmd *c);
+bool		restore_io(t_io_fds *io);
+void		close_pipe_fds(t_cmd *cmds);
+int			init_heredoc(t_cmd *cmd, t_data *data);
+void		free_all(t_data *data, int i);
+void		free_all(t_data *data, int i);
+void		free_data(t_data *data, int exit_code);
+int			is_valid_env_name(char *var);
+void		handle_write_to(t_cmd *cmd);
+void		handle_read_from(t_cmd *cmd);
+void		handle_append(t_cmd *cmd);
+char		*get_key(char *value, char **env_value);
+int			append_env_value(char *key, char *env_value, t_list *envp);
+void		free_cmd_node(t_cmd *cmd);
 
 #endif

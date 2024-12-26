@@ -22,12 +22,7 @@ int	init_append(t_cmd *cmd)
 	if (cmd->prev && cmd->prev->type == PIPE)
 		return (0);
 	while (current && current->type != CMD)
-	{
-		free(current->io_fds->outfile);
-		current->io_fds->outfile = ft_strdup(cmd->io_fds->outfile);
-		current->io_fds->out_fd = cmd->io_fds->out_fd;
 		current = current->prev;
-	}
 	if (current && current->type != APPEND)
 	{
 		free(current->io_fds->outfile);
@@ -47,12 +42,7 @@ int	init_write_to(t_cmd *cmd)
 	if (cmd->prev && cmd->prev->type == PIPE)
 		return (0);
 	while (current && current->type != CMD)
-	{
-		free(current->io_fds->outfile);
-		current->io_fds->outfile = ft_strdup(cmd->io_fds->outfile);
-		current->io_fds->out_fd = cmd->io_fds->out_fd;
 		current = current->prev;
-	}
 	if (current && current->type != REDIR_OUT)
 	{
 		free(current->io_fds->outfile);
@@ -86,12 +76,7 @@ int	init_read_from(t_cmd *cmd)
 		return (0);
 	current = cmd->prev;
 	while (current && current->type != CMD)
-	{
-		free(current->io_fds->infile);
-		current->io_fds->infile = ft_strdup(cmd->io_fds->infile);
-		current->io_fds->in_fd = cmd->io_fds->in_fd;
 		current = current->prev;
-	}
 	if (current && current->type != REDIR_IN)
 	{
 		free(current->io_fds->infile);

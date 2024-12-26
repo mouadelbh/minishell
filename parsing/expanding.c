@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 16:26:16 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/25 16:26:33 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 11:35:24 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static int	check_cse(char *str, int i)
 {
-	if (!str[i] || is_space(str[i]) || !ft_isalpha(str[i]))
+	if (!str[i] || is_space(str[i]) || str[i] == '\'' || str[i] == '\"' || str[i] == '$' \
+	|| str[i] == '.' || str[i] == '/' || str[i] == '+')
 		return (1);
 	if (check_token(str[i]))
 		return (1);

@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/26 14:11:05 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:44:50 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char *ft_getenv(char *name, t_data *data)
-{
-	t_list	*temp;
-
-	temp = data->envp;
-	if (!name || !data || !data->envp)
-		return NULL;
-	while (temp)
-	{
-		if (ft_strncmp(temp->content, name, ft_strlen(name)) == 0)
-			return (ft_strdup(temp->content));
-		temp = temp->next;
-	}
-	return (NULL);
-}
 
 int	modify_env_value(char *name, char *new_value, t_data *data)
 {
@@ -49,55 +33,10 @@ int	modify_env_value(char *name, char *new_value, t_data *data)
 	return (1);
 }
 
-int	builtin(char *cmd)
+void	set_list_var(t_data *data, char *name, char *new_value)
 {
-	char	*builtin[8];
-	int		i;
-
-	i = 0;
-	builtin[0] = "echo";
-	builtin[1] = "cd";
-	builtin[2] = "pwd";
-	builtin[3] = "export";
-	builtin[4] = "unset";
-	builtin[5] = "env";
-	builtin[6] = "exit";
-	builtin[7] = NULL;
-	while (i < 7)
-	{
-		if (ft_strncmp(builtin[i], cmd, 0) == 0)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	exec_builtin(t_data *data, char **cmd)
-{
-	int	res;
-
-	res = 127;
-	if (ft_strncmp(cmd[0], "pwd", 0) == 0)
-		res = ft_pwd(cmd);
-	else if (ft_strncmp(cmd[0], "env", 0) == 0)
-		res = ft_env(data, cmd, 0);
-	else if (ft_strncmp(cmd[0], "echo", 0) == 0)
-		res = ft_echo(cmd);
-	else if (ft_strncmp(cmd[0], "cd", 0) == 0)
-		res = ft_cd(data, cmd);
-	else if (ft_strncmp(cmd[0], "unset", 0) == 0)
-		res = ft_unset(data, cmd);
-	else if (ft_strncmp(cmd[0], "export", 0) == 0)
-		res = ft_export(data, cmd);
-	else if (ft_strncmp(cmd[0], "exit", 0) == 0)
-		res = ft_exit(data, cmd);
-	return (res);
-}
-
-void set_list_var(t_data *data, char *name, char *new_value)
-{
-	int 	len;
-	t_list *current;
+	int		len;
+	t_list	*current;
 	char	*temp;
 
 	len = ft_strlen(name);
@@ -111,14 +50,13 @@ void set_list_var(t_data *data, char *name, char *new_value)
 			temp = ft_strjoin(name, "=");
 			current->content = ft_strjoin(temp, new_value);
 			current->empty_value = 0;
+			free(temp);
 			if (!current->content)
 			{
-				free(temp);
-				ft_putstr_fd("Error: Memory allocation failed\n", STDERR_FILENO);
-				return;
+				ft_putstr_fd("Error: Memory allocation failed\n", 2);
+				return ;
 			}
-			free(temp);
-			break;
+			break ;
 		}
 		current = current->next;
 	}
@@ -126,8 +64,8 @@ void set_list_var(t_data *data, char *name, char *new_value)
 
 int	count_pipes(t_data *data)
 {
-	int	i;
-	int	k;
+	int		i;
+	int		k;
 	t_line	*temp;
 
 	i = 0;
@@ -176,95 +114,10 @@ char	*get_full_cmd(char *av, char **env)
 		free(full_cmd);
 		i++;
 	}
-	free_arr(path);
-	return (ft_strdup(av));
+	return (free_arr(path), ft_strdup(av));
 }
 
-int	count_symbols(t_data *data)
-{
-	int		i;
-	t_line	*temp = data->head;
-
-	i = 0;
-	while (temp)
-	{
-		if (temp->type >= 1 && temp->type <= 5)
-			i++;
-		temp = temp->next;
-	}
-	return (i);
-}
-
-char *ft_strcat(char *s1, char *s2)
-{
-	size_t	len1;
-	size_t	len2;
-	char	*dest;
-
-	if (!s1 && !s2)
-		return (NULL);
-	if (!s1)
-		return (ft_strdup(s2));
-	if (!s2)
-		return (ft_strdup(s1));
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	dest = malloc(len1 + len2 + 1);
-	if (!dest)
-		return (NULL);
-	ft_memcpy(dest, s1, len1);
-	ft_memcpy(dest + len1, s2, len2);
-	dest[len1 + len2] = '\0';
-	return (dest);
-}
-
-char	*to_str(char **arr)
-{
-	char	*result;
-	char	*temp;
-	int		i;
-
-	i = 0;
-	result = NULL;
-	while (arr[i])
-	{
-		temp = ft_strjoin(result, arr[i]);
-		free(result);
-		if (arr[i + 1])
-			result = ft_strjoin(temp, " ");
-		else
-			result = ft_strjoin(temp, "");
-		free(temp);
-		i++;
-	}
-	return (result);
-}
-
-char	*new_strjoin(char *s1, char *s2)
-{
-	char	*result;
-
-	if (!s1 || !s2)
-	{
-		if (s1)
-			return (ft_strdup(s1));
-		if (s2)
-			return (ft_strdup(s2));
-		else
-			return (NULL);
-	}
-	result = malloc(ft_strlen(s1) + ft_strlen(s2) + 2);
-	while (*s1)
-		*result++ = *s1++;
-	*result = ' ';
-	result++;
-	while (*s2)
-		*result++ = *s2++;
-	*result = '\0';
-	return (result);
-}
-
-void set_cmd_strings(t_cmd *cmd)
+void	set_cmd_strings(t_cmd *cmd)
 {
 	int		i;
 	char	*temp;
@@ -298,33 +151,4 @@ void set_cmd_strings(t_cmd *cmd)
 		cmd->file_error = 1;
 		cmd = cmd->next;
 	}
-}
-
-char	**set_list_arra(t_list *env)
-{
-	char	**result;
-	t_list	*temp;
-	int		i;
-
-	temp = env;
-	i = ft_lstsize(env);
-	result = malloc(sizeof(char *) * (i + 1));
-	if (!result)
-		return NULL;
-	result[i] = NULL;
-	i = 0;
-	while (temp)
-	{
-		result[i] = ft_strdup(temp->content);
-		if (!result[i])
-		{
-			while (i > 0)
-				free(result[--i]);
-			free(result);
-			return (NULL);
-		}
-		temp = temp->next;
-		i++;
-	}
-	return (result);
 }

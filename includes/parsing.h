@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/26 14:00:35 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:15:34 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct	s_token
 	struct s_token	*next;
 }	t_line;
 
+void	handledoc(int sig);
 void	ft_free(char **arg);
 void	split_command(t_cmd **node);
 void	lexer(char **arg, t_line **head);
@@ -78,7 +79,6 @@ void	free_line(t_line *head);
 void	handlesig(int sig);
 void	lstadd_line(t_line **head, t_line *new);
 void	arange_arguments(t_line *head, t_line **final);
-void	reset_signal(void);
 void	handledoc(int sig);
 void	handlehang(int sig);
 void	update_env(t_cmd *cmd, t_data *data);
@@ -87,6 +87,7 @@ void	expanding(t_line **head, t_list *env);
 void	unflag_spaces(char **line);
 void	flag_spaces(char *line);
 void	fill_arguments(char **arg, int *i, t_line *tmp, int *flag);
+void	execute_signal(t_data *data, int temp_fd, char *temp_file);
 int		set_exit_status(int status);
 int		count_arguments(char **arg, int *i, t_line *tmp);
 int		print_error(char *str);
@@ -100,7 +101,6 @@ int		isredir(int i);
 int		checkspaces(char *line);
 int 	is_empty(char *str);
 int		count_words(const char *s, char c);
-int		get_env_length(t_list *env, int ca);
 int		alloc_exit(char *str, int exit);
 int		empty_node(t_line *node);
 int		handle_empty_node(t_line **node);
@@ -114,6 +114,7 @@ char	*ft_itoa(int value);
 char	*delete(char *tmp, int size);
 char	*fill_string(char *tmp, t_list *env, int env_len, int size);
 char	*expand_exit(char *str, int i, int exit);
+char	*expand_string(char *line, t_list *envp);
 t_list	*get_shlvl(void);
 t_list	*get_pwd(void);
 t_line	*copy_line_node(t_line *node);

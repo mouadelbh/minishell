@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/19 12:24:50 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:26:21 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,22 +58,23 @@ void	init_io(t_io_fds **io_fds)
 	(*io_fds)->stdout_backup = -1;
 }
 
-int init_append(t_cmd *cmd)
+int	init_append(t_cmd *cmd)
 {
 	t_cmd	*current;
 
 	if (!remove_old_file_ref(cmd->io_fds, false) || cmd->file_error == 0)
 		return (0);
 	cmd->io_fds->outfile = ft_strdup(cmd->argv[1]);
-	if (cmd->io_fds->outfile[0] == '\0'
-		|| (cmd->io_fds->outfile[0] == 36
-		&& cmd->io_fds->outfile[1] != '\0'))
+	if (cmd->io_fds->outfile[0] == '\0' \
+	|| (cmd->io_fds->outfile[0] == 36 \
+	&& cmd->io_fds->outfile[1] != '\0'))
 		return (file_error(cmd, "ambigious redirect\n"), 0);
 	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
 		return (file_error(cmd, "No such file or directory\n"), 0);
 	if (cmd->prev && cmd->prev->file_error != 1)
 		return (0);
-	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_APPEND | O_CREAT, 0644);
+	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_APPEND \
+	| O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
 		return (perror(cmd->argv[1]), 0);
 	current = cmd->prev;
@@ -93,7 +94,7 @@ int init_append(t_cmd *cmd)
 	return (1);
 }
 
-int init_write_to(t_cmd *cmd)
+int	init_write_to(t_cmd *cmd)
 {
 	t_cmd	*current;
 
@@ -102,15 +103,16 @@ int init_write_to(t_cmd *cmd)
 	if (cmd->io_fds->outfile)
 		free(cmd->io_fds->outfile);
 	cmd->io_fds->outfile = ft_strdup(cmd->argv[1]);
-	if (cmd->io_fds->outfile[0] == '\0'
-		|| (cmd->io_fds->outfile[0] == 36
-		&& cmd->io_fds->outfile[1] != '\0'))
+	if (cmd->io_fds->outfile[0] == '\0' \
+	|| (cmd->io_fds->outfile[0] == 36 \
+	&& cmd->io_fds->outfile[1] != '\0'))
 		return (file_error(cmd, "ambigious redirect\n"), 0);
 	if (cmd->io_fds->outfile && cmd->io_fds->outfile[0] == '\0')
 		return (file_error(cmd, "No such file or directory\n"), 0);
 	if (cmd->prev && cmd->prev->file_error != 1)
 		return (0);
-	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_TRUNC | O_CREAT, 0644);
+	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_TRUNC \
+	| O_CREAT, 0644);
 	if (cmd->io_fds->out_fd == -1)
 		return (perror(cmd->argv[1]), 0);
 	current = cmd->prev;
@@ -140,9 +142,9 @@ int	init_read_from(t_cmd *cmd)
 	if ((cmd->prev && cmd->prev->file_error != 1) || cmd->file_error == 0)
 		return (0);
 	cmd->io_fds->in_fd = open(cmd->io_fds->infile, O_RDONLY);
-	if (access(cmd->io_fds->infile, F_OK) == 0
-		&& access(cmd->io_fds->infile, R_OK) == -1)
-			return (file_error(cmd, ": Permission denied\n"), 0);
+	if (access(cmd->io_fds->infile, F_OK) == 0 \
+	&& access(cmd->io_fds->infile, R_OK) == -1)
+		return (file_error(cmd, ": Permission denied\n"), 0);
 	if (access(cmd->io_fds->infile, F_OK) == -1)
 		return (file_error(cmd, ": No such file or directory\n"), 0);
 	// if (!remove_old_file_ref(cmd->io_fds, true))

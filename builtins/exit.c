@@ -55,8 +55,7 @@ static int	arg_count(char *arg1, char *arg2)
 		ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 2);
 		if (is_num(arg1))
 			return (0);
-		else
-			printf("exit\n");
+		g_exit_status = 2;
 	}
 	return (1);
 }
@@ -66,7 +65,10 @@ int	ft_exit(t_data *data, char **cmd)
 	if (!cmd[1])
 		printf("exit\n");
 	if (!arg_count(cmd[1], cmd[2]))
-		return (1);
+	{
+		g_exit_status = 1;
+		return (0);
+	}
 	else if (cmd[1] && !cmd[2] && !is_num(cmd[1]))
 	{
 		ft_putstr_fd("exit\n", 2);

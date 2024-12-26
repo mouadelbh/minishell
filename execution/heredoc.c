@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/26 14:02:49 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:16:27 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	temp_file = random_file_name();
 	fork_id = fork();
 	if (fork_id != 0)
-		signal(SIGINT, handledoc);
+		signal(SIGINT, handlehang);
 	if (fork_id == 0)
 	{
 		signal(SIGINT, handledoc);
@@ -85,7 +85,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 			{
 				if (g_exit_status == -1)
 				{
-					perror("minishell: warning: here-document delimited by end-of-file\n");
+					ft_putendl_fd("minishell: warning: here-document delimited by end-of-file", 2);
 					g_exit_status = 0;
 				}
 				unlink(temp_file);

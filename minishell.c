@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:18:31 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/25 16:22:56 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:03:30 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ void	handlesig(int sig)
 
 int	main(int ac, char **av, char **env)
 {
-	(void)av;
 	t_data	program;
 
 	if (ac != 1)
 		return (printf("minishell doesn't take any arguments\n"), 1);
+	(void)av;
 	program.envp = NULL;
 	init(&program.envp, env);
 	program.status = 0;

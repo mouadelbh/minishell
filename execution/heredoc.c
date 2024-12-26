@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/25 14:52:19 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:16:27 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,6 @@ char	*expand_string(char *line, t_list *envp)
 	return (line);
 }
 
-void	print_warning(int i, char *str)
-{
-	ft_putstr_fd("minishell: warning: here-document at line ", 2);
-	ft_putnbr_fd(i, 2);
-	ft_putstr_fd(" delimited by end-of-file (wanted `", 2);
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd("')\n", 2);
-}
-
 int init_heredoc(t_cmd *cmd, t_data *data)
 {
 	char	*line;
@@ -80,7 +71,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	temp_file = random_file_name();
 	fork_id = fork();
 	if (fork_id != 0)
-		signal(SIGINT, handledoc);
+		signal(SIGINT, handlehang);
 	if (fork_id == 0)
 	{
 		signal(SIGINT, handledoc);
@@ -94,7 +85,7 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 			{
 				if (g_exit_status == -1)
 				{
-					perror("minishell: warning: here-document delimited by end-of-file\n");
+					ft_putendl_fd("minishell: warning: here-document delimited by end-of-file", 2);
 					g_exit_status = 0;
 				}
 				unlink(temp_file);

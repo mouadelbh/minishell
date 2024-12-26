@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:56:42 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/25 16:37:33 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:00:35 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,8 @@ typedef struct s_data t_data;
 
 typedef struct	s_expand
 {
-	int		i;
 	int		size;
 	int		ca;
-	char	*tmp;
 }	t_expand;
 
 typedef struct	s_token
@@ -114,6 +112,7 @@ char	*find_and_replace(char *line, t_list *data, int flag);
 char	*spacing(char *line);
 char	*ft_itoa(int value);
 char	*delete(char *tmp, int size);
+char	*fill_string(char *tmp, t_list *env, int env_len, int size);
 char	*expand_exit(char *str, int i, int exit);
 t_list	*get_shlvl(void);
 t_list	*get_pwd(void);

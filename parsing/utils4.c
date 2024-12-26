@@ -6,20 +6,22 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 14:56:20 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/25 15:44:46 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:01:24 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
 
-// int	check_case(char *str, int i)
-// {
-// 	if (!str[i] || is_space(str[i]) || !ft_isalpha(str[i]))
-// 		return (1);
-// 	if (check_token(str[i]))
-// 		return (1);
-// 	return (0);
-// }
+int	check_case(char *str, int i)
+{
+	if (!str[i] || is_space(str[i]) || str[i] == '\'' || \
+	str[i] == '\"' || str[i] == '$' || str[i] == '.' || str[i] == '/' \
+	|| str[i] == '+')
+		return (1);
+	if (check_token(str[i]))
+		return (1);
+	return (0);
+}
 
 int	print_error(char *str)
 {

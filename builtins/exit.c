@@ -39,7 +39,6 @@ static int	get_code(char *arg)
 		printf("No more arguments\n");
 		return (g_exit_status);
 	}
-	exit_code = 0;
 	if (!is_num(arg))
 		exit_code = 255;
 	else if (ft_atoi(arg) > 0 && ft_atoi(arg) < 256)
@@ -79,10 +78,6 @@ int	ft_exit(t_data *data, char **cmd)
 	}
 	if (is_num(cmd[1]))
 		g_exit_status = get_code(cmd[1]);
-	else if (!cmd[1])
-		g_exit_status = 0;
-	else
-		g_exit_status = 2;
 	free_all(data, 1);
 	rl_clear_history();
 	exit(g_exit_status);

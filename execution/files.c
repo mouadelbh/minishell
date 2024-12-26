@@ -19,9 +19,9 @@ int	is_redirection(int type)
 	return (0);
 }
 
-void	handle_read_from(t_cmd *cmd, t_data *data)
+void	handle_read_from(t_cmd *cmd)
 {
-	if (!init_read_from(cmd, data))
+	if (!init_read_from(cmd))
 	{
 		while (cmd->prev && is_redirection(cmd->type))
 		{
@@ -32,9 +32,9 @@ void	handle_read_from(t_cmd *cmd, t_data *data)
 	}
 }
 
-void	handle_write_to(t_cmd *cmd, t_data *data)
+void	handle_write_to(t_cmd *cmd)
 {
-	if (!init_write_to(cmd, data))
+	if (!init_write_to(cmd))
 	{
 		while (cmd->next && is_redirection(cmd->type))
 		{
@@ -45,9 +45,9 @@ void	handle_write_to(t_cmd *cmd, t_data *data)
 	}
 }
 
-void	handle_append(t_cmd *cmd, t_data *data)
+void	handle_append(t_cmd *cmd)
 {
-	if (!init_append(cmd, data))
+	if (!init_append(cmd))
 	{
 		while (cmd->next && is_redirection(cmd->type))
 		{
@@ -65,15 +65,15 @@ int	create_files(t_cmd *cmd, t_data *data)
 	i = 1;
 	while (cmd)
 	{
-		init_io(&cmd->io_fds, cmd->cmd);
+		init_io(&cmd->io_fds);
 		if (cmd->type == CMD)
 			cmd->file_error = init_command(cmd, data);
 		else if (cmd->type == REDIR_OUT)
-			handle_write_to(cmd, data);
+			handle_write_to(cmd);
 		else if (cmd->type == REDIR_IN)
-			handle_read_from(cmd, data);
+			handle_read_from(cmd);
 		else if (cmd->type == APPEND)
-			handle_append(cmd, data);
+			handle_append(cmd);
 		else if (cmd->type == HEREDOC)
 			cmd->file_error = init_heredoc(cmd, data);
 		i = cmd->file_error;

@@ -24,7 +24,7 @@ void	close_fds(t_cmd *cmds, bool close_backups)
 		if (close_backups)
 			restore_io(cmds->io_fds);
 	}
-	close_pipe_fds(cmds, NULL);
+	close_pipe_fds(cmds);
 }
 
 bool	redirect_io(t_io_fds *io)

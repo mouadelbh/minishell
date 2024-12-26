@@ -14,13 +14,11 @@
 
 char *ft_getenv(char *name, t_data *data)
 {
-	int 	i;
 	t_list	*temp;
 
 	temp = data->envp;
 	if (!name || !data || !data->envp)
 		return NULL;
-	i = 0;
 	while (temp)
 	{
 		if (ft_strncmp(temp->content, name, ft_strlen(name)) == 0)
@@ -271,9 +269,7 @@ void set_cmd_strings(t_cmd *cmd)
 {
 	int		i;
 	char	*temp;
-	char	*new_cmd;
 
-	new_cmd = NULL;
 	while (cmd != NULL)
 	{
 		i = 0;

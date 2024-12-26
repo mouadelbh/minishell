@@ -98,5 +98,6 @@ void	free_all(t_data *data, int i)
 
 void	free_data(t_data *data, int exit_code)
 {
+	(void)exit_code;
 	free_all(data, 1);
 }

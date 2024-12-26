@@ -31,11 +31,10 @@ static void	print_env(t_list *envp)
 
 int	ft_env(t_data *data, char **args, int export)
 {
-	int		i;
+	(void)args;
 	t_list	*env_temp;
 
 	env_temp = data->envp;
-	i = 0;
 	if (!data->envp)
 		return (EXIT_FAILURE);
 	if (export == 0)

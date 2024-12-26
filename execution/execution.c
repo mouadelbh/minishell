@@ -21,21 +21,9 @@ int	handle_input(t_data *data)
 	return (complex_command(data));
 }
 
-static void	print_remaining_nodes(t_data *data)
-{
-	t_cmd *cmd;
-
-	cmd = data->cmd;
-	if (cmd)
-		show_command_info(cmd);
-}
-
 int	minishell(t_data *data)
 {
 	int		err;
-	t_cmd	*cmd;
-	t_line	*head;
-	int		new_fd;
 
 	while (1)
 	{

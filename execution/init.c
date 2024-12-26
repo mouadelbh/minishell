@@ -41,7 +41,7 @@ void	init_cmd(t_cmd *cmd)
 	cmd->prev = NULL;
 }
 
-void	init_io(t_io_fds **io_fds, char *current)
+void	init_io(t_io_fds **io_fds)
 {
 	*io_fds = (t_io_fds *)malloc(sizeof(t_io_fds));
 	if (!(*io_fds))
@@ -58,7 +58,7 @@ void	init_io(t_io_fds **io_fds, char *current)
 	(*io_fds)->stdout_backup = -1;
 }
 
-int init_append(t_cmd *cmd, t_data *data)
+int init_append(t_cmd *cmd)
 {
 	t_cmd	*current;
 
@@ -93,7 +93,7 @@ int init_append(t_cmd *cmd, t_data *data)
 	return (1);
 }
 
-int init_write_to(t_cmd *cmd, t_data *data)
+int init_write_to(t_cmd *cmd)
 {
 	t_cmd	*current;
 
@@ -132,12 +132,12 @@ int init_write_to(t_cmd *cmd, t_data *data)
 	return (1);
 }
 
-int	init_read_from(t_cmd *cmd, t_data *data)
+int	init_read_from(t_cmd *cmd)
 {
 	t_cmd	*current;
 
 	cmd->io_fds->infile = ft_strdup(cmd->argv[1]);
-	if (cmd->prev && cmd->prev->file_error != 1 || cmd->file_error == 0)
+	if ((cmd->prev && cmd->prev->file_error != 1) || cmd->file_error == 0)
 		return (0);
 	cmd->io_fds->in_fd = open(cmd->io_fds->infile, O_RDONLY);
 	if (access(cmd->io_fds->infile, F_OK) == 0

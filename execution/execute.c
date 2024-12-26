@@ -50,7 +50,7 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 	}
 	if (execve(path, cmd->argv, envp) == -1)
 		perror("execve");
-	reset_shell(data, 0);
+	return (reset_shell(data, 0), EXIT_SUCCESS);
 }
 
 int	execute_command(t_data *data, t_cmd *cmd)

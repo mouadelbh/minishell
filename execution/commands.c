@@ -15,6 +15,7 @@
 
 int	init_command(t_cmd *cmd, t_data *data)
 {
+	(void)data;
 	if (should_pipe(cmd) || (cmd->next && cmd->next->type == CMD))
 		cmd->pipe_output = true;
 	return (1);
@@ -76,7 +77,7 @@ int single_command(t_data *data)
 	else
 	{
 		path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
-		if (check_cmd(path, data) == 1 || check_permission(path, data) == 1)
+		if (check_cmd(path) == 1 || check_permission(path, data) == 1)
 		{
 			free(path);
 			g_exit_status = 126;
@@ -202,9 +203,7 @@ void	set_cmd_list(t_cmd **cmd, t_cmd **new)
 int	complex_command(t_data *data)
 {
 	t_cmd	*new;
-	t_cmd	*cmd;
 
-	cmd = data->cmd;
 	new = NULL;
 	if (data->cmd)
 	{
@@ -213,11 +212,11 @@ int	complex_command(t_data *data)
 		if (!create_pipes(data))
 		{
 			ft_putstr_fd("Failed to create pipes\n", 2);
-			close_pipe_fds(data->cmd, NULL);
+			close_pipe_fds(data->cmd);
 			return (EXIT_FAILURE);
 		}
 		if (set_values(data) == 1)
-			return (close_pipe_fds(data->cmd, NULL), 1);
+			return (close_pipe_fds(data->cmd), 1);
 		set_cmd_list(&data->cmd, &new);
 		data->cmd = new;
 		return (handle_execute(data));

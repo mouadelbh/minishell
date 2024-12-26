@@ -14,13 +14,11 @@
 
 char	*find_value(char *name, t_list *envp)
 {
-	int		i;
 	char	*key;
 	t_list	*temp;
 	char	*result;
 
 	temp = envp;
-	i = 0;
 	if (!is_valid_env_name(name))
 		return (NULL);
 	key = new_substr(name, '=');
@@ -65,8 +63,6 @@ int	is_valid_env_name(char *var)
 	i++;
 	while (var[i] && var[i] != '=')
 	{
-		if (var[i] == '+' && var[i + 1] && var[i + 1] == '=')
-			return (2);
 		if (ft_isalnum(var[i]) == 0 && var[i] != '_')
 			return (0);
 		i++;

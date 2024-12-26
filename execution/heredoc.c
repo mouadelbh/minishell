@@ -69,16 +69,13 @@ void	print_warning(int i, char *str)
 
 int init_heredoc(t_cmd *cmd, t_data *data)
 {
-	char	*temp;
 	char	*line;
 	char	*temp_file;
 	int		temp_fd;
 	int		fork_id;
-	int		tmp;
 	t_cmd	*current;
 
 	line = NULL;
-	tmp = g_exit_status;
 	g_exit_status = -1;
 	temp_file = random_file_name();
 	fork_id = fork();

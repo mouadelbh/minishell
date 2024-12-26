@@ -154,8 +154,6 @@ char	*find_and_replace(char *str, t_list *env, int flag)
 	int		i;
 	int		size;
 	int		ca;
-	int		j;
-	int		c;
 	char	*tmp;
 
 	if (!str)
@@ -164,8 +162,6 @@ char	*find_and_replace(char *str, t_list *env, int flag)
 	i = 0;
 	while (str[i])
 	{
-		j = 0;
-		c = 0;
 		if (str[i] == -1 && str[i + 1] == '?')
 			tmp = expand_exit(tmp, i, g_exit_status);
 		else if (str[i] == -1)
@@ -173,7 +169,7 @@ char	*find_and_replace(char *str, t_list *env, int flag)
 			ca = find(str, i, env, &size);
 			if (ca >= 0)
 				tmp = replace(tmp, ca, env, size, flag);
-			else if (ca < 0 && flag == 0)
+			else if (flag == 0)
 				tmp = delete(tmp, size);
 			else
 				reset_expand(tmp);

@@ -30,10 +30,12 @@ int	valid_command(t_cmd *cmd, t_data *data)
 	return (1);
 }
 
-int	check_cmd(char *cmd, t_data *data)
+int	check_cmd(char *cmd)
 {
 	struct stat	buf;
 
+	if (cmd[0] != '.' || cmd[1] != '/')
+		return (0);
 	if (!ft_strchr(cmd, '/'))
 		return (0);
 	if (stat(cmd, &buf) == -1)
@@ -53,8 +55,6 @@ int	check_permission(char *path, t_data *data)
 {
 	if (!path)
 		return (0);
-	if (path[0] != '.' || path[1] != '/')
-		return (0);
 	if (access(path, X_OK) != 0 && access(path, F_OK) == 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
@@ -73,7 +73,7 @@ int	command_is_valid(t_data *data, t_cmd *cmd, int is_builtin)
 	if (is_builtin)
 		return (1);
 	full_cmd = get_full_cmd(cmd->argv[0], data->envp_arr);
-	if (check_cmd(cmd->argv[0], data) || check_permission(full_cmd, data))
+	if (check_cmd(cmd->argv[0]) || check_permission(full_cmd, data))
 		return (free(full_cmd), 0);
 	free(full_cmd);
 	if (cmd->type == CMD)

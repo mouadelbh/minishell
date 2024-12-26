@@ -62,7 +62,7 @@ char* new_substr(const char* str, int c)
 	return (result);
 }
 
-char* get_key(char* value, t_list* envp, char** env_value, int* append)
+char* get_key(char* value, char** env_value)
 {
 	char* key;
 	int i;
@@ -73,20 +73,13 @@ char* get_key(char* value, t_list* envp, char** env_value, int* append)
 		key = find_occurance(value, "=");
 		*env_value = ft_substr(value, (ft_strlen(key) + 1), ft_strlen(value));
 	}
-	else if (i == 2)
-	{
-		key = find_occurance(value, "+=");
-		*env_value = ft_substr(value, (ft_strlen(key) + 2), ft_strlen(value));
-		*append = 1;
-	}
 	else
 		*env_value = NULL;
 	return (key);
 }
 
-int append_env_value(char* key, char* env_value, char* cmd, t_list* envp)
+int append_env_value(char* key, char* env_value, t_list* envp)
 {
-	int i;
 	char* temp;
 	char* temp2;
 

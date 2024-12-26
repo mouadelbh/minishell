@@ -23,10 +23,10 @@ void	delete_env_var(char *name, t_list **envp)
 	name_len = ft_strlen(name);
 	while (temp != NULL)
 	{
-		if (ft_strncmp(name, temp->content, name_len) == 0
-			&& (((char*)temp->content)[name_len] == '=')
-			|| ((temp->empty_value == 1)
-			&& (ft_strncmp(name, temp->content, 0) == 0)))
+		if ((ft_strncmp(name, temp->content, name_len) == 0
+		&& (((char*)temp->content)[name_len] == '='))
+		|| ((temp->empty_value == 1)
+		&& (ft_strncmp(name, temp->content, 0) == 0)))
 		{
 			if (prev == NULL)
 				*envp = temp->next;

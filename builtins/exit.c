@@ -30,7 +30,7 @@ static int	is_num(char *arg)
 	return (1);
 }
 
-static int	get_code(char *arg, int *error)
+static int	get_code(char *arg)
 {
 	unsigned long long	exit_code;
 
@@ -41,19 +41,11 @@ static int	get_code(char *arg, int *error)
 	}
 	exit_code = 0;
 	if (!is_num(arg))
-	{
 		exit_code = 255;
-	}
 	else if (ft_atoi(arg) > 0 && ft_atoi(arg) < 256)
-	{
 		exit_code = ft_atoi(arg);
-	}
 	else if (ft_atoi(arg) > 255 || ft_atoi(arg) < 0)
-	{
 		exit_code = ft_atoi(arg) % 256;
-		if (exit_code < 0)
-			exit_code *= -1;
-	}
 	return (exit_code);
 }
 
@@ -72,8 +64,6 @@ static int	arg_count(char *arg1, char *arg2)
 
 int	ft_exit(t_data *data, char **cmd)
 {
-	int	error;
-
 	if (!cmd[1])
 		printf("exit\n");
 	if (!arg_count(cmd[1], cmd[2]))
@@ -88,7 +78,7 @@ int	ft_exit(t_data *data, char **cmd)
 		reset_shell(data, 0);
 	}
 	if (is_num(cmd[1]))
-		g_exit_status = get_code(cmd[1], &error);
+		g_exit_status = get_code(cmd[1]);
 	else if (!cmd[1])
 		g_exit_status = 0;
 	else

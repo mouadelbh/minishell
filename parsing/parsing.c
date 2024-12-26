@@ -81,11 +81,8 @@ void	expanding(t_line **head, t_list *env)
 
 int	parse(char *str, t_line **head, t_list *env, t_data *ex_data)
 {
-	t_line	*tmp;
-	t_line	*new;
 	char	**arg;
 	char	*line;
-	int		i;
 
 	if (ex_data->arg == NULL)
 		reset_shell(ex_data, 1);

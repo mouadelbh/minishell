@@ -29,7 +29,7 @@ bool	create_pipes(t_data *data)
 	return (true);
 }
 
-void	close_pipe_fds(t_cmd *cmds, t_cmd *skip_cmd)
+void	close_pipe_fds(t_cmd *cmds)
 {
 	while (cmds && cmds->pipe_output)
 	{
@@ -49,6 +49,6 @@ bool	set_pipe_fds(t_cmd *cmds, t_cmd *c)
 		dup2(c->prev->pipe_fd[0], STDIN_FILENO);
 	if (c->pipe_output)
 		dup2(c->pipe_fd[1], STDOUT_FILENO);
-	close_pipe_fds(cmds, c);
+	close_pipe_fds(cmds);
 	return (true);
 }

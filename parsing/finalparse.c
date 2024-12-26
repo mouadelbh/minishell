@@ -94,6 +94,7 @@ int	get_current(t_line **node, t_cmd **new)
 		(*node) = (*node)->next;
 	}
 	(*new)->argv[i] = NULL;
+	return (0);
 }
 
 void	get_final_list(t_line **head, t_cmd **cmd)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:48:20 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/25 14:52:19 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:01:09 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ int	ft_exit(t_data *data, char **cmd)
 		ft_putstr_fd("exit\n", 2);
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(cmd[1], 2);
-		ft_putstr_fd(": numeric argument required\n", 2);
-		g_exit_status = 255;
+			ft_putstr_fd(": numeric argument required\n", 2);
+		g_exit_status = 2;
 		reset_shell(data, 0);
 	}
 	if (is_num(cmd[1]))

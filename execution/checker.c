@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:34:19 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/26 14:05:34 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:02:33 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ int	check_cmd(char *cmd)
 {
 	struct stat	buf;
 
-	if (cmd[0] != '.' || cmd[1] != '/')
-		return (0);
 	if (!ft_strchr(cmd, '/'))
 		return (0);
 	if (stat(cmd, &buf) == -1)
@@ -44,7 +42,7 @@ int	check_cmd(char *cmd)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": is a directory\n", 2);
+		ft_putstr_fd(": Is a directory\n", 2);
 		g_exit_status = 126;
 		return (1);
 	}
@@ -54,6 +52,8 @@ int	check_cmd(char *cmd)
 int	check_permission(char *path, t_data *data)
 {
 	if (!path)
+		return (0);
+	if (path[0] != '.' || path[1] != '/')
 		return (0);
 	if (access(path, X_OK) != 0 && access(path, F_OK) == 0)
 	{

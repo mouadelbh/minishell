@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:47:56 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/26 14:04:19 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:58:52 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ int	ft_export(t_data *data, char **cmd)
 {
 	if (!cmd[1])
 		return (ft_env(data, cmd, 1));
-	handle_export(cmd[1], data);
+	g_exit_status = handle_export(cmd[1], data);
 	if (cmd[2])
 		ft_export(data, cmd + 1);
-	return (0);
+	return (g_exit_status);
 }

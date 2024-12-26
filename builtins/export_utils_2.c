@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:43:26 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/19 09:57:39 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:42:42 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ char	*find_value(char *name, t_list *envp)
 	char	*key;
 	t_list	*temp;
 	char	*result;
+	char	*value;
 
 	temp = envp;
 	if (!is_valid_env_name(name))
@@ -26,16 +27,18 @@ char	*find_value(char *name, t_list *envp)
 		return (NULL);
 	while (temp)
 	{
-		if (ft_strncmp(key, temp->content, ft_strlen(temp->content)) == 0)
+		value = new_substr(temp->content, '=');
+		if (ft_strncmp(key, value, ft_strlen(value) == 0))
 		{
 			result = ft_strdup(temp->content);
 			free(key);
+			free(value);
 			return (result);
 		}
+		free(value);
 		temp = temp->next;
 	}
-	free(key);
-	return (NULL);
+	return (free(key), NULL);
 }
 
 static t_list	*create_env_node(const char *key, int empty_value)

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:46:48 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/26 14:01:54 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:02:16 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,7 @@ int	ft_unset(t_data *data, char **cmd)
 	if (!cmd[1])
 		return (0);
 	delete_env_var(cmd[1], &(data->envp));
+	if (cmd[2])
+		ft_unset(data, cmd + 1);
 	return (0);
 }

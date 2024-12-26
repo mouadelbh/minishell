@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 14:35:27 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/26 14:00:56 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 17:24:12 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*fill_string(char *tmp, t_list *env, int env_len, int size)
 
 	i = 0;
 	j = 0;
-	new = malloc(ft_strlen(tmp) + ft_strlen(env->content + env_len) - size + 1);
+	new = malloc(ft_strlen(tmp) + ft_strlen(env->content + env_len) + 1);
 	if (!new)
 		return (NULL);
 	while (tmp[i] && tmp[i] != -1)

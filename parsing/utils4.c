@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 14:56:20 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/12/26 14:01:24 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 17:26:10 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	check_case(char *str, int i)
 {
 	if (!str[i] || is_space(str[i]) || str[i] == '\'' || \
 	str[i] == '\"' || str[i] == '$' || str[i] == '.' || str[i] == '/' \
-	|| str[i] == '+')
+	|| str[i] == '+' || str[i] == -1)
 		return (1);
 	if (check_token(str[i]))
 		return (1);

@@ -19,6 +19,8 @@ int	init_append(t_cmd *cmd)
 	if (!check_file_refs(cmd))
 		return (0);
 	current = cmd->prev;
+	if (cmd->prev && cmd->prev->type == PIPE)
+		return (0);
 	while (current && current->type != CMD)
 	{
 		free(current->io_fds->outfile);

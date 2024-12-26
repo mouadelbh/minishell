@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:46:48 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/25 13:55:50 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:01:54 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void	delete_env_var(char *name, t_list **envp)
 	while (temp != NULL)
 	{
 		if ((ft_strncmp(name, temp->content, name_len) == 0
-		&& (((char*)temp->content)[name_len] == '='))
-		|| ((temp->empty_value == 1)
-		&& (ft_strncmp(name, temp->content, 0) == 0)))
+				&& (((char *)temp->content)[name_len] == '='))
+			|| ((temp->empty_value == 1) && (ft_strncmp(name, temp->content,
+						0) == 0)))
 		{
 			if (prev == NULL)
 				*envp = temp->next;

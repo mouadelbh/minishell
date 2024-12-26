@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:47:56 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/22 20:50:52 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:04:19 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@ int	export_error(char *cmd)
 	return (1);
 }
 
-int add_entry(char *cmd, char *value, t_data *data)
+int	add_entry(char *cmd, char *value, t_data *data)
 {
-	char *equal_sign = ft_strchr(cmd, '=');
+	char	*equal_sign;
 
+	equal_sign = ft_strchr(cmd, '=');
 	if (!equal_sign && is_valid_env_name(cmd) && !value)
 		return (create_env_value(data, cmd, 1), 0);
 	if (value && (!equal_sign || !*(equal_sign + 1)))
@@ -31,38 +32,36 @@ int add_entry(char *cmd, char *value, t_data *data)
 	return (1);
 }
 
-static int	handle_export(char *key, char *env_value, char **cmd, t_data *data)
+static int	handle_export(char *cmd, t_data *data)
 {
 	char	*value;
+	char	*key;
+	char	*env_value;
 
+	if (!is_valid_env_name(cmd))
+		return (export_error(cmd));
+	value = find_value(cmd, data->envp);
+	if (!add_entry(cmd, value, data))
+		return (free(value), 0);
+	free(value);
+	key = get_key(cmd, &env_value);
 	value = find_value(key, data->envp);
 	if (!value)
-		create_env_value(data, cmd[1], 0);
+		create_env_value(data, cmd, 0);
 	else
 		modify_env_value(key, env_value, data);
 	free(value);
+	free(key);
+	free(env_value);
 	return (0);
 }
 
 int	ft_export(t_data *data, char **cmd)
 {
-	char	*key;
-	char	*env_value;
-	char	*value;
-
 	if (!cmd[1])
 		return (ft_env(data, cmd, 1));
-	if (!is_valid_env_name(cmd[1]))
-		return (export_error(cmd[1]));
-	value = find_value(cmd[1], data->envp);
-	if (!add_entry(cmd[1], value, data))
-		return (free(value), 0);
-	free(value);
-	key = get_key(cmd[1], &env_value);
-	handle_export(key, env_value, cmd, data);
+	handle_export(cmd[1], data);
 	if (cmd[2])
 		ft_export(data, cmd + 1);
-	free(key);
-	free(env_value);
 	return (0);
 }

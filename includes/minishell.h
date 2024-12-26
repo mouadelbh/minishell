@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 12:50:28 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/25 14:52:19 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:09:02 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,11 +122,8 @@ void 	show_io_fds(t_io_fds *io_fds);
 void 	set_cmd_strings(t_cmd *cmd);
 int		create_files(t_cmd *cmd, t_data *data);
 int		init_command(t_cmd *cmd, t_data *data);
-t_cmd	*init_new_cmd(t_cmd *src, t_cmd *next, t_cmd *prev);
-t_cmd	*set_command_list(t_cmd *cmd);
 int		command_is_valid(t_data *data, t_cmd *cmd, int is_builtin);
 int		check_permission(char *path, t_data *data);
-t_cmd	*set_command_list(t_cmd *cmd);
 int		command_is_valid(t_data *data, t_cmd *cmd, int is_builtin);
 int		check_cmd(char *cmd);
 int		check_permission(char *path, t_data *data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:45:30 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/11 21:49:56 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:00:33 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ static void	print_env(t_list *envp)
 
 int	ft_env(t_data *data, char **args, int export)
 {
-	(void)args;
 	t_list	*env_temp;
 
+	(void)args;
 	env_temp = data->envp;
 	if (!data->envp)
 		return (EXIT_FAILURE);

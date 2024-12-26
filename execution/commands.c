@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/25 14:52:19 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:10:46 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ t_io_fds	*dup_io(t_io_fds *io)
 
 	new = (t_io_fds *)malloc(sizeof(t_io_fds));
 	if (!new)
-        return (NULL);
+		return (NULL);
 	new->in_fd = io->in_fd;
 	new->out_fd = io->out_fd;
 	new->heredoc_name = ft_strdup(io->heredoc_name);
@@ -163,22 +163,22 @@ t_cmd	*copy_node(t_cmd *src)
 void	free_tmp_io(t_io_fds *io)
 {
 	if (io->infile)
-    {
-        free(io->infile);
-        io->infile = NULL;
-    }
+	{
+		free(io->infile);
+		io->infile = NULL;
+	}
 	if (io->outfile)
 	{
 		free(io->outfile);
 		io->outfile = NULL;
 	}
 	if (io->heredoc_name)
-    {
+	{
 		printf("The heredoc name is %s\n", io->heredoc_name);
 		unlink(io->heredoc_name);
-        free(io->heredoc_name);
-        io->heredoc_name = NULL;
-    }
+		free(io->heredoc_name);
+		io->heredoc_name = NULL;
+	}
 	free(io);
 }
 

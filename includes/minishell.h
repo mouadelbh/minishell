@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:39:05 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/26 18:39:36 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 18:46:47 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,9 @@ int			ft_exit(t_data *data, char **cmd);
 int			ft_export(t_data *data, char **cmd);
 int			ft_unset(t_data *data, char **cmd);
 int			modify_env_value(char *name, char *new_value, t_data *data);
-char		ft_getenv(char *name, t_data *data);
-char		find_value(char *name, t_list *envp);
-char		new_substr(const char *str, int c);
+char		*ft_getenv(char *name, t_data *data);
+char		*find_value(char *name, t_list *envp);
+char		*new_substr(const char *str, int c);
 void		create_env_value(t_data *data, char *key, int empty_value);
 void		set_list_var(t_data *data, char *name, char *new_value);
 void		reset_shell(t_data *data, int i);
@@ -109,9 +109,9 @@ int			builtin(char *cmd);
 int			exec_builtin(t_data *data, char **cmd);
 int			count_pipes(t_data *data);
 int			count_symbols(t_data *data);
-char		ft_strcat(char *dest, char *src);
-char		get_full_cmd(char *av, char **env);
-char		to_str(char **arr);
+char		*ft_strcat(char *dest, char *src);
+char		*get_full_cmd(char *av, char **env);
+char		*to_str(char **arr);
 char		**set_list_arra(t_list *envp);
 void		set_cmd_strings(t_cmd *cmd);
 int			create_files(t_cmd *cmd, t_data *data);
@@ -124,6 +124,7 @@ int			exec_cmd(char **command, char **envp, t_data *data);
 int			single_command(t_data *data);
 int			complex_command(t_data *data);
 int			should_pipe(t_cmd *cmd);
+int			check_cmd(char *path);
 int			set_values(t_data *data);
 int			execute_command(t_data *data, t_cmd *cmd);
 int			close_file(t_data *data, t_cmd *cmd);
@@ -141,7 +142,7 @@ bool		redirect_io(t_io_fds *io);
 bool		create_pipes(t_data *data);
 void		lstadd_cmd(t_cmd **head, t_cmd *new);
 int			fork_and_exec(t_data *data);
-t_io_fds	dup_io(t_io_fds *io);
+t_io_fds	*dup_io(t_io_fds *io);
 bool		set_pipe_fds(t_cmd *cmds, t_cmd *c);
 bool		restore_io(t_io_fds *io);
 void		close_pipe_fds(t_cmd *cmds);
@@ -151,7 +152,7 @@ int			is_valid_env_name(char *var);
 void		handle_write_to(t_cmd *cmd);
 void		handle_read_from(t_cmd *cmd);
 void		handle_append(t_cmd *cmd);
-char		get_key(char *value, char **env_value);
+char		*get_key(char *value, char **env_value);
 int			append_env_value(char *key, char *env_value, t_list *envp);
 void		free_cmd_node(t_cmd *cmd);
 

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:39:05 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 13:05:21 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:51:18 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void		init_io(t_io_fds **io_fds);
 int			init_write_to(t_cmd *cmd);
 int			init_read_from(t_cmd *cmd);
 int			init_append(t_cmd *cmd);
-int			check_file_refs(t_cmd *cmd);
+int			check_file_refs(t_cmd *cmd, int append);
 void		file_error(t_cmd *cmd, char *str);
 void		close_fds(t_cmd *cmds, bool close_backups);
 bool		check_infile_outfile(t_io_fds *io);

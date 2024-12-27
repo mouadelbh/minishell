@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 14:07:28 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:51:12 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	init_append(t_cmd *cmd)
 {
 	t_cmd	*current;
 
-	if (!check_file_refs(cmd))
+	if (!check_file_refs(cmd, 1))
 		return (0);
 	current = cmd->prev;
 	if (cmd->prev && cmd->prev->type == PIPE)
@@ -36,7 +36,7 @@ int	init_write_to(t_cmd *cmd)
 {
 	t_cmd	*current;
 
-	if (!check_file_refs(cmd))
+	if (!check_file_refs(cmd, 0))
 		return (0);
 	current = cmd->prev;
 	if (cmd->prev && cmd->prev->type == PIPE)

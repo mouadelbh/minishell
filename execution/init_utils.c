@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 17:50:28 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/26 17:52:48 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:52:48 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	init_io(t_io_fds **io_fds)
 	(*io_fds)->stdout_backup = -1;
 }
 
-int	check_file_refs(t_cmd *cmd)
+int	check_file_refs(t_cmd *cmd, int append)
 {
 	if (!remove_old_file_ref(cmd->io_fds, false) || cmd->file_error == 0)
 		return (0);
@@ -71,8 +71,10 @@ int	check_file_refs(t_cmd *cmd)
 		return (file_error(cmd, "No such file or directory\n"), 0);
 	if (cmd->prev && cmd->prev->file_error != 1)
 		return (0);
-	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | O_APPEND \
-	| O_CREAT, 0644);
+	if (append)
+		cmd->io_fds->in_fd = open(cmd->io_fds->outfile, O_RDWR | O_CREAT | O_APPEND, 0644);
+	else
+		cmd->io_fds->in_fd = open(cmd->io_fds->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (cmd->io_fds->out_fd == -1)
 		return (perror(cmd->argv[1]), 0);
 	return (1);

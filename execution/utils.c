@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 13:05:29 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 13:16:58 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	*get_path(char **env)
 	{
 		if (ft_strncmp(env[i], "PATH=", 5) == 0)
 		{
-			result = ft_strdup(env[i]);
+			result = ft_strdup(env[i] + 5);
 			break ;
 		}
 		i++;

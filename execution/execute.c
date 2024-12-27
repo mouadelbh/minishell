@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 13:06:59 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 13:08:30 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 		g_exit_status = 1;
 		reset_shell(data, 0);
 	}
-	execve(path, cmd->argv, envp);	
+	execve(path, cmd->argv, envp);
 	return (reset_shell(data, 0), EXIT_SUCCESS);
 }
 

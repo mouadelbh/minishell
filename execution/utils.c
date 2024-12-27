@@ -58,7 +58,10 @@ char	*get_full_cmd(char *av, char **env)
 
 	env_path = get_path(env);
 	if (!env_path || av[0] == '\0')
+	{
+		free(env_path);
 		return (NULL);
+	}
 	path = ft_split(env_path, ':');
 	free(env_path);
 	if (!path)
@@ -85,8 +88,8 @@ static char	*concat_cmd_strings(char **argv)
 	while (argv[i] != NULL)
 	{
 		temp = ft_strjoin(cmd, argv[i]);
-		if (temp == NULL)
-			return (perror("Failed to allocate memory"), NULL);
+		if (!temp)
+			return (NULL);
 		if (argv[i + 1] != NULL)
 		{
 			free(cmd);
@@ -108,11 +111,6 @@ void	set_cmd_strings(t_cmd *cmd)
 	while (cmd != NULL)
 	{
 		cmd->cmd = concat_cmd_strings(cmd->argv);
-		if (cmd->cmd == NULL)
-		{
-			perror("Failed to allocate memory");
-			return ;
-		}
 		cmd->file_error = 1;
 		cmd = cmd->next;
 	}

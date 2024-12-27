@@ -109,7 +109,5 @@ int	complex_command(t_data *data)
 		data->cmd = new;
 		return (handle_execute(data));
 	}
-	else
-		ft_putstr_fd("No command found\n", 2);
 	return (0);
 }

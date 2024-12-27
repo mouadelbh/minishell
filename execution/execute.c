@@ -24,7 +24,6 @@ int	set_values(t_data *data)
 			ft_putstr_fd("Error in the fds\n", 2);
 			return (EXIT_FAILURE);
 		}
-		ft_putstr_fd("No command\n", 2);
 		return (EXIT_SUCCESS);
 	}
 	return (127);

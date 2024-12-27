@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:24:51 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/26 18:25:28 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 13:53:15 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	complex_command(t_data *data)
 			return (EXIT_FAILURE);
 		}
 		if (set_values(data) == 1)
-			return (close_pipe_fds(data->cmd), 1);
+			return (1);
 		set_cmd_list(&data->cmd, &new);
 		data->cmd = new;
 		return (handle_execute(data));

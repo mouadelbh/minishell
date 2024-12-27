@@ -28,7 +28,7 @@ char	*find_value(char *name, t_list *envp)
 	while (temp)
 	{
 		value = new_substr(temp->content, '=');
-		if (ft_strncmp(key, value, ft_strlen(value) == 0))
+		if (ft_strncmp(key, value, ft_strlen(value)) == 0)
 		{
 			result = ft_strdup(temp->content);
 			free(key);

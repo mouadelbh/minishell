@@ -27,7 +27,7 @@ int	add_entry(char *cmd, char *value, t_data *data)
 	equal_sign = ft_strchr(cmd, '=');
 	if (!equal_sign && is_valid_env_name(cmd) && !value)
 		return (create_env_value(data, cmd, 1), 0);
-	if (value && (!equal_sign || !*(equal_sign + 1)))
+	if (value && (!equal_sign))
 		return (0);
 	return (1);
 }

@@ -6,33 +6,11 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/26 18:01:28 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 13:05:29 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	count_pipes(t_data *data)
-{
-	int		i;
-	int		k;
-	t_line	*temp;
-
-	i = 0;
-	k = 0;
-	temp = data->head;
-	while (temp)
-	{
-		while (temp->str[i])
-		{
-			if (temp->type == 1)
-				k++;
-			i++;
-		}
-		temp = temp->next;
-	}
-	return (k);
-}
 
 static char	*construct_full_cmd(char *path, char *av)
 {
@@ -52,6 +30,25 @@ static char	*construct_full_cmd(char *path, char *av)
 	return (NULL);
 }
 
+static char	*get_path(char **env)
+{
+	int		i;
+	char	*result;
+
+	i = 0;
+	result = NULL;
+	while (env[i])
+	{
+		if (ft_strncmp(env[i], "PATH=", 5) == 0)
+		{
+			result = ft_strdup(env[i]);
+			break ;
+		}
+		i++;
+	}
+	return (result);
+}
+
 char	*get_full_cmd(char *av, char **env)
 {
 	int		i;
@@ -59,8 +56,7 @@ char	*get_full_cmd(char *av, char **env)
 	char	*env_path;
 	char	*full_cmd;
 
-	(void)env;
-	env_path = getenv("PATH");
+	env_path = get_path(env);
 	if (!env_path || av[0] == '\0')
 		return (NULL);
 	path = ft_split(env_path, ':');

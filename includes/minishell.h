@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:39:05 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/26 18:46:47 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 13:05:21 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ void		reset_shell(t_data *data, int i);
 void		free_env(t_list **envp);
 int			builtin(char *cmd);
 int			exec_builtin(t_data *data, char **cmd);
-int			count_pipes(t_data *data);
 int			count_symbols(t_data *data);
 char		*ft_strcat(char *dest, char *src);
 char		*get_full_cmd(char *av, char **env);

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 14:05:38 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:14:57 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int	execute_command(t_data *data, t_cmd *cmd)
 	set_pipe_fds(data->cmd, cmd);
 	redirect_io(cmd->io_fds);
 	close_fds(data->cmd, false);
-	ret = exec_builtin(data, cmd->argv);
+	if (cmd->file_error)
+		ret = exec_builtin(data, cmd->argv);
 	if (ret != 127)
 		reset_shell(data, 0);
 	return (new_exec(cmd, data->envp_arr, data));

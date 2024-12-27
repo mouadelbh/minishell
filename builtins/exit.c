@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:48:20 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/26 16:42:56 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:17:29 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	ft_exit(t_data *data, char **cmd)
 	if (!arg_count(cmd[1], cmd[2]))
 	{
 		g_exit_status = 1;
-		return (0);
+		return (1);
 	}
 	else if (cmd[1] && !cmd[2] && !is_num(cmd[1]))
 	{

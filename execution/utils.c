@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:19:29 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 13:16:58 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 13:19:41 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ char	*get_full_cmd(char *av, char **env)
 	if (!env_path || av[0] == '\0')
 		return (NULL);
 	path = ft_split(env_path, ':');
+	free(env_path);
 	if (!path)
 		return (NULL);
 	i = 0;

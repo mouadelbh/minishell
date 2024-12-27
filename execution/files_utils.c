@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:10:23 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 14:05:07 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:09:55 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ void	handle_read_from(t_cmd *cmd)
 {
 	if (!init_read_from(cmd))
 	{
-		while (cmd->next && is_redirection(cmd->type))
+		while (cmd->prev && is_redirection(cmd->type))
 		{
 			cmd->file_error = 0;
-			cmd = cmd->next;
+			cmd = cmd->prev;
 		}
 		cmd->file_error = 0;
 	}

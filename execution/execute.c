@@ -59,7 +59,7 @@ int	execute_command(t_data *data, t_cmd *cmd)
 	signal(SIGQUIT, SIG_DFL);
 	set_pipe_fds(cmd);
 	redirect_io(cmd->io_fds);
-	close_fds(data->cmd);
+	close_pipe_fds(data->cmd);
 	if (cmd->file_error)
 		ret = exec_builtin(data, cmd->argv);
 	if (ret != 127)

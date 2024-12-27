@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:17:37 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 15:00:25 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 19:27:18 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,12 @@ bool	create_pipes(t_data *data)
 		if (cmd->pipe_output)
 		{
 			if (pipe(cmd->pipe_fd) != 0)
-				return (false);
+			{
+				if (errno == EMFILE)
+					close_pipe_fds(data->cmd);
+				if (pipe(cmd->pipe_fd) != 0)
+					return (false);
+			}
 		}
 		cmd = cmd->next;
 	}

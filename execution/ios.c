@@ -50,13 +50,3 @@ bool	redirect_io(t_io_fds *io)
 	print_io_error(io->in_fd, io->out_fd);
 	return (ret);
 }
-
-bool	restore_io(t_io_fds *io)
-{
-	int	ret;
-
-	ret = true;
-	if (!io)
-		return (ret);
-	return (ret);
-}

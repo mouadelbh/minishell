@@ -141,7 +141,6 @@ void		lstadd_cmd(t_cmd **head, t_cmd *new);
 int			fork_and_exec(t_data *data);
 t_io_fds	*dup_io(t_io_fds *io);
 bool		set_pipe_fds(t_cmd *c);
-bool		restore_io(t_io_fds *io);
 void		close_pipe_fds(t_cmd *cmds);
 int			init_heredoc(t_cmd *cmd, t_data *data);
 void		free_all(t_data *data, int i);

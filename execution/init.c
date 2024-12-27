@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:24:39 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 14:51:12 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:58:31 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@ int	init_append(t_cmd *cmd)
 {
 	t_cmd	*current;
 
-	if (!check_file_refs(cmd, 1))
+	if (!check_file_refs(cmd))
 		return (0);
+	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | \
+		O_CREAT | O_APPEND, 0644);
+	if (cmd->io_fds->out_fd == -1)
+		return (perror(cmd->argv[1]), 0);
 	current = cmd->prev;
 	if (cmd->prev && cmd->prev->type == PIPE)
 		return (0);
@@ -36,8 +40,12 @@ int	init_write_to(t_cmd *cmd)
 {
 	t_cmd	*current;
 
-	if (!check_file_refs(cmd, 0))
+	if (!check_file_refs(cmd))
 		return (0);
+	cmd->io_fds->out_fd = open(cmd->io_fds->outfile, O_RDWR | \
+		O_CREAT | O_TRUNC, 0644);
+	if (cmd->io_fds->out_fd == -1)
+		return (perror(cmd->argv[1]), 0);
 	current = cmd->prev;
 	if (cmd->prev && cmd->prev->type == PIPE)
 		return (0);

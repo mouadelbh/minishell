@@ -9,14 +9,14 @@ ft_strrchr.c ft_strtrim.c ft_substr.c ft_tolower.c ft_toupper.c ft_lstadd_front.
 ft_lstclear.c ft_lstdelone.c ft_lstiter.c ft_lstmap.c ft_lstnew.c ft_lstsize.c \
 ft_lstadd_back.c
 OBJ			= $(FILES:.c=.o)
-CC 			= gcc
+CC 			= cc
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	@ar rc $(NAME) $(OBJ)
 
-%.o: %.c
+%.o: %.c libft.h
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

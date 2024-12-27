@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 14:14:57 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:59:54 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,11 @@ int	execute_command(t_data *data, t_cmd *cmd)
 {
 	int	ret;
 
+	ret = 0;
 	signal(SIGQUIT, SIG_DFL);
-	set_pipe_fds(data->cmd, cmd);
+	set_pipe_fds(cmd);
 	redirect_io(cmd->io_fds);
-	close_fds(data->cmd, false);
+	close_fds(data->cmd);
 	if (cmd->file_error)
 		ret = exec_builtin(data, cmd->argv);
 	if (ret != 127)

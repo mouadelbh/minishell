@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:39:05 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 14:55:47 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 15:00:07 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ typedef struct s_io_fds
 	char	*infile;
 	char	*outfile;
 	char	*heredoc_name;
-	int		stdin_backup;
-	int		stdout_backup;
 }			t_io_fds;
 
 typedef struct s_cmd
@@ -134,7 +132,7 @@ int			init_read_from(t_cmd *cmd);
 int			init_append(t_cmd *cmd);
 int			check_file_refs(t_cmd *cmd);
 void		file_error(t_cmd *cmd, char *str);
-void		close_fds(t_cmd *cmds, bool close_backups);
+void		close_fds(t_cmd *cmds);
 bool		check_infile_outfile(t_io_fds *io);
 bool		remove_old_file_ref(t_io_fds *io, bool infile);
 bool		redirect_io(t_io_fds *io);
@@ -142,7 +140,7 @@ bool		create_pipes(t_data *data);
 void		lstadd_cmd(t_cmd **head, t_cmd *new);
 int			fork_and_exec(t_data *data);
 t_io_fds	*dup_io(t_io_fds *io);
-bool		set_pipe_fds(t_cmd *cmds, t_cmd *c);
+bool		set_pipe_fds(t_cmd *c);
 bool		restore_io(t_io_fds *io);
 void		close_pipe_fds(t_cmd *cmds);
 int			init_heredoc(t_cmd *cmd, t_data *data);

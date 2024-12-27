@@ -17,7 +17,7 @@ int	close_file(t_data *data, t_cmd *cmd)
 	pid_t	wpid;
 	int		status;
 
-	close_fds(cmd, false);
+	close_fds(cmd);
 	wpid = 0;
 	status = 0;
 	while (wpid != -1 || errno != ECHILD)

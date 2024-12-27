@@ -19,8 +19,6 @@ void	default_io(t_io_fds *io)
 	io->infile = NULL;
 	io->outfile = NULL;
 	io->heredoc_name = NULL;
-	io->stdin_backup = -1;
-	io->stdout_backup = -1;
 }
 
 void	file_error(t_cmd *cmd, char *str)
@@ -54,8 +52,6 @@ void	init_io(t_io_fds **io_fds)
 	(*io_fds)->infile = NULL;
 	(*io_fds)->outfile = NULL;
 	(*io_fds)->heredoc_name = NULL;
-	(*io_fds)->stdin_backup = -1;
-	(*io_fds)->stdout_backup = -1;
 }
 
 int	check_file_refs(t_cmd *cmd)

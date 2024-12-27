@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:17:37 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/23 10:29:35 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 15:00:25 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	close_pipe_fds(t_cmd *cmds)
 	}
 }
 
-bool	set_pipe_fds(t_cmd *cmds, t_cmd *c)
+bool	set_pipe_fds(t_cmd *c)
 {
 	if (!c)
 		return (false);
@@ -49,6 +49,5 @@ bool	set_pipe_fds(t_cmd *cmds, t_cmd *c)
 		dup2(c->prev->pipe_fd[0], STDIN_FILENO);
 	if (c->pipe_output)
 		dup2(c->pipe_fd[1], STDOUT_FILENO);
-	close_pipe_fds(cmds);
 	return (true);
 }

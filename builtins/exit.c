@@ -64,7 +64,7 @@ int	ft_exit(t_data *data, char **cmd)
 {
 	if (!cmd[1])
 		printf("exit\n");
-	if (!arg_count(cmd[1], cmd[2]))
+	else if (!arg_count(cmd[1], cmd[2]))
 	{
 		g_exit_status = 1;
 		return (1);
@@ -78,7 +78,7 @@ int	ft_exit(t_data *data, char **cmd)
 		g_exit_status = 2;
 		reset_shell(data, 0);
 	}
-	if (is_num(cmd[1]))
+	else if (is_num(cmd[1]))
 		g_exit_status = get_code(cmd[1]);
 	free_all(data, 1);
 	rl_clear_history();

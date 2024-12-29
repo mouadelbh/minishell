@@ -12,12 +12,6 @@
 
 #include "../includes/minishell.h"
 
-void	ft_close(int fd)
-{
-	if (fd > 0)
-		close(fd);
-}
-
 void	free_io(t_cmd *cmd)
 {
 	while (cmd && cmd->io_fds)

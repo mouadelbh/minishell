@@ -48,3 +48,9 @@ bool	redirect_io(t_io_fds *io)
 	print_io_error(io->in_fd, io->out_fd);
 	return (ret);
 }
+
+void	ft_close(int fd)
+{
+	if (fd > 0)
+		close(fd);
+}

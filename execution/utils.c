@@ -73,7 +73,7 @@ char	*get_full_cmd(char *av, char **env)
 			return (free_arr(path), full_cmd);
 		i++;
 	}
-	return (free_arr(path), ft_strdup(av));
+	return (free_arr(path), NULL);
 }
 
 static char	*concat_cmd_strings(char **argv)

@@ -70,7 +70,8 @@ int	single_command(t_data *data)
 	else
 	{
 		path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
-		if (check_cmd(path) == 1 || check_permission(path, data) == 1)
+		if (check_cmd(data->cmd->argv[0]) == 1 \
+			|| check_permission(path, data) == 1)
 		{
 			free(path);
 			g_exit_status = 126;

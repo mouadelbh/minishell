@@ -56,7 +56,7 @@ char	*get_full_cmd(char *av, char **env)
 	char	*env_path;
 	char	*full_cmd;
 
-	if (ft_strncmp(av, "./", 2) == 0)
+	if (ft_strncmp(av, ".", 1) == 0)
 		return (ft_strdup(av));
 	env_path = get_path(env);
 	if (!env_path || av[0] == '\0')

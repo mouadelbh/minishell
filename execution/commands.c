@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 01:04:20 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/29 20:25:42 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,11 @@ int single_command(t_data *data, char *cmd)
 			}
 			data->pid = fork();
 			if (data->pid != -1)
+			{
 				signal(SIGINT, handlehang);
+				if (ft_strnstr(data->cmd->argv[0], "minishell", ft_strlen("minishell")))
+					signal(SIGINT, SIG_IGN);
+			}
 			if (data->pid == -1)
 				return (ft_error(1, data));
 			if (data->pid == 0)

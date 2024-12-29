@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 17:31:30 by mel-bouh          #+#    #+#             */
-/*   Updated: 2023/11/06 18:03:24 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/29 20:25:06 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 	i = 0;
 	if ((ft_strlen(needle)) > ft_strlen(haystack))
 		return (NULL);
-	if ((ft_strlen(haystack) == 0 || ft_strlen(needle) == 0) || needle == NULL )
+	if ((ft_strlen(haystack) == 0 || ft_strlen(needle) == 0) || needle == NULL)
 		return ((char *)haystack);
 	if (ft_strlen(needle) > len || len <= 0)
 		return (NULL);

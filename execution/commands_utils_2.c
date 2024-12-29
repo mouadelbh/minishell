@@ -41,6 +41,8 @@ int	exec_cmd(char **command, char **envp, t_data *data)
 
 	path = NULL;
 	signal(SIGQUIT, SIG_DFL);
+	if (!command_is_valid(data, data->cmd, builtin(data->cmd->argv[0])))
+		reset_shell(data, 0);
 	if (command[0][0] == '/')
 		path = ft_strdup(command[0]);
 	else if (command[0][0] != '\0')
@@ -49,12 +51,8 @@ int	exec_cmd(char **command, char **envp, t_data *data)
 		path = ft_strdup("");
 	if (execve(path, command, envp) == -1)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(command[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		g_exit_status = 127;
 		free(path);
-		reset_shell(data, 0);
+		ft_error(data, "command not found", 127, 1);
 	}
 	return (0);
 }
@@ -70,7 +68,7 @@ int	single_command(t_data *data)
 	else
 	{
 		path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
-		if (check_cmd(data->cmd->argv[0]) == 1 \
+		if (check_cmd(data, data->cmd->argv[0]) == 1 \
 			|| check_permission(path, data) == 1)
 		{
 			free(path);

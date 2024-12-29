@@ -13,6 +13,17 @@
 #include "../includes/minishell.h"
 #include <sys/wait.h>
 
+void	ft_error(t_data *data, char *str, int status, int reset)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(data->cmd->argv[0], 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(str, 2);
+	g_exit_status = status;
+	if (reset)
+		reset_shell(data, 0);
+}
+
 int	init_command(t_cmd *cmd, t_data *data)
 {
 	(void)data;
@@ -60,6 +71,7 @@ t_io_fds	*dup_io(t_io_fds *io)
 		return (NULL);
 	new->in_fd = io->in_fd;
 	new->out_fd = io->out_fd;
+	new->heredoc_in_fd = io->heredoc_in_fd;
 	new->heredoc_name = ft_strdup(io->heredoc_name);
 	new->infile = ft_strdup(io->infile);
 	new->outfile = ft_strdup(io->outfile);

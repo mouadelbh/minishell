@@ -55,8 +55,6 @@ int	check_permission(char *path, t_data *data)
 {
 	if (!path)
 		return (0);
-	if (path[0] != '.' || path[1] != '/')
-		return (0);
 	if (access(path, X_OK) != 0 && access(path, F_OK) == 0)
 	{
 		ft_putstr_fd("minishell: ", 2);

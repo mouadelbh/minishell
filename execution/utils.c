@@ -56,12 +56,11 @@ char	*get_full_cmd(char *av, char **env)
 	char	*env_path;
 	char	*full_cmd;
 
+	if (ft_strncmp(av, "./", 2) == 0)
+		return (ft_strdup(av));
 	env_path = get_path(env);
 	if (!env_path || av[0] == '\0')
-	{
-		free(env_path);
-		return (NULL);
-	}
+		return (free(env_path), NULL);
 	path = ft_split(env_path, ':');
 	free(env_path);
 	if (!path)

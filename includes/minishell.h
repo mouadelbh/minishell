@@ -89,7 +89,7 @@ void		free_cmd_struct(t_cmd *cmd);
 int			minishell(t_data *data);
 void		ft_close(int fd);
 void		handle_child_term(int status);
-int			ft_pwd(char **cmd);
+int			ft_pwd(t_data *data, char **cmd);
 int			ft_env(t_data *data, char **cmd, int export);
 int			ft_echo(char **cmd);
 int			ft_cd(t_data *data, char **cmd);

@@ -57,7 +57,7 @@ int	exec_builtin(t_data *data, char **cmd)
 
 	res = 127;
 	if (ft_strncmp(cmd[0], "pwd", 0) == 0)
-		res = ft_pwd(cmd);
+		res = ft_pwd(data, cmd);
 	else if (ft_strncmp(cmd[0], "env", 0) == 0)
 		res = ft_env(data, cmd, 0);
 	else if (ft_strncmp(cmd[0], "echo", 0) == 0)

@@ -12,17 +12,19 @@
 
 #include "../includes/minishell.h"
 
-int	ft_pwd(char **cmd)
+int	ft_pwd(t_data *data, char **cmd)
 {
 	char	buff[MAX_PATH];
+	char	*new_pwd;
 
 	(void)cmd;
 	if (getcwd(buff, sizeof(buff)) != NULL)
 		ft_putendl_fd(buff, 1);
 	else
 	{
-		perror("getcwd");
-		g_exit_status = 1;
+		new_pwd = ft_getenv("PWD", data);
+		ft_putendl_fd(ft_strchr(new_pwd, '=') + 1, 1);
+		free(new_pwd);
 	}
 	return (g_exit_status);
 }

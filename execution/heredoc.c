@@ -29,7 +29,7 @@ char	*random_file_name(void)
 		fd = open("/dev/urandom", O_RDONLY);
 		read(fd, &i, 1);
 		name[k + 5] = charset[i % 36];
-		close(fd);
+		ft_close(fd);
 		k++;
 	}
 	name[k + 5] = '\0';
@@ -77,7 +77,7 @@ void	set_ios(t_cmd *cmd, int temp_fd)
 void	end_and_reset(t_data *data, char *temp_file, int temp_fd)
 {
 	free(temp_file);
-	close(temp_fd);
+	ft_close(temp_fd);
 	reset_shell(data, 0);
 }
 

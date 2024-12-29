@@ -17,6 +17,8 @@ int	valid_command(t_cmd *cmd, t_data *data)
 	char	*full_command;
 
 	full_command = get_full_cmd(cmd->argv[0], data->envp_arr);
+	if (!full_command)
+		full_command = ft_strdup("");
 	if (access(full_command, F_OK) == -1)
 	{
 		ft_putstr_fd("minishell: ", 2);

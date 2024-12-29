@@ -16,10 +16,8 @@ void	close_fds(t_cmd *cmds)
 {
 	if (cmds && cmds->io_fds)
 	{
-		if (cmds->io_fds->in_fd != -1)
-			close(cmds->io_fds->in_fd);
-		if (cmds->io_fds->out_fd != -1)
-			close(cmds->io_fds->out_fd);
+		ft_close(cmds->io_fds->in_fd);
+		ft_close(cmds->io_fds->out_fd);
 	}
 	close_pipe_fds(cmds);
 }

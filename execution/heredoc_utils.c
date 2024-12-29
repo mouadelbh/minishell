@@ -44,6 +44,6 @@ end-of-file\n", 2);
 	}
 	unlink(temp_file);
 	free(temp_file);
-	close(temp_fd);
+	ft_close(temp_fd);
 	reset_shell(data, 0);
 }

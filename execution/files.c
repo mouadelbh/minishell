@@ -55,8 +55,7 @@ bool	remove_outfile_ref(t_io_fds *io)
 		free(io->outfile);
 		io->outfile = NULL;
 	}
-	if (io->out_fd != -1)
-		close(io->out_fd);
+	ft_close(io->out_fd);
 	return (true);
 }
 
@@ -75,8 +74,7 @@ bool	remove_infile_ref(t_io_fds *io)
 		free(io->infile);
 		io->infile = NULL;
 	}
-	if (io->in_fd != -1)
-		close(io->in_fd);
+	ft_close(io->in_fd);
 	return (true);
 }
 

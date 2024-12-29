@@ -39,7 +39,7 @@ void	close_pipe_fds(t_cmd *cmds)
 	while (cmds && cmds->pipe_output)
 	{
 		if (cmds->pipe_fd[0] != -1)
-			close(cmds->pipe_fd[0]);
+			ft_close(cmds->pipe_fd[0]);
 		if (cmds->pipe_fd[1] != -1)
 			close(cmds->pipe_fd[1]);
 		cmds = cmds->next;

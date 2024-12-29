@@ -12,6 +12,12 @@
 
 #include "../includes/minishell.h"
 
+void	ft_close(int fd)
+{
+	if (fd > 0)
+		close(fd);
+}
+
 void	free_io(t_cmd *cmd)
 {
 	while (cmd && cmd->io_fds)
@@ -21,14 +27,14 @@ void	free_io(t_cmd *cmd)
 			if (cmd->io_fds->infile)
 				free(cmd->io_fds->infile);
 			cmd->io_fds->infile = NULL;
-			close(cmd->io_fds->in_fd);
+			ft_close(cmd->io_fds->in_fd);
 		}
 		if (cmd->io_fds->outfile)
 		{
 			if (cmd->io_fds->outfile)
 				free(cmd->io_fds->outfile);
 			cmd->io_fds->outfile = NULL;
-			close(cmd->io_fds->out_fd);
+			ft_close(cmd->io_fds->out_fd);
 		}
 		if (cmd->io_fds->heredoc_name)
 		{

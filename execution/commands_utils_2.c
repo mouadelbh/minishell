@@ -45,6 +45,8 @@ int	exec_cmd(char **command, char **envp, t_data *data)
 		path = ft_strdup(command[0]);
 	else if (command[0][0] != '\0')
 		path = get_full_cmd(command[0], envp);
+	if (!path)
+		path = ft_strdup("");
 	if (execve(path, command, envp) == -1)
 	{
 		ft_putstr_fd("minishell: ", 2);

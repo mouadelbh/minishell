@@ -47,6 +47,8 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 		g_exit_status = 1;
 		reset_shell(data, 0);
 	}
+	if (!path)
+		path = ft_strdup("");
 	execve(path, cmd->argv, envp);
 	return (reset_shell(data, 0), EXIT_SUCCESS);
 }

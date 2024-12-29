@@ -107,5 +107,5 @@ int	init_heredoc(t_cmd *cmd, t_data *data)
 	if (temp_fd == -1)
 		return (free(temp_file), 0);
 	set_ios(cmd, temp_fd);
-	return (unlink(temp_file), free(temp_file), 1);
+	return (close(temp_fd), unlink(temp_file), free(temp_file), 1);
 }

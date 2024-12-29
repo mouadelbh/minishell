@@ -96,7 +96,11 @@ int	complex_command(t_data *data)
 	if (data->cmd)
 	{
 		if (!create_files(data->cmd, data))
+		{
+			if (g_exit_status > 127)
+				return (g_exit_status);
 			return (1);
+		}
 		if (!create_pipes(data))
 		{
 			ft_putstr_fd("Failed to create pipes\n", 2);

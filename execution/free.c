@@ -3,49 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:55:16 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 00:03:11 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 20:27:40 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	free_io(t_cmd *cmd)
+void	free_io(t_cmd *cmd)
 {
-	while (cmd)
+	while (cmd && cmd->io_fds)
 	{
-		if (cmd->io_fds)
+		if (cmd->io_fds->infile)
 		{
-			if (cmd->io_fds && cmd->io_fds->infile)
+			if (cmd->io_fds->infile)
 				free(cmd->io_fds->infile);
+			cmd->io_fds->infile = NULL;
+			ft_close(cmd->io_fds->in_fd);
+		}
+		if (cmd->io_fds->outfile)
+		{
 			if (cmd->io_fds->outfile)
 				free(cmd->io_fds->outfile);
-			if (cmd->io_fds->heredoc_name)
-				free(cmd->io_fds->heredoc_name);
-			if (cmd->pipe_output)
-			{
-				free(cmd->pipe_fd);
-				cmd->pipe_fd = NULL;
-			}
-			free(cmd->io_fds);
-			cmd->io_fds = NULL;
+			cmd->io_fds->outfile = NULL;
+			ft_close(cmd->io_fds->out_fd);
 		}
+		if (cmd->io_fds->heredoc_name)
+		{
+			unlink(cmd->io_fds->heredoc_name);
+			free(cmd->io_fds->heredoc_name);
+		}
+		free(cmd->io_fds);
 		cmd = cmd->next;
 	}
 }
 
-static void	free_cmd_struct(t_cmd *cmd)
+void	free_cmd_node(t_cmd *cmd)
+{
+	if (cmd->argv)
+		free_arr(cmd->argv);
+	if (cmd->cmd)
+	{
+		free(cmd->cmd);
+		cmd->cmd = NULL;
+	}
+	free(cmd);
+	cmd = NULL;
+}
+
+void	free_cmd_struct(t_cmd *cmd)
 {
 	t_cmd	*tmp;
 
+	if (cmd && cmd->io_fds)
+		free_io(cmd);
 	while (cmd)
 	{
 		tmp = cmd->next;
-		if (cmd->argv)
-			free_arr(cmd->argv);
-		free(cmd);
+		free_cmd_node(cmd);
 		cmd = tmp;
 	}
 }
@@ -71,17 +88,10 @@ void	free_all(t_data *data, int i)
 	if (i)
 		free_env(&data->envp);
 	if (data->envp_arr)
+	{
 		free_arr(data->envp_arr);
-	// if (cmd->io_fds)
-	// 	free_io(cmd);
-	// free_io(cmd);
-	free_line(data->head);
+		data->envp_arr = NULL;
+	}
 	free_cmd_struct(cmd);
-	data->envp_arr = NULL;
-}
-
-
-void	free_data(t_data *data, int exit_code)
-{
-	free_all(data, 1);
+	free_line(data->head);
 }

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:34:12 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/04 13:47:51 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 13:59:59 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*find_occurance(char *str, char *oc)
 
 	if (!str || !oc)
 		return (NULL);
-	result = malloc(strlen(str) + 1);
+	result = malloc(ft_strlen(str) + 1);
 	if (!result)
 		return (perror("Failed to allocate memory"), NULL);
 	i = 0;
@@ -62,7 +62,7 @@ char	*new_substr(const char *str, int c)
 	return (result);
 }
 
-char	*get_key(char *value, t_list *envp, char **env_value, int *append)
+char	*get_key(char *value, char **env_value)
 {
 	char	*key;
 	int		i;
@@ -73,30 +73,27 @@ char	*get_key(char *value, t_list *envp, char **env_value, int *append)
 		key = find_occurance(value, "=");
 		*env_value = ft_substr(value, (ft_strlen(key) + 1), ft_strlen(value));
 	}
-	else if (i == 2)
-	{
-		key = find_occurance(value, "+=");
-		*env_value = ft_substr(value, (ft_strlen(key) + 2), ft_strlen(value));
-		*append = 1;
-	}
 	else
 		*env_value = NULL;
 	return (key);
 }
 
-int	append_env_value(char *key, char *env_value, char *cmd, t_list *envp)
+int	append_env_value(char *key, char *env_value, t_list *envp)
 {
-	int		i;
 	char	*temp;
+	char	*temp2;
 
 	while (envp)
 	{
 		if (ft_strncmp(key, envp->content, ft_strlen(key)) == 0)
 		{
-			temp = ft_strjoin(envp->content, env_value);
+			temp2 = ft_strjoin(key, "=");
+			temp = ft_strjoin(temp2, env_value);
+			envp->empty_value = 0;
 			free(envp->content);
-			envp->content = temp;
-			return (1);
+			envp->content = ft_strdup(temp);
+			free(temp);
+			return (free(temp2), 1);
 		}
 		envp = envp->next;
 	}

@@ -6,103 +6,63 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:17:11 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 01:16:19 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:12:57 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	handledoc(int sig)
+char	*random_file_name(void)
 {
-	(void)sig;
-	exit_status = CTRL_C;
-	unlink("/tmp/jc03fjkdc");
-	close(0);
-	exit(0);
-}
+	char		*name;
+	int			i;
+	int			fd;
+	int			k;
+	const char	charset[] = "abcdefghijklmnopqrstuvwxyz0123456789";
 
-char	*expand_string(char *line, t_list *envp)
-{
-	int		i;
-
+	name = malloc(30);
+	ft_strlcpy(name, "/tmp/", 6);
+	k = 0;
 	i = 0;
-	while (line[i])
+	while (k < 15)
 	{
-		if (line[i] == '$' && line[i + 1] && line[i + 1] != '$')
-			line[i] = -1;
-		i++;
+		fd = open("/dev/urandom", O_RDONLY);
+		read(fd, &i, 1);
+		name[k + 5] = charset[i % 36];
+		ft_close(fd);
+		k++;
 	}
-	line = find_and_replace(line, envp, 0);
-	return (line);
+	name[k + 5] = '\0';
+	return (name);
 }
 
-void	print_warning(int i, char *str)
+void	write_to_file(t_data *data, t_cmd *cmd, int fd, char *file)
 {
-	ft_putstr_fd("minishell: warning: here-document at line ", 2);
-	ft_putnbr_fd(i, 2);
-	ft_putstr_fd(" delimited by end-of-file (wanted `", 2);
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd("')\n", 2);
-}
-
-int init_heredoc(t_cmd *cmd, t_data *data)
-{
-	char	*temp;
 	char	*line;
-	int		temp_fd;
-	int		fork_id;
-
-	t_cmd	*current;
 
 	line = NULL;
-	fork_id = fork();
-	if (fork_id != 0)
-		signal(SIGINT, handlehang);
-	if (fork_id == 0)
+	while (g_exit_status == -1)
 	{
-		signal(SIGINT, handledoc);
-		temp_fd = open("/tmp/jc03fjkdc", O_CREAT | O_RDWR | O_TRUNC, 0644);
-		if (temp_fd == -1)
+		line = readline("> ");
+		if (!line)
+			execute_signal(data, fd, file);
+		if (ft_strncmp(line, cmd->argv[1], 0) == 0)
 		{
-			perror("heredoc temp file");
-			return (0);
-		}
-		while (1)
-		{
-			line = readline("> ");
-			if (!line)
-			{
-				perror("minishell: warning: here-document delimited by end-of-file\n");
-				unlink("/tmp/jc03fjkdc");
-				close(temp_fd);
-				free_all(data, 1);
-				exit(0);
-				break;
-			}
-			if (ft_strchr(line, '$'))
-			{
-				line[0] = -1;
-				line = find_and_replace(line, data->envp, 0);
-			}
-			if (strcmp(line, cmd->argv[1]) == 0)
-			{
-				free(line);
-				break;
-			}
-			write(temp_fd, line, strlen(line));
-			write(temp_fd, "\n", 1);
 			free(line);
+			break ;
 		}
-		close(temp_fd);
-		exit(0);
+		if (ft_strchr(line, '$'))
+			line = expand_string(line, data->envp);
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
 	}
-	waitpid(0, &data->status, 0);
-	temp_fd = open("/tmp/jc03fjkdc", O_RDONLY, 0644);
-	if (temp_fd == -1)
-	{
-		// perror("heredoc temp file");
-		return (0);
-	}
+}
+
+void	set_ios(t_cmd *cmd, int temp_fd)
+{
+	t_cmd	*current;
+
 	cmd->io_fds->in_fd = temp_fd;
 	current = cmd->prev;
 	while (current && current->type != CMD)
@@ -112,6 +72,40 @@ int init_heredoc(t_cmd *cmd, t_data *data)
 	}
 	if (current && current->type == CMD)
 		current->io_fds->in_fd = temp_fd;
-	close(temp_fd);
-	return (1);
+}
+
+void	end_and_reset(t_data *data, char *temp_file, int temp_fd)
+{
+	free(temp_file);
+	ft_close(temp_fd);
+	reset_shell(data, 0);
+}
+
+int	init_heredoc(t_cmd *cmd, t_data *data)
+{
+	char	*temp_file;
+	int		temp_fd;
+	int		fork_id;
+
+	g_exit_status = -1;
+	temp_file = random_file_name();
+	fork_id = fork();
+	if (fork_id != 0)
+		signal(SIGINT, handlehang);
+	if (fork_id == 0)
+	{
+		signal(SIGINT, handledoc);
+		temp_fd = open(temp_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if (temp_fd == -1)
+			return (perror("open"), 0);
+		write_to_file(data, cmd, temp_fd, temp_file);
+		end_and_reset(data, temp_file, temp_fd);
+	}
+	waitpid(0, &g_exit_status, 0);
+	handle_child_term(g_exit_status);
+	temp_fd = open(temp_file, O_RDONLY, 0644);
+	if (temp_fd == -1)
+		return (free(temp_file), 0);
+	set_ios(cmd, temp_fd);
+	return (unlink(temp_file), free(temp_file), 1);
 }

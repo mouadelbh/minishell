@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 11:18:29 by mel-bouh          #+#    #+#             */
-/*   Updated: 2024/11/25 19:47:55 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/25 16:21:01 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,26 @@ static char	*camouflage(char *str)
 	return (tmp);
 }
 
+int	should_skip_quote(char *str, int i)
+{
+	if (str[i] == '\'' && \
+	(quotes_open(str, i) == 1 || quotes_open(str, i) == 0))
+		return (1);
+	else if (str[i] == '\"' && \
+	(quotes_open(str, i) == 2 || quotes_open(str, i) == 0))
+		return (1);
+	return (0);
+}
+
 char	*trim(char *str, int type)
 {
 	char	*result;
 	int		j;
 	int		i;
-	int		in[2];
 
-	if (type == CMD && (!ft_strncmp(str, "\"\"", 2) || !ft_strncmp(str, "\'\'", 2)))
+	if (type == CMD && (!ft_strncmp(str, "\"\"", 2) \
+	|| !ft_strncmp(str, "\'\'", 2)))
 		return (camouflage(str));
-	ft_bzero(in, 8);
 	i = 0;
 	j = 0;
 	result = malloc(ft_strlen(str) + 1);
@@ -40,15 +50,8 @@ char	*trim(char *str, int type)
 		return (NULL);
 	while (str[i])
 	{
-		if (str[i] == '\'' && !in[0])
+		if (should_skip_quote(str, i))
 		{
-			in[1] = !in[1];
-			i++;
-			continue ;
-		}
-		else if (str[i] == '\"' && !in[1])
-		{
-			in[0] = !in[0];
 			i++;
 			continue ;
 		}

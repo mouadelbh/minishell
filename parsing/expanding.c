@@ -5,70 +5,20 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/12/09 01:00:36 by mel-bouh         ###   ########.fr       */
+/*   Created: 2024/12/25 16:26:16 by mel-bouh          #+#    #+#             */
+/*   Updated: 2024/12/26 17:26:54 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../includes/parsing.h"
 
-void	reset_expand(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == -1)
-		{
-			str[i] = '$';
-			break ;
-		}
-		i++;
-	}
-}
-
-static int	check_case(char *str, int i)
-{
-	if (!str[i] || is_space(str[i]) || str[i] == '=' \
-	|| str[i] == '\'' || str[i] == '\"' || str[i] == '/')
-		return (1);
-	if (check_token(str[i]))
-		return (1);
-	return (0);
-}
-
-int	find(char *tmp, int i, t_list *env, int *size)
-{
-	int	j;
-
-	j = 0;
-	*size = 0;
-	i++;
-	while (!check_case(tmp, i + *size))
-		*size += 1;
-	tmp += i;
-	while (env)
-	{
-		if (!ft_strncmp(tmp, env->content, *size) && env->content[*size] == '=')
-			return (j);
-		env = env->next;
-		j++;
-	}
-	return (-1);
-}
-
-char	*replace(char *tmp, int k, t_list *env, int size, int flag)
+char	*replace(char *tmp, t_list *env, t_expand ex, int flag)
 {
 	char	*new;
-	int		i;
-	int		j;
 	int		env_len;
 
-	i = 0;
 	env_len = 0;
-	while (k--)
+	while (ex.ca--)
 		env = env->next;
 	while (env->content[env_len] && env->content[env_len] != '=')
 		env_len++;
@@ -78,22 +28,8 @@ char	*replace(char *tmp, int k, t_list *env, int size, int flag)
 		reset_expand(tmp);
 		return (tmp);
 	}
-	new = malloc(ft_strlen(tmp) + ft_strlen(env->content + env_len) - size + 1);
-	if (!new)
-		return (NULL);
-	while (tmp[i] && tmp[i] != -1)
-	{
-		new[i] = tmp[i];
-		i++;
-	}
-	j = i + size + 1;
-	while (env->content[env_len])
-		new[i++] = env->content[env_len++];
-	while (tmp[j])
-		new[i++] = tmp[j++];
-	new[i] = '\0';
-	free(tmp);
-	return (new);
+	new = fill_string(tmp, env, env_len, ex.size);
+	return (free(tmp), new);
 }
 
 char	*delete(char *tmp, int size)
@@ -116,8 +52,7 @@ char	*delete(char *tmp, int size)
 	while (tmp[i])
 		new[j++] = tmp[i++];
 	new[j] = '\0';
-	free(tmp);
-	return (new);
+	return (free(tmp), new);
 }
 
 int	alloc_exit(char *str, int exit)
@@ -168,33 +103,27 @@ char	*expand_exit(char *str, int i, int exit)
 
 char	*find_and_replace(char *str, t_list *env, int flag)
 {
-	int		i;
-	int		size;
-	int		ca;
-	char	*tmp;
+	int			i;
+	t_expand	ex;
+	char		*tmp;
 
-	if (!str)
-		return (NULL);
 	tmp = ft_strdup(str);
 	i = 0;
-	while (str[i])
+	while (tmp && str[i])
 	{
 		if (str[i] == -1 && str[i + 1] == '?')
-			tmp = expand_exit(tmp, i, exit_status);
+			tmp = expand_exit(tmp, i, g_exit_status);
 		else if (str[i] == -1)
 		{
-			ca = find(str, i, env, &size);
-			if (ca >= 0)
-				tmp = replace(tmp, ca, env, size, flag);
-			else if (ca < 0 && flag == 0)
-				tmp = delete(tmp, size);
+			ex.ca = find(str, i, env, &ex.size);
+			if (ex.ca >= 0)
+				tmp = replace(tmp, env, ex, flag);
+			else if (flag == 0)
+				tmp = delete(tmp, ex.size);
 			else
 				reset_expand(tmp);
 		}
-		if (tmp == NULL)
-			return (free(str), NULL);
 		i++;
 	}
-	free(str);
-	return (tmp);
+	return (free(str), tmp);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:34:19 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/04 15:35:21 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 20:26:01 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,31 +17,35 @@ int	valid_command(t_cmd *cmd, t_data *data)
 	char	*full_command;
 
 	full_command = get_full_cmd(cmd->argv[0], data->envp_arr);
+	if (!full_command)
+		full_command = ft_strdup("");
 	if (access(full_command, F_OK) == -1)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd->argv[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		free(full_command);
-		data->status = 1;
+		g_exit_status = 127;
 		return (0);
 	}
 	free(full_command);
 	return (1);
 }
 
-int	check_cmd(char *cmd, t_data *data)
+int	check_cmd(char *cmd)
 {
 	struct stat	buf;
 
+	if (!ft_strchr(cmd, '/'))
+		return (0);
 	if (stat(cmd, &buf) == -1)
 		return (0);
 	if (S_ISDIR(buf.st_mode))
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": is a directory\n", 2);
-		data->status = 126;
+		ft_putstr_fd(": Is a directory\n", 2);
+		g_exit_status = 126;
 		return (1);
 	}
 	return (0);
@@ -49,12 +53,14 @@ int	check_cmd(char *cmd, t_data *data)
 
 int	check_permission(char *path, t_data *data)
 {
+	if (!path)
+		return (0);
 	if (access(path, X_OK) != 0 && access(path, F_OK) == 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(data->cmd->argv[0], 2);
 		ft_putstr_fd(": Permission denied\n", 2);
-		data->status = 126;
+		g_exit_status = 126;
 		return (1);
 	}
 	return (0);
@@ -67,7 +73,7 @@ int	command_is_valid(t_data *data, t_cmd *cmd, int is_builtin)
 	if (is_builtin)
 		return (1);
 	full_cmd = get_full_cmd(cmd->argv[0], data->envp_arr);
-	if (check_cmd(cmd->argv[0], data) || check_permission(full_cmd, data))
+	if (check_cmd(cmd->argv[0]) || check_permission(full_cmd, data))
 		return (free(full_cmd), 0);
 	free(full_cmd);
 	if (cmd->type == CMD)
@@ -75,10 +81,9 @@ int	command_is_valid(t_data *data, t_cmd *cmd, int is_builtin)
 	return (0);
 }
 
-int should_pipe(t_cmd *cmd)
+int	should_pipe(t_cmd *cmd)
 {
 	t_cmd	*temp;
-	
 	int		pipe_count;
 
 	pipe_count = 0;

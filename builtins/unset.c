@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:46:48 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/04 15:00:32 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:02:16 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ void	delete_env_var(char *name, t_list **envp)
 	name_len = ft_strlen(name);
 	while (temp != NULL)
 	{
-		if (ft_strncmp(name, temp->content, name_len) == 0
-			&& (((char*)temp->content)[name_len] == '=')
-			|| ((temp->empty_value == 1)
-			&& (ft_strncmp(name, temp->content, 0) == 0)))
+		if ((ft_strncmp(name, temp->content, name_len) == 0
+				&& (((char *)temp->content)[name_len] == '='))
+			|| ((temp->empty_value == 1) && (ft_strncmp(name, temp->content,
+						0) == 0)))
 		{
 			if (prev == NULL)
 				*envp = temp->next;
@@ -46,5 +46,7 @@ int	ft_unset(t_data *data, char **cmd)
 	if (!cmd[1])
 		return (0);
 	delete_env_var(cmd[1], &(data->envp));
+	if (cmd[2])
+		ft_unset(data, cmd + 1);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   files.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:19:52 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 00:22:58 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/26 18:18:13 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	create_files(t_cmd *cmd, t_data *data)
 {
 	int	i;
-	int	id;
 
 	i = 1;
 	while (cmd)
@@ -24,18 +23,13 @@ int	create_files(t_cmd *cmd, t_data *data)
 		if (cmd->type == CMD)
 			cmd->file_error = init_command(cmd, data);
 		else if (cmd->type == REDIR_OUT)
-			cmd->file_error = init_write_to(cmd, data);
+			handle_write_to(cmd);
 		else if (cmd->type == REDIR_IN)
-			cmd->file_error = init_read_from(cmd, data);
+			handle_read_from(cmd);
 		else if (cmd->type == APPEND)
-			cmd->file_error = init_append(cmd, data);
+			handle_append(cmd);
 		else if (cmd->type == HEREDOC)
 			cmd->file_error = init_heredoc(cmd, data);
-		// {
-		// 	id = fork();
-		// 	init_heredoc(cmd, data);
-		// 	waitpid(0, &data->status, 0);
-		// }
 		i = cmd->file_error;
 		cmd = cmd->next;
 	}
@@ -46,57 +40,51 @@ bool	check_infile_outfile(t_io_fds *io)
 {
 	if ((io->infile && io->in_fd == -1)
 		|| (io->outfile && io->out_fd == -1))
-			return (false);
+		return (false);
 	if (!io || (!io->infile && !io->outfile))
 		return (true);
 	return (true);
 }
 
-int	close_file(t_data *data)
+bool	remove_outfile_ref(t_io_fds *io)
 {
-	pid_t	wpid;
-	int		status;
-	int		save_status;
-
-	close_fds(data->cmd, false);
-	save_status = 0;
-	wpid = 0;
-	while (wpid != -1 || errno != ECHILD)
+	if (io->out_fd == -1 || (io->infile && io->in_fd == -1))
+		return (false);
+	if (io->outfile)
 	{
-		wpid = waitpid(-1, &status, 0);
-		if (wpid == data->pid)
-			save_status = status;
-		continue ;
+		free(io->outfile);
+		io->outfile = NULL;
 	}
-	return (status);
+	ft_close(io->out_fd);
+	return (true);
+}
+
+bool	remove_infile_ref(t_io_fds *io)
+{
+	if (io->in_fd == -1 || (io->outfile && io->out_fd == -1))
+		return (false);
+	if (io->heredoc_name != NULL)
+	{
+		free(io->heredoc_name);
+		io->heredoc_name = NULL;
+		unlink(io->infile);
+	}
+	if (io->infile)
+	{
+		free(io->infile);
+		io->infile = NULL;
+	}
+	ft_close(io->in_fd);
+	return (true);
 }
 
 bool	remove_old_file_ref(t_io_fds *io, bool infile)
 {
+	if (!io)
+		return (false);
 	if (infile == true && io->infile)
-	{
-		if (io->in_fd == -1 || (io->outfile && io->out_fd == -1))
-		{
-			// ft_putstr_fd("error in remove_old_ref: 74", 2);
-			return (false);
-		}
-		if (io->heredoc_name != NULL)
-		{
-			free(io->heredoc_name);
-			io->heredoc_name = NULL;
-			unlink(io->infile);
-		}
-		free(io->infile);
-		if (io->in_fd != -1)
-			close(io->in_fd);
-	}
-	else if (infile == false && (io && io->outfile))
-	{
-		if (io->out_fd == -1 || (io->infile && io->in_fd == -1))
-			return (false);
-		free(io->outfile);
-		if (io->out_fd != -1)
-			close(io->out_fd);
-	}
+		return (remove_infile_ref(io));
+	else if (infile == false && io->outfile)
+		return (remove_outfile_ref(io));
 	return (true);
 }

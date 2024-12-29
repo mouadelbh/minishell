@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:28:55 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/09 00:02:11 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:59:54 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,48 +24,47 @@ int	set_values(t_data *data)
 			ft_putstr_fd("Error in the fds\n", 2);
 			return (EXIT_FAILURE);
 		}
-		ft_putstr_fd("No cd\n",2 );
 		return (EXIT_SUCCESS);
-	}
-	if (!create_pipes(data))
-	{
-		ft_putstr_fd("Failed to create pipes\n", 2);
-		return (EXIT_FAILURE);
 	}
 	return (127);
 }
 
-int	new_exec(char **command, char **envp, t_data *data)
+int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 {
 	char	*path;
 
-	if (command[0][0] == '/')
-		path = ft_strdup(command[0]);
-	else if (command[0][0] != '\0')
-		path = get_full_cmd(command[0], envp);
-	data->status = 0;
-	if (execve(path, command, envp) == -1)
+	path = NULL;
+	usleep(100);
+	if (!command_is_valid(data, cmd, builtin(cmd->argv[0])))
+		reset_shell(data, 0);
+	if (cmd->argv[0][0] == '/')
+		path = ft_strdup(cmd->argv[0]);
+	else if (cmd->argv[0][0] != '\0')
+		path = get_full_cmd(cmd->argv[0], envp);
+	if (cmd->file_error == 0)
 	{
-		exit_status = 1;
 		free(path);
-		return (1);
+		g_exit_status = 1;
+		reset_shell(data, 0);
 	}
-	return (0);
+	if (!path)
+		path = ft_strdup("");
+	execve(path, cmd->argv, envp);
+	return (reset_shell(data, 0), EXIT_SUCCESS);
 }
 
 int	execute_command(t_data *data, t_cmd *cmd)
 {
 	int	ret;
 
-	if (cmd->type != CMD)
-		return (1);
-	set_pipe_fds(data->cmd, cmd);
+	ret = 0;
+	signal(SIGQUIT, SIG_DFL);
+	set_pipe_fds(cmd);
 	redirect_io(cmd->io_fds);
-	close_fds(data->cmd, false);
-	ret = exec_builtin(data, cmd->argv);
+	close_pipe_fds(data->cmd);
+	if (cmd->file_error)
+		ret = exec_builtin(data, cmd->argv);
 	if (ret != 127)
-		exit(0);
-	if (ret == 127)
-		return (new_exec(cmd->argv, data->envp_arr, data));
-	return (ret);
+		reset_shell(data, 0);
+	return (new_exec(cmd, data->envp_arr, data));
 }

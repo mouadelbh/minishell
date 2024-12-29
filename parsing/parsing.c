@@ -6,24 +6,11 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 13:58:54 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/09 21:49:56 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/25 16:37:13 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
-
-int	exit_status;
-
-int	print_error(char *str)
-{
-	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
-	ft_putstr_fd("'", 2);
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd("'", 2);
-	ft_putstr_fd("\n", 2);
-	exit_status = 2;
-	return (-1);
-}
 
 int	redir_error(t_line *head)
 {
@@ -92,68 +79,25 @@ void	expanding(t_line **head, t_list *env)
 	}
 }
 
-void	flag_spaces(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (is_space(line[i]) && quotes_open(line, i))
-			line[i] = 31;
-		i++;
-	}
-}
-
-void	unflag_spaces(char **line)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	if (!line)
-		return ;
-	while (line[i])
-	{
-		j = 0;
-		while (line[i][j])
-		{
-			if (line[i][j] == 31)
-				line[i][j] = ' ';
-			j++;
-		}
-		i++;
-	}
-}
-
-int	parse(char *str, t_line **head, t_list *env,t_data* ex_data)
+int	parse(char *str, t_line **head, t_list *env, t_data *ex_data)
 {
 	char	**arg;
-	t_line *tmp;
 	char	*line;
-	t_line	*new;
-	int		i;
 
 	if (ex_data->arg == NULL)
-		reset_shell(ex_data);
+		reset_shell(ex_data, 1);
 	if (!checkspaces(str))
 		return (-1);
 	add_history(ex_data->arg);
 	if (!checkquotes(str, ex_data))
-	{
-		exit_status = 2;
-		return (-1);
-	}
+		return (set_exit_status(2));
 	line = spacing(str);
 	flag_spaces(line);
 	arg = ft_split(line, ' ');
 	free(line);
 	unflag_spaces(arg);
 	if (!arg)
-	{
-		exit_status = 139;
-		return (-1);
-	}
+		return (set_exit_status(1));
 	lexer(arg, head);
 	expanding(head, env);
 	triming_quotes(*head);

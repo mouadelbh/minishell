@@ -6,116 +6,62 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 15:47:56 by prizmo            #+#    #+#             */
-/*   Updated: 2024/12/07 14:00:09 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:42:12 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*find_value(char *name, t_list *envp)
+int	export_error(char *cmd)
 {
-	int		i;
-	char	*key;
-	t_list	*temp;
-	char	*result;
-
-	temp = envp;
-	i = 0;
-	if (is_valid_env_name(name) == 0)
-		return (NULL);
-	key = new_substr(name, '=');
-	while (temp)
-	{
-		if (ft_strncmp(key, temp->content, ft_strlen(key)) == 0)
-		{
-			result = strdup(temp->content);
-			free(key);
-			return (result);
-		}
-		temp = temp->next;
-	}
-	free(key);
-	return (NULL);
-}
-
-static t_list	*create_env_node(const char *key, int empty_value)
-{
-	t_list	*new_node;
-
-	new_node = (t_list *)malloc(sizeof(t_list));
-	if (!new_node)
-		return (NULL);
-	new_node->content = strdup(key);
-	new_node->empty_value = empty_value;
-	if (!new_node->content)
-		return (free(new_node), NULL);
-	new_node->next = NULL;
-	return (new_node);
-}
-
-int	is_valid_env_name(char *var)
-{
-	int	i;
-
-	i = 0;
-	if (ft_isalpha(var[i]) == 0 && var[i] != '_')
-		return (0);
-	i++;
-	while (var[i] && var[i] != '=')
-	{
-		if (var[i] == '+' && var[i + 1] && var[i + 1] == '=')
-			return (2);
-		if (ft_isalnum(var[i]) == 0 && var[i] != '_')
-			return (0);
-		i++;
-	}
+	ft_putstr_fd("minishell: export: `", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
 	return (1);
 }
 
-void	create_env_value(t_data *data, char *key, int empty_value)
+int	add_entry(char *cmd, char *value, t_data *data)
 {
-	t_list	*new_node;
-	t_list	*temp;
+	char	*equal_sign;
 
-	new_node = create_env_node(key, empty_value);
-	if (!new_node)
-		return ;
-	if (data->envp == NULL)
-		data->envp = new_node;
+	equal_sign = ft_strchr(cmd, '=');
+	if (!equal_sign && is_valid_env_name(cmd) && !value)
+		return (create_env_value(data, cmd, 1), 0);
+	if (value && (!equal_sign))
+		return (0);
+	return (1);
+}
+
+static int	handle_export(char *cmd, t_data *data)
+{
+	char	*value;
+	char	*key;
+	char	*env_value;
+
+	if (!is_valid_env_name(cmd))
+		return (export_error(cmd));
+	value = find_value(cmd, data->envp);
+	if (!add_entry(cmd, value, data))
+		return (free(value), 0);
+	free(value);
+	key = get_key(cmd, &env_value);
+	value = find_value(key, data->envp);
+	if (!value)
+		create_env_value(data, cmd, 0);
 	else
-	{
-		temp = data->envp;
-		while (temp->next != NULL)
-			temp = temp->next;
-		temp->next = new_node;
-	}
+		modify_env_value(key, env_value, data);
+	free(value);
+	free(key);
+	free(env_value);
+	return (0);
 }
 
 int	ft_export(t_data *data, char **cmd)
 {
-	char	*key;
-	char	*env_value;
-	int		append;
-
-	append = 0;
 	if (!cmd[1])
 		return (ft_env(data, cmd, 1));
-	if (!is_valid_env_name(cmd[1]))
-	{
-		ft_putstr_fd("minishell: export: `", 2);
-		ft_putstr_fd(cmd[1], 2);
-		ft_putstr_fd("': not a valid identifier\n", 2);
-		return (1);
-	}
-	if (!ft_strchr(cmd[1], '=') && is_valid_env_name(cmd[1]))
-		create_env_value(data, cmd[1], 1);
-	key = get_key(cmd[1], data->envp, &env_value, &append);
-	if (append)
-	{
-		if (!append_env_value(key, env_value, cmd[1], data->envp))
-			modify_env_value(key, env_value, data);
-	}
-	free(key);
-	free(env_value);
-	return (0);
+	g_exit_status = handle_export(cmd[1], data);
+	if (cmd[2])
+		ft_export(data, cmd + 1);
+	return (g_exit_status);
 }

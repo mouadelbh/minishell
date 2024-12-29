@@ -6,130 +6,66 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/29 20:25:42 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/29 20:36:21 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../includes/minishell.h"
 #include <sys/wait.h>
 
 int	init_command(t_cmd *cmd, t_data *data)
 {
+	(void)data;
 	if (should_pipe(cmd) || (cmd->next && cmd->next->type == CMD))
 		cmd->pipe_output = true;
 	return (1);
 }
 
-int	handle_execute(t_data *data)
+int	fork_and_exec(t_data *data)
 {
-	t_cmd	*cmd;
-	t_cmd	*temp;
-
-	cmd = data->cmd;
-	temp = cmd;
-	while (cmd)
+	data->pid = fork();
+	if (data->pid != -1)
 	{
-		if (command_is_valid(data, cmd, builtin(cmd->argv[0])))
-		{
-			data->status = 0;
-			data->pid = fork();
-			if (data->pid != -1)
-				signal(SIGINT, handlehang);
-			if (data->pid == -1)
-				return (ft_putstr_fd("fork error\n", 2), 1);
-		}
-		else
-			data->status = 1;
-		if (data->pid == 0)
-			data->status = execute_command(data, cmd);
-		cmd = cmd->next;
+		signal(SIGINT, handlehang);
+		if (ft_strnstr(data->cmd->argv[0], "./minishell", ft_strlen(data->cmd->argv[0])))
+			signal(SIGINT, SIG_IGN);
 	}
-	waitpid(0, &data->status, 0);
-	return (close_file(data), data->status);
+	if (data->pid == -1)
+		return (ft_putstr_fd("fork error\n", 2), 0);
+	if (data->pid == 0)
+		g_exit_status = exec_cmd(data->cmd->argv, data->envp_arr, data);
+	waitpid(data->pid, &g_exit_status, 0);
+	handle_child_term(g_exit_status);
+	return (1);
 }
 
-int exec_cmd(char **command, char **envp, t_data *data)
+void	lstadd_cmd(t_cmd **head, t_cmd *new)
 {
-	char	*path;
+	t_cmd	*tmp;
 
-	path = NULL;
-	if (command[0][0] == '/')
-		path = ft_strdup(command[0]);
-	else if (command[0][0] != '\0')
-		path = get_full_cmd(command[0], envp);
-	if (!path)
-		return (ft_error(7, data), 1);
-	if (execve(path, command, envp) == -1)
+	if (!*head)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(command[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		data->status = 1;
-		free(path);
-		return (1);
+		*head = new;
+		return ;
 	}
-	return (0);
+	tmp = *head;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+	new->prev = tmp;
 }
 
-int single_command(t_data *data, char *cmd)
+t_io_fds	*dup_io(t_io_fds *io)
 {
-	t_line *temp = data->head;
-	char	*path;
+	t_io_fds	*new;
 
-	while (temp)
-	{
-		if (temp->next && temp->next->type == 7)
-			temp = temp->next;
-		if (builtin(data->cmd->argv[0]))
-			return (exec_builtin(data, data->cmd->argv));
-		else
-		{
-			path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
-			if (check_cmd(path, data) == 1 || check_permission(path, data) == 1)
-			{
-				free(path);
-				exit_status = 126;
-				return (126);
-			}
-			data->pid = fork();
-			if (data->pid != -1)
-			{
-				signal(SIGINT, handlehang);
-				if (ft_strnstr(data->cmd->argv[0], "minishell", ft_strlen("minishell")))
-					signal(SIGINT, SIG_IGN);
-			}
-			if (data->pid == -1)
-				return (ft_error(1, data));
-			if (data->pid == 0)
-				data->status = exec_cmd(data->cmd->argv, data->envp_arr, data);
-			waitpid(data->pid, &data->status, 0);
-			if (data->pid == 0)
-				exit(data->status);
-		}
-		free(path);
-		temp = temp->next;
-	}
-	return (data->status);
-}
-
-int	complex_command(t_data *data)
-{
-	t_line	*temp = data->head;
-	int		ret;
-
-	if (data->cmd)
-	{
-		if (!create_files(data->cmd, data))
-		{
-			// free_cmd_list(&data->cmd);
-			return (1);
-		}
-		data->cmd = set_command_list(data->cmd);
-		ret = set_values(data);
-		return (handle_execute(data));
-	}
-	else
-		ft_putstr_fd("No command found\n", 2);
-	return (0);
+	new = (t_io_fds *)malloc(sizeof(t_io_fds));
+	if (!new)
+		return (NULL);
+	new->in_fd = io->in_fd;
+	new->out_fd = io->out_fd;
+	new->heredoc_name = ft_strdup(io->heredoc_name);
+	new->infile = ft_strdup(io->infile);
+	new->outfile = ft_strdup(io->outfile);
+	return (new);
 }

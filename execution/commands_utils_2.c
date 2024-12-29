@@ -6,7 +6,7 @@
 /*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:25:46 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/29 20:37:09 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/29 20:46:55 by mel-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int	exec_cmd(char **command, char **envp, t_data *data)
 		path = ft_strdup("");
 	if (execve(path, command, envp) == -1)
 	{
-		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("minishell: '", 2);
 		ft_putstr_fd(command[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
+		ft_putstr_fd("': command not found\n", 2);
 		g_exit_status = 127;
 		free(path);
 		reset_shell(data, 0);

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:24:51 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 13:53:15 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/30 17:45:13 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ int	complex_command(t_data *data)
 		if (!create_pipes(data))
 		{
 			ft_putstr_fd("Failed to create pipes\n", 2);
-			close_pipe_fds(data->cmd);
 			return (EXIT_FAILURE);
 		}
 		if (set_values(data) == 1)

@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:34:19 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/30 18:07:20 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/30 18:44:18 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	valid_command(t_cmd *cmd, t_data *data)
 	full_command = get_full_cmd(cmd->argv[0], data->envp_arr);
 	if (!full_command)
 		full_command = ft_strdup("");
-	if ((access(full_command, F_OK) == -1) && (access(cmd->argv[0], F_OK) == -1))
+	if ((access(full_command, F_OK) == -1) \
+		&& (access(cmd->argv[0], F_OK) == -1))
 	{
 		free(full_command);
 		if (ft_strncmp(cmd->argv[0], "./", 2) == 0 \

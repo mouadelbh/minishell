@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:17:37 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/30 17:46:15 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/30 18:44:07 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ bool	create_pipes(t_data *data)
 					i = 0;
 					close_pipe_fds(data->cmd);
 				}
-				break;
+				break ;
 			}
 		}
 		cmd = cmd->next;

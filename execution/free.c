@@ -21,14 +21,12 @@ void	free_io(t_cmd *cmd)
 			if (cmd->io_fds->infile)
 				free(cmd->io_fds->infile);
 			cmd->io_fds->infile = NULL;
-			ft_close(cmd->io_fds->in_fd);
 		}
 		if (cmd->io_fds->outfile)
 		{
 			if (cmd->io_fds->outfile)
 				free(cmd->io_fds->outfile);
 			cmd->io_fds->outfile = NULL;
-			ft_close(cmd->io_fds->out_fd);
 		}
 		if (cmd->io_fds->heredoc_name)
 		{
@@ -94,4 +92,7 @@ void	free_all(t_data *data, int i)
 	}
 	free_cmd_struct(cmd);
 	free_line(data->head);
+	i = 3;
+	while (i < 1024)
+		ft_close(i++);
 }

@@ -60,6 +60,9 @@ static t_cmd	*copy_node(t_line *node)
 	t_cmd	*new;
 
 	new = malloc(sizeof(t_cmd));
+	if (!new)
+		return (NULL);
+	new->io_fds = NULL;
 	new->argv = malloc(sizeof(char *) * size_to_alloc(node) + 1);
 	new->pipe_output = 0;
 	new->type = node->type;

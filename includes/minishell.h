@@ -51,6 +51,7 @@ typedef struct s_io_fds
 	char	*infile;
 	char	*outfile;
 	char	*heredoc_name;
+	int		heredoc_in_fd;
 }			t_io_fds;
 
 typedef struct s_cmd
@@ -122,7 +123,7 @@ int			exec_cmd(char **command, char **envp, t_data *data);
 int			single_command(t_data *data);
 int			complex_command(t_data *data);
 int			should_pipe(t_cmd *cmd);
-int			check_cmd(char *path);
+int			check_cmd(t_data *data, char *path);
 int			set_values(t_data *data);
 int			execute_command(t_data *data, t_cmd *cmd);
 int			close_file(t_data *data, t_cmd *cmd);
@@ -152,5 +153,6 @@ void		handle_append(t_cmd *cmd);
 char		*get_key(char *value, char **env_value);
 int			append_env_value(char *key, char *env_value, t_list *envp);
 void		free_cmd_node(t_cmd *cmd);
+void		ft_error(t_data *data, char *str, int status, int reset);
 
 #endif

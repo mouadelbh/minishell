@@ -34,7 +34,6 @@ int	new_exec(t_cmd *cmd, char **envp, t_data *data)
 	char	*path;
 
 	path = NULL;
-	usleep(100);
 	if (!command_is_valid(data, cmd, builtin(cmd->argv[0])))
 		reset_shell(data, 0);
 	if (cmd->argv[0][0] == '/')

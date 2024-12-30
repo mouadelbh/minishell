@@ -12,15 +12,6 @@
 
 #include "../includes/minishell.h"
 
-void	default_io(t_io_fds *io)
-{
-	io->in_fd = STDIN_FILENO;
-	io->out_fd = STDOUT_FILENO;
-	io->infile = NULL;
-	io->outfile = NULL;
-	io->heredoc_name = NULL;
-}
-
 void	file_error(t_cmd *cmd, char *str)
 {
 	ft_putstr_fd("minishell: ", 2);
@@ -49,6 +40,7 @@ void	init_io(t_io_fds **io_fds)
 	}
 	(*io_fds)->in_fd = -1;
 	(*io_fds)->out_fd = -1;
+	(*io_fds)->heredoc_in_fd = -1;
 	(*io_fds)->infile = NULL;
 	(*io_fds)->outfile = NULL;
 	(*io_fds)->heredoc_name = NULL;

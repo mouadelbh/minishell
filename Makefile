@@ -30,7 +30,7 @@ HEADER_DIR = ./includes
 HEADER	=	$(HEADER_DIR)/parsing.h $(HEADER_DIR)/minishell.h
 OBJS	=	$(FILES:.c=.o)
 LIBFT	=	libft/libft.a
-FLAGS	=	-Wall -Wextra -Werror -g #-fsanitize=address
+FLAGS	=	-Wall -Wextra -Werror -g -fsanitize=address
 
 all: $(NAME)
 

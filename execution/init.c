@@ -30,6 +30,7 @@ int	init_append(t_cmd *cmd)
 	if (current && current->type != APPEND)
 	{
 		free(current->io_fds->outfile);
+		ft_close(current->io_fds->out_fd);
 		current->io_fds->outfile = ft_strdup(cmd->io_fds->outfile);
 		current->io_fds->out_fd = cmd->io_fds->out_fd;
 	}
@@ -54,6 +55,7 @@ int	init_write_to(t_cmd *cmd)
 	if (current && current->type != REDIR_OUT)
 	{
 		free(current->io_fds->outfile);
+		ft_close(current->io_fds->out_fd);
 		current->io_fds->outfile = ft_strdup(cmd->io_fds->outfile);
 		current->io_fds->out_fd = cmd->io_fds->out_fd;
 	}
@@ -88,6 +90,7 @@ int	init_read_from(t_cmd *cmd)
 	if (current && current->type != REDIR_IN)
 	{
 		free(current->io_fds->infile);
+		ft_close(current->io_fds->in_fd);
 		current->io_fds->infile = ft_strdup(cmd->io_fds->infile);
 		current->io_fds->in_fd = cmd->io_fds->in_fd;
 	}

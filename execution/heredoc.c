@@ -84,7 +84,6 @@ void	end_and_reset(t_data *data, char *temp_file, int temp_fd)
 int	init_heredoc(t_cmd *cmd, t_data *data)
 {
 	char	*temp_file;
-	int		temp_fd;
 	int		fork_id;
 
 	g_exit_status = -1;
@@ -95,17 +94,18 @@ int	init_heredoc(t_cmd *cmd, t_data *data)
 	if (fork_id == 0)
 	{
 		signal(SIGINT, handledoc);
-		temp_fd = open(temp_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
-		if (temp_fd == -1)
+		cmd->io_fds->heredoc_in_fd = \
+			open(temp_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if (cmd->io_fds->heredoc_in_fd == -1)
 			return (perror("open"), 0);
-		write_to_file(data, cmd, temp_fd, temp_file);
-		end_and_reset(data, temp_file, temp_fd);
+		write_to_file(data, cmd, cmd->io_fds->heredoc_in_fd, temp_file);
+		end_and_reset(data, temp_file, cmd->io_fds->heredoc_in_fd);
 	}
 	waitpid(0, &g_exit_status, 0);
 	handle_child_term(g_exit_status);
-	temp_fd = open(temp_file, O_RDONLY, 0644);
-	if (temp_fd == -1)
+	cmd->io_fds->heredoc_in_fd = open(temp_file, O_RDONLY, 0644);
+	if (cmd->io_fds->heredoc_in_fd == -1)
 		return (free(temp_file), 0);
-	set_ios(cmd, temp_fd);
-	return (close(temp_fd), unlink(temp_file), free(temp_file), 1);
+	set_ios(cmd, cmd->io_fds->heredoc_in_fd);
+	return (free(temp_file), 1);
 }

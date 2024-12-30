@@ -62,7 +62,6 @@ void	free_tmp_io(t_io_fds *io)
 	}
 	if (io->heredoc_name)
 	{
-		printf("The heredoc name is %s\n", io->heredoc_name);
 		unlink(io->heredoc_name);
 		free(io->heredoc_name);
 		io->heredoc_name = NULL;

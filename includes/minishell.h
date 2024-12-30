@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-bouh <mel-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:39:05 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 20:39:24 by mel-bouh         ###   ########.fr       */
+/*   Updated: 2024/12/30 18:00:18 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,14 +116,14 @@ void		set_cmd_strings(t_cmd *cmd);
 int			create_files(t_cmd *cmd, t_data *data);
 int			init_command(t_cmd *cmd, t_data *data);
 int			command_is_valid(t_data *data, t_cmd *cmd, int is_builtin);
-int			check_permission(char *path, t_data *data);
+int			check_permission(char *path, t_cmd *cmd);
 int			handle_input(t_data *data);
 int			handle_execute(t_data *data);
 int			exec_cmd(char **command, char **envp, t_data *data);
 int			single_command(t_data *data);
 int			complex_command(t_data *data);
 int			should_pipe(t_cmd *cmd);
-int			check_cmd(t_data *data, char *path);
+int			check_cmd(t_cmd *cmd, char *path);
 int			set_values(t_data *data);
 int			execute_command(t_data *data, t_cmd *cmd);
 int			close_file(t_data *data, t_cmd *cmd);
@@ -153,6 +153,6 @@ void		handle_append(t_cmd *cmd);
 char		*get_key(char *value, char **env_value);
 int			append_env_value(char *key, char *env_value, t_list *envp);
 void		free_cmd_node(t_cmd *cmd);
-void		ft_error(t_data *data, char *str, int status, int reset);
+void		ft_error(t_cmd *cmd, char *str, int status);
 
 #endif

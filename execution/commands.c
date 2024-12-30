@@ -6,22 +6,20 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:21:30 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/26 18:26:39 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/30 17:57:18 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <sys/wait.h>
 
-void	ft_error(t_data *data, char *str, int status, int reset)
+void	ft_error(t_cmd *cmd, char *str, int status)
 {
 	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(data->cmd->argv[0], 2);
+	ft_putstr_fd(cmd->argv[0], 2);
 	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(str, 2);
 	g_exit_status = status;
-	if (reset)
-		reset_shell(data, 0);
 }
 
 int	init_command(t_cmd *cmd, t_data *data)
@@ -36,7 +34,12 @@ int	fork_and_exec(t_data *data)
 {
 	data->pid = fork();
 	if (data->pid != -1)
-		signal(SIGINT, handlehang);
+	{
+		if (ft_strnstr(data->cmd->argv[0], "minishell", ft_strlen(data->cmd->argv[0])))
+			signal(SIGINT, SIG_IGN);
+		else
+			signal(SIGINT, handlehang);
+	}
 	if (data->pid == -1)
 		return (ft_putstr_fd("fork error\n", 2), 0);
 	if (data->pid == 0)

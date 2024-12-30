@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:25:46 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/26 18:26:17 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/30 18:00:12 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	exec_cmd(char **command, char **envp, t_data *data)
 	if (execve(path, command, envp) == -1)
 	{
 		free(path);
-		ft_error(data, "command not found", 127, 1);
+		ft_error(data->cmd, "command not found", 127);
+		reset_shell(data, 0);
 	}
 	return (0);
 }
@@ -68,8 +69,8 @@ int	single_command(t_data *data)
 	else
 	{
 		path = get_full_cmd(data->cmd->argv[0], data->envp_arr);
-		if (check_cmd(data, data->cmd->argv[0]) == 1 \
-			|| check_permission(path, data) == 1)
+		if (check_cmd(data->cmd, data->cmd->argv[0]) == 1 \
+			|| check_permission(path, data->cmd) == 1)
 		{
 			free(path);
 			g_exit_status = 126;

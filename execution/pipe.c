@@ -6,7 +6,7 @@
 /*   By: zelbassa <zelbassa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:17:37 by zelbassa          #+#    #+#             */
-/*   Updated: 2024/12/27 19:27:18 by zelbassa         ###   ########.fr       */
+/*   Updated: 2024/12/30 17:46:15 by zelbassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 bool	create_pipes(t_data *data)
 {
+	int		i;
 	t_cmd	*cmd;
 
+	i = 1;
 	cmd = data->cmd;
 	while (cmd)
 	{
@@ -24,24 +26,24 @@ bool	create_pipes(t_data *data)
 			if (pipe(cmd->pipe_fd) != 0)
 			{
 				if (errno == EMFILE)
+				{
+					i = 0;
 					close_pipe_fds(data->cmd);
-				if (pipe(cmd->pipe_fd) != 0)
-					return (false);
+				}
+				break;
 			}
 		}
 		cmd = cmd->next;
 	}
-	return (true);
+	return (i);
 }
 
 void	close_pipe_fds(t_cmd *cmds)
 {
 	while (cmds && cmds->pipe_output)
 	{
-		if (cmds->pipe_fd[0] != -1)
-			ft_close(cmds->pipe_fd[0]);
-		if (cmds->pipe_fd[1] != -1)
-			close(cmds->pipe_fd[1]);
+		ft_close(cmds->pipe_fd[0]);
+		ft_close(cmds->pipe_fd[1]);
 		cmds = cmds->next;
 	}
 }

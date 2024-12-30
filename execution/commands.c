@@ -35,7 +35,8 @@ int	fork_and_exec(t_data *data)
 	data->pid = fork();
 	if (data->pid != -1)
 	{
-		if (ft_strnstr(data->cmd->argv[0], "minishell", ft_strlen(data->cmd->argv[0])))
+		if (ft_strnstr(data->cmd->argv[0], "minishell", \
+		ft_strlen(data->cmd->argv[0])))
 			signal(SIGINT, SIG_IGN);
 		else
 			signal(SIGINT, handlehang);
